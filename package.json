@@ -1,0 +1,37 @@
+{
+  "name": "release-checker",
+  "version": "0.0.1",
+  "description": "Check your release before publishing",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "bin": {
+    "release-checker": "./bin/release-checker.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": " tsc --listEmittedFiles",
+    "tsc-init": "tsc --init",
+    "build": "rimraf lib && tsc ",
+    "release-checker": "node ./bin/release-checker"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hdorgeval/release-checker.git"
+  },
+  "author": "Henri d'Orgeval",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hdorgeval/release-checker/issues"
+  },
+  "homepage": "https://github.com/hdorgeval/release-checker#readme",
+  "devDependencies": {
+    "rimraf": "2.6.2",
+    "typescript": "3.2.2"
+  },
+  "dependencies": {
+    "@types/node": "10.12.18"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
