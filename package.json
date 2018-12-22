@@ -10,6 +10,7 @@
   "scripts": {
     "jest--init": "jest --init",
     "test": "jest",
+    "test--watch": "npm run test -- --watch",
     "tsc": " tsc --listEmittedFiles",
     "tsc--init": "tsc --init",
     "build": "rimraf lib && tsc ",
