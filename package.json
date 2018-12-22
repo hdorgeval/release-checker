@@ -8,9 +8,10 @@
     "release-checker": "./bin/release-checker.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "jest--init": "jest --init",
+    "test": "jest",
     "tsc": " tsc --listEmittedFiles",
-    "tsc-init": "tsc --init",
+    "tsc--init": "tsc --init",
     "build": "rimraf lib && tsc ",
     "release-checker": "node ./bin/release-checker"
   },
