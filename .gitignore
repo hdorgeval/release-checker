@@ -61,5 +61,6 @@ typings/
 .next
 
 #package files
-lib/
+build/
+package/
 

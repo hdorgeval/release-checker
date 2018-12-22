@@ -2,19 +2,24 @@
   "name": "release-checker",
   "version": "0.0.1",
   "description": "Check your release before publishing",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "build/lib/index.js",
+  "typings": "build/lib/index.d.ts",
   "bin": {
-    "release-checker": "./bin/release-checker.js"
+    "release-checker": "build/bin/release-checker.js"
   },
+  "files":[
+    "build"
+  ],
   "scripts": {
     "jest--init": "jest --init",
     "test": "jest",
     "test--watch": "npm run test -- --watch",
     "tsc": " tsc --listEmittedFiles",
     "tsc--init": "tsc --init",
-    "build": "rimraf lib && tsc ",
-    "release-checker": "node ./bin/release-checker"
+    "build": "rimraf build && tsc",
+    "release-checker": "node ./build/bin/release-checker",
+    "package": "rimraf ./package && rm -f release-checker*.tgz && npm pack",
+    "rimraf": "rimraf"
   },
   "repository": {
     "type": "git",
@@ -34,7 +39,9 @@
     "typescript": "3.2.2"
   },
   "dependencies": {
-    "@types/node": "10.12.18"
+    "@types/minimist": "1.2.0",
+    "@types/node": "10.12.18",
+    "minimist": "1.2.0"
   },
   "engines": {
     "node": ">=6.0.0"
