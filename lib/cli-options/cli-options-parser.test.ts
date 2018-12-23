@@ -38,6 +38,18 @@ describe('CLI options parsing', () => {
     expect(commandLineHasNoOption).toBe(true);
   });
 
+  test('It should detect that an option has been set on command `npx release-checker --help` ', () => {
+    // Given
+    process.argv = argv['npx release-checker --help']
+
+    // When
+    const options = getCliOptions();
+    const commandLineHasNoOption = allKeysAreUndefindIn(options);
+
+    // Then
+    expect(commandLineHasNoOption).toBe(false);
+  });
+
   test('It should parse --help on command `npm run release-checker -- --help` ', () => {
     // Given
     process.argv = argv['npm run release-checker -- --help'];
