@@ -1,0 +1,25 @@
+language: node_js
+sudo: false
+node_js:
+  - '6'
+  - '8'
+  - '9'
+  - '10'
+  - '11'
+
+before_install:
+  - if [[ `node -v` = v6* ]]; then npm i -g npx; fi
+  - npx --version
+
+script:
+  - node --version
+  - npm --version
+  - npx --version
+  - npm run test-with-no-coverage-check
+  # Update npm to check that audit analyzer is then (still) active
+  - npm i -g npm@latest
+  - node --version
+  - npm --version
+  - npx --version
+  - npm test
+  

@@ -12,7 +12,8 @@
   ],
   "scripts": {
     "jest--init": "jest --init",
-    "test": "jest",
+    "test": "jest --config=jest.config.js",
+    "test-with-no-coverage-check": "jest --config=jest.config.no-coverage.js",
     "test--watch": "npm run test -- --watch",
     "tsc": " tsc --listEmittedFiles",
     "tsc--init": "tsc --init",
