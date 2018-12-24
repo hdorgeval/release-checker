@@ -8,7 +8,8 @@
     "release-checker": "build/bin/release-checker.js"
   },
   "files":[
-    "build"
+    "build/bin",
+    "build/lib"
   ],
   "scripts": {
     "jest--init": "jest --init",
