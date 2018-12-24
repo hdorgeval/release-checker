@@ -9,7 +9,9 @@
   },
   "files":[
     "build/bin",
-    "build/lib"
+    "build/lib",
+    "!*.test.js",
+    "!*.test.d.ts"
   ],
   "scripts": {
     "jest--init": "jest --init",
