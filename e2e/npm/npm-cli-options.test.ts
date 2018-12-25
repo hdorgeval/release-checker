@@ -36,7 +36,6 @@ describe('npm globall install - CLI options parsing', () => {
 
     // When
     const result = exec(command);
-    console.log(result);
    
     // Then
     expect(result).toContain(usage);

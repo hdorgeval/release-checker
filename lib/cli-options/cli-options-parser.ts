@@ -6,9 +6,7 @@ export interface ReleaseCheckerOptions {
 }
 
 export function getCliOptions(): ReleaseCheckerOptions {
-    console.log('process.argv', process.argv);
     const args = minimist(process.argv.slice(2));
-    console.log(args);
     const options: ReleaseCheckerOptions = {
         '--help' : args['help'],
     }
