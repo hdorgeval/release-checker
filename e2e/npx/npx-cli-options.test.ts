@@ -1,7 +1,7 @@
 
 import {join} from 'path';
-import { exec } from '../../lib/utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
+import { exec } from '../../lib/utils/exec-sync';
 import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
 
 describe('npx - CLI options parsing', () => {

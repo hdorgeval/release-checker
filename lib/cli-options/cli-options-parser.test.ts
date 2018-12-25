@@ -1,19 +1,20 @@
-import { getCliOptions, allKeysAreUndefindIn } from "./cli-options-parser";
+import { allKeysAreUndefindIn, getCliOptions } from "./cli-options-parser";
 
 const argv = {
   'npm run release-checker -- --help': [ 
       '/usr/local/bin/node',
       '/Users/user_name/projects/release-checker/build/bin/release-checker',
       '--help' ],
+      
+  'npx release-checker': [ 
+            '/usr/local/bin/node',
+            '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
 
   'npx release-checker --help': [ 
       '/usr/local/bin/node',
       '/Users/user_name/.npm/_npx/49244/bin/release-checker',
       '--help' ],
   
-  'npx release-checker': [ 
-        '/usr/local/bin/node',
-        '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
 
   "release-checker": [ '/usr/local/bin/node', '/usr/local/bin/release-checker' ],
 

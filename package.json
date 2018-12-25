@@ -23,7 +23,9 @@
     "build": "rimraf build && tsc",
     "release-checker": "node ./build/bin/release-checker",
     "package": "rimraf ./package && rm -f release-checker*.tgz && npm pack",
-    "rimraf": "rimraf"
+    "rimraf": "rimraf",
+    "tslint--init": "tslint --init",
+    "lint": "tslint -p tsconfig.json"
   },
   "repository": {
     "type": "git",
