@@ -33,6 +33,15 @@
     "type": "git",
     "url": "git+https://github.com/hdorgeval/release-checker.git"
   },
+  "keywords": [
+    "module",
+    "npm",
+    "package",
+    "publish",
+    "release",
+    "release-automation",
+    "release-helper"
+  ],
   "author": "Henri d'Orgeval",
   "license": "ISC",
   "bugs": {
