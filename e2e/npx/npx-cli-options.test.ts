@@ -1,15 +1,15 @@
 
-import {readFileSync} from 'fs';
 import {join} from 'path';
 import { exec } from '../../lib/utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
+import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
 
 describe('npx - CLI options parsing', () => {
   let nativeCwd: string;
   let packageFilename: string;
   let packageFilepath: string;
   beforeAll(() => {
-    const packageDotJson: any = JSON.parse(readFileSync(join(process.cwd(), 'package.json')).toString());
+    const packageDotJson = readPackageDotJsonInCurrentWorkingDirectory()
     packageFilename = `${packageDotJson.name}-${packageDotJson.version}.tgz`;
     packageFilepath  = join(process.cwd(),packageFilename);
   })

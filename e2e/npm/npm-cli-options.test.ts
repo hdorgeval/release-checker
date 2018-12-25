@@ -1,8 +1,8 @@
 
-import {readFileSync} from 'fs';
 import {join} from 'path';
 import { exec } from '../../lib//utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
+import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
 
 describe('npm globall install - CLI options parsing', () => {
   let nativeCwd: string;
@@ -11,7 +11,7 @@ describe('npm globall install - CLI options parsing', () => {
   let packageName: string;
 
   beforeAll(() => {
-    const packageDotJson: any = JSON.parse(readFileSync(join(process.cwd(), 'package.json')).toString());
+    const packageDotJson = readPackageDotJsonInCurrentWorkingDirectory()
     packageName = packageDotJson.name;
     packageFilename = `${packageDotJson.name}-${packageDotJson.version}.tgz`;
     packageFilepath  = join(process.cwd(),packageFilename);
