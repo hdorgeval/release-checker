@@ -15,8 +15,8 @@
   ],
   "scripts": {
     "jest--init": "jest --init",
-    "test": "npm run build && npm run package && jest --config=jest.config.js",
-    "test-with-no-coverage-check": "npm run build && npm run package && jest --config=jest.config.no-coverage.js",
+    "test": "npm run build && npm run package && jest --config=jest.config.js --runInBand",
+    "test-with-no-coverage-check": "npm run build && npm run package && jest --config=jest.config.no-coverage.js --runInBand",
     "test--watch": "npm run test -- --watch",
     "tsc": " tsc --listEmittedFiles",
     "tsc--init": "tsc --init",
