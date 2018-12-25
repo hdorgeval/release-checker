@@ -1,4 +1,4 @@
-import { exec } from "./exec-sync";
+import { exec } from './exec-sync';
 
 describe('Execution of npm commands', () => {
   let nativeProcessArgv: string[];
@@ -22,16 +22,15 @@ describe('Execution of npm commands', () => {
     expect(result).toHaveProperty('npm');
     expect(result).toHaveProperty('node');
     expect(result).toHaveProperty('modules');
-
   });
 
   test('It should not execute command `npm yo --json` ', () => {
     // Given
     const command = 'npm yo --json';
-    
+
     // When
     const result = exec(command);
-   
+
     // Then
     expect(result).toContain('Command failed');
     expect(result).toContain(command);

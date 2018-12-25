@@ -25,7 +25,9 @@
     "package": "rimraf ./package && rm -f release-checker*.tgz && npm pack",
     "rimraf": "rimraf",
     "tslint--init": "tslint --init",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "check-format": "prettier --list-different \"{bin,lib,e2e}/**/*.ts\"",
+    "format": "prettier --write \"{bin,lib,e2e}/**/*.ts\""
   },
   "repository": {
     "type": "git",

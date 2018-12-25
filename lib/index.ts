@@ -1,3 +1,3 @@
-import {run} from './cli-runner';
+import { run } from './cli-runner';
 
 run();

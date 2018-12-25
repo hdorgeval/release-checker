@@ -1,5 +1,4 @@
-
-import {join} from 'path';
+import { join } from 'path';
 import { usage } from '../../lib/cli-options/usage';
 import { exec } from '../../lib/utils/exec-sync';
 import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
@@ -9,10 +8,10 @@ describe('npx - CLI options parsing', () => {
   let packageFilename: string;
   let packageFilepath: string;
   beforeAll(() => {
-    const packageDotJson = readPackageDotJsonInCurrentWorkingDirectory()
+    const packageDotJson = readPackageDotJsonInCurrentWorkingDirectory();
     packageFilename = `${packageDotJson.name}-${packageDotJson.version}.tgz`;
-    packageFilepath  = join(process.cwd(),packageFilename);
-  })
+    packageFilepath = join(process.cwd(), packageFilename);
+  });
   beforeEach(() => {
     nativeCwd = process.cwd();
   });
@@ -26,7 +25,7 @@ describe('npx - CLI options parsing', () => {
 
     // When
     const result = exec(command);
-   
+
     // Then
     expect(result).toContain(usage);
   });

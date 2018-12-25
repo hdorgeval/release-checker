@@ -1,29 +1,24 @@
-import { allKeysAreUndefindIn, getCliOptions } from "./cli-options-parser";
+import { allKeysAreUndefindIn, getCliOptions } from './cli-options-parser';
 
 const argv = {
-  'npm run release-checker -- --help': [ 
-      '/usr/local/bin/node',
-      '/Users/user_name/projects/release-checker/build/bin/release-checker',
-      '--help' ],
-      
-  'npx release-checker': [ 
-            '/usr/local/bin/node',
-            '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
+  'npm run release-checker -- --help': [
+    '/usr/local/bin/node',
+    '/Users/user_name/projects/release-checker/build/bin/release-checker',
+    '--help',
+  ],
 
-  'npx release-checker --help': [ 
-      '/usr/local/bin/node',
-      '/Users/user_name/.npm/_npx/49244/bin/release-checker',
-      '--help' ],
-  
+  'npx release-checker': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
 
-  "release-checker": [ '/usr/local/bin/node', '/usr/local/bin/release-checker' ],
+  'npx release-checker --help': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--help',
+  ],
 
-  "release-checker --help --foo=far": [ 
-        '/usr/local/bin/node',
-        '/usr/local/bin/release-checker',
-        '--help',
-        '--foo=far' ],
-}
+  'release-checker': ['/usr/local/bin/node', '/usr/local/bin/release-checker'],
+
+  'release-checker --help --foo=far': ['/usr/local/bin/node', '/usr/local/bin/release-checker', '--help', '--foo=far'],
+};
 
 describe('CLI options parsing', () => {
   let nativeProcessArgv: string[];
@@ -37,7 +32,7 @@ describe('CLI options parsing', () => {
 
   test('It should detect no options on command `npx release-checker` ', () => {
     // Given
-    process.argv = argv['npx release-checker']
+    process.argv = argv['npx release-checker'];
 
     // When
     const options = getCliOptions();
@@ -49,7 +44,7 @@ describe('CLI options parsing', () => {
 
   test('It should detect no options on command `release-checker` ', () => {
     // Given
-    process.argv = argv['release-checker']
+    process.argv = argv['release-checker'];
 
     // When
     const options = getCliOptions();
@@ -61,7 +56,7 @@ describe('CLI options parsing', () => {
 
   test('It should detect that an option has been set on command `npx release-checker --help` ', () => {
     // Given
-    process.argv = argv['npx release-checker --help']
+    process.argv = argv['npx release-checker --help'];
 
     // When
     const options = getCliOptions();
@@ -79,17 +74,17 @@ describe('CLI options parsing', () => {
     const options = getCliOptions();
 
     // Then
-    expect(options["--help"]).toBe(true);
+    expect(options['--help']).toBe(true);
   });
 
   test('It should parse --help on command `npx release-checker --help` ', () => {
     // Given
-    process.argv = argv['npx release-checker --help']
+    process.argv = argv['npx release-checker --help'];
 
     // When
     const options = getCliOptions();
 
     // Then
-    expect(options["--help"]).toBe(true);
+    expect(options['--help']).toBe(true);
   });
 });

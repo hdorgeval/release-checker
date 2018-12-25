@@ -3,4 +3,4 @@ Usage: release-checker [options]
 
 Options:
     --help, -h  Show help
-`
+`;
