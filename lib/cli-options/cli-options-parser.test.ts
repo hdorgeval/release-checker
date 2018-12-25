@@ -14,6 +14,14 @@ const argv = {
   'npx release-checker': [ 
         '/usr/local/bin/node',
         '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
+
+  "release-checker": [ '/usr/local/bin/node', '/usr/local/bin/release-checker' ],
+
+  "release-checker --help --foo=far": [ 
+        '/usr/local/bin/node',
+        '/usr/local/bin/release-checker',
+        '--help',
+        '--foo=far' ],
 }
 
 describe('CLI options parsing', () => {
@@ -29,6 +37,18 @@ describe('CLI options parsing', () => {
   test('It should detect no options on command `npx release-checker` ', () => {
     // Given
     process.argv = argv['npx release-checker']
+
+    // When
+    const options = getCliOptions();
+    const commandLineHasNoOption = allKeysAreUndefindIn(options);
+
+    // Then
+    expect(commandLineHasNoOption).toBe(true);
+  });
+
+  test('It should detect no options on command `release-checker` ', () => {
+    // Given
+    process.argv = argv['release-checker']
 
     // When
     const options = getCliOptions();
