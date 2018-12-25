@@ -29,7 +29,7 @@ describe('npm globall install - CLI options parsing', () => {
     exec(uninstallCommand);
   });
 
-  test('It should detect no options on command `release-checker` ', () => {
+  test('It should detect no option on command `release-checker` ', () => {
     // Given
     const command = `${packageName}`;
 

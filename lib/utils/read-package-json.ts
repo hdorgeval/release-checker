@@ -3,6 +3,11 @@ import { join } from 'path';
 export interface PackageDotJson {
   name: string;
   version: string;
+  scripts: ScriptsSection;
+}
+
+export interface ScriptsSection {
+  [index: string]: string;
 }
 
 export function readPackageDotJsonInCurrentWorkingDirectory(): PackageDotJson {
