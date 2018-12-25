@@ -63,4 +63,7 @@ typings/
 #package files
 build/
 package/
+
+#test files
 testing-repo-for-release-checker/
+**/tmp/
