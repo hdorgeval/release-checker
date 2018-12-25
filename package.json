@@ -20,7 +20,7 @@
     "test--watch": "npm run test -- --watch",
     "tsc": " tsc --listEmittedFiles",
     "tsc--init": "tsc --init",
-    "build": "rimraf build && tsc",
+    "build": "rimraf build && npm run format && npm run lint && tsc",
     "release-checker": "node ./build/bin/release-checker",
     "package": "rimraf ./package && rm -f release-checker*.tgz && npm pack",
     "rimraf": "rimraf",
