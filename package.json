@@ -14,20 +14,20 @@
     "!*.test.d.ts"
   ],
   "scripts": {
+    "build": "rimraf build && npm run format && npm run lint && tsc",
+    "check-format": "prettier --list-different \"{bin,lib,e2e}/**/*.ts\"",
+    "format": "prettier --write \"{bin,lib,e2e}/**/*.ts\"",
     "jest--init": "jest --init",
+    "lint": "tslint -p tsconfig.json",
+    "package": "rimraf ./package && rm -f release-checker*.tgz && npm pack",
+    "release-checker": "node ./build/bin/release-checker",
+    "rimraf": "rimraf",
     "test": "npm run build && npm run package && jest --config=jest.config.js --runInBand",
     "test-with-no-coverage-check": "npm run build && npm run package && jest --config=jest.config.no-coverage.js --runInBand",
     "test--watch": "npm run test -- --watch",
     "tsc": " tsc --listEmittedFiles",
     "tsc--init": "tsc --init",
-    "build": "rimraf build && npm run format && npm run lint && tsc",
-    "release-checker": "node ./build/bin/release-checker",
-    "package": "rimraf ./package && rm -f release-checker*.tgz && npm pack",
-    "rimraf": "rimraf",
-    "tslint--init": "tslint --init",
-    "lint": "tslint -p tsconfig.json",
-    "check-format": "prettier --list-different \"{bin,lib,e2e}/**/*.ts\"",
-    "format": "prettier --write \"{bin,lib,e2e}/**/*.ts\""
+    "tslint--init": "tslint --init"
   },
   "repository": {
     "type": "git",
