@@ -8,7 +8,7 @@ export interface ReleaseCheckerOptions {
 export function getCliOptions(): ReleaseCheckerOptions {
   const args = minimist(process.argv.slice(2));
   const options: ReleaseCheckerOptions = {
-    '--help': args['help'],
+    '--help': args.help || args.h,
   };
   return options;
 }

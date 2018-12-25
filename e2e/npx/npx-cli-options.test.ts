@@ -32,4 +32,37 @@ describe('npx - CLI options parsing', () => {
     // Then
     expect(result).toContain(usage);
   });
+
+  test('It should show usage on command `npx release-checker --yo` ', () => {
+    // Given
+    const command = `npx ${packageFilepath}`;
+
+    // When
+    const result = exec(command);
+
+    // Then
+    expect(result).toContain(usage);
+  });
+
+  test('It should show usage on command `npx release-checker --help` ', () => {
+    // Given
+    const command = `npx ${packageFilepath} --help`;
+
+    // When
+    const result = exec(command);
+
+    // Then
+    expect(result).toContain(usage);
+  });
+
+  test('It should show usage on command `npx release-checker -h` ', () => {
+    // Given
+    const command = `npx ${packageFilepath} -h`;
+
+    // When
+    const result = exec(command);
+
+    // Then
+    expect(result).toContain(usage);
+  });
 });

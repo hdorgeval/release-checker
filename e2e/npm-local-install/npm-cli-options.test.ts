@@ -42,4 +42,37 @@ describe('npm local install - CLI options parsing', () => {
     // Then
     expect(result).toContain(usage);
   });
+
+  test('It should show usage on command `npm run release-checker -- --yo` ', () => {
+    // Given
+    const command = `npm run ${packageName} -- --yo`;
+
+    // When
+    const result = exec(command);
+
+    // Then
+    expect(result).toContain(usage);
+  });
+
+  test('It should show usage on command `npm run release-checker -- --help` ', () => {
+    // Given
+    const command = `npm run ${packageName} -- --help`;
+
+    // When
+    const result = exec(command);
+
+    // Then
+    expect(result).toContain(usage);
+  });
+
+  test('It should show usage on command `npm run release-checker -- -h` ', () => {
+    // Given
+    const command = `npm run ${packageName} -- -h`;
+
+    // When
+    const result = exec(command);
+
+    // Then
+    expect(result).toContain(usage);
+  });
 });

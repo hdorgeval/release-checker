@@ -3,8 +3,9 @@ import { usage } from './cli-options/usage';
 
 export function run() {
   const options = getCliOptions();
-  if (allKeysAreUndefindIn(options)) {
+  if (allKeysAreUndefindIn(options) || options['--help']) {
     // tslint:disable-next-line:no-console
     console.log(usage);
+    return;
   }
 }

@@ -39,4 +39,37 @@ describe('npm globall install - CLI options parsing', () => {
     // Then
     expect(result).toContain(usage);
   });
+
+  test('It should show usage on command `release-checker --yo` ', () => {
+    // Given
+    const command = `${packageName} --yo`;
+
+    // When
+    const result = exec(command);
+
+    // Then
+    expect(result).toContain(usage);
+  });
+
+  test('It should show usage on command `release-checker --help` ', () => {
+    // Given
+    const command = `${packageName} --help`;
+
+    // When
+    const result = exec(command);
+
+    // Then
+    expect(result).toContain(usage);
+  });
+
+  test('It should show usage on command `release-checker -h` ', () => {
+    // Given
+    const command = `${packageName} -h`;
+
+    // When
+    const result = exec(command);
+
+    // Then
+    expect(result).toContain(usage);
+  });
 });
