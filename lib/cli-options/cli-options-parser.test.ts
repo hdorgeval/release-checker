@@ -1,6 +1,10 @@
 import { allKeysAreUndefindIn, getCliOptions } from './cli-options-parser';
 
 const argv = {
+  'npm run release-checker': [
+    '/usr/local/bin/node',
+    '/Users/user_name/projects/release-checker/build/bin/release-checker',
+  ],
   'npm run release-checker -- --help': [
     '/usr/local/bin/node',
     '/Users/user_name/projects/release-checker/build/bin/release-checker',
@@ -39,7 +43,7 @@ describe('CLI options parsing', () => {
     process.argv = nativeProcessArgv;
   });
 
-  test('It should detect no options on command `npx release-checker` ', () => {
+  test('It should set default options on command `npx release-checker` ', () => {
     // Given
     process.argv = argv['npx release-checker'];
 
@@ -48,10 +52,11 @@ describe('CLI options parsing', () => {
     const commandLineHasNoOption = allKeysAreUndefindIn(options);
 
     // Then
-    expect(commandLineHasNoOption).toBe(true);
+    expect(commandLineHasNoOption).toBe(false);
+    expect(options['--package.json']).toBe(true);
   });
 
-  test('It should detect no options on command `release-checker` ', () => {
+  test('It should set default options on command `release-checker` ', () => {
     // Given
     process.argv = argv['release-checker'];
 
@@ -60,12 +65,13 @@ describe('CLI options parsing', () => {
     const commandLineHasNoOption = allKeysAreUndefindIn(options);
 
     // Then
-    expect(commandLineHasNoOption).toBe(true);
+    expect(commandLineHasNoOption).toBe(false);
+    expect(options['--package.json']).toBe(true);
   });
 
-  test('It should detect that an option has been set on command `npx release-checker --help` ', () => {
+  test('It should set default options on command `npm run release-checker` ', () => {
     // Given
-    process.argv = argv['npx release-checker --help'];
+    process.argv = argv['npm run release-checker'];
 
     // When
     const options = getCliOptions();
@@ -73,6 +79,7 @@ describe('CLI options parsing', () => {
 
     // Then
     expect(commandLineHasNoOption).toBe(false);
+    expect(options['--package.json']).toBe(true);
   });
 
   test('It should parse --help on command `release-checker --help` ', () => {

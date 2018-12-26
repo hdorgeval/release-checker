@@ -3,6 +3,7 @@ import { exec } from '../../lib//utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
 import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
 import { addScriptInPackageDotJsonOfCurrentWorkingDirectory } from '../../lib/utils/update-package-json';
+import * as validators from '../../lib/validators';
 
 describe('npm local install - CLI options parsing', () => {
   let nativeCwd: string;
@@ -32,26 +33,15 @@ describe('npm local install - CLI options parsing', () => {
     // exec('npm run rimraf -- testing-repo-for-release-checker ');
   });
 
-  test('It should detect no option on command `npm run release-checker` ', () => {
+  test.skip('It should execute default validations on command `npm run release-checker` ', () => {
     // Given
-    const command = `npm run ${packageName}`;
+    const command = `npm run ${packageName} > `;
 
     // When
     const result = exec(command);
 
     // Then
-    expect(result).toContain(usage);
-  });
-
-  test('It should show usage on command `npm run release-checker -- --yo` ', () => {
-    // Given
-    const command = `npm run ${packageName} -- --yo`;
-
-    // When
-    const result = exec(command);
-
-    // Then
-    expect(result).toContain(usage);
+    expect(result).toContain(validators.packageJsonValidator.statusToDisplayWhileValidating);
   });
 
   test('It should show usage on command `npm run release-checker -- --help` ', () => {

@@ -2,6 +2,7 @@ import { join } from 'path';
 import { exec } from '../../lib//utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
 import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
+import * as validators from '../../lib/validators';
 
 describe('npm globall install - CLI options parsing', () => {
   let nativeCwd: string;
@@ -29,7 +30,7 @@ describe('npm globall install - CLI options parsing', () => {
     exec(uninstallCommand);
   });
 
-  test('It should detect no option on command `release-checker` ', () => {
+  test.skip('It should execute default validations on command `release-checker` ', () => {
     // Given
     const command = `${packageName}`;
 
@@ -37,18 +38,7 @@ describe('npm globall install - CLI options parsing', () => {
     const result = exec(command);
 
     // Then
-    expect(result).toContain(usage);
-  });
-
-  test('It should show usage on command `release-checker --yo` ', () => {
-    // Given
-    const command = `${packageName} --yo`;
-
-    // When
-    const result = exec(command);
-
-    // Then
-    expect(result).toContain(usage);
+    expect(result).toContain(validators.packageJsonValidator.statusToDisplayWhileValidating);
   });
 
   test('It should show usage on command `release-checker --help` ', () => {

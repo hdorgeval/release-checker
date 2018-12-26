@@ -2,6 +2,7 @@ import { join } from 'path';
 import { usage } from '../../lib/cli-options/usage';
 import { exec } from '../../lib/utils/exec-sync';
 import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
+import * as validators from '../../lib/validators';
 
 describe('npx - CLI options parsing', () => {
   let nativeCwd: string;
@@ -22,7 +23,7 @@ describe('npx - CLI options parsing', () => {
     process.chdir(nativeCwd);
   });
 
-  test('It should detect no option on command `npx release-checker` ', () => {
+  test.skip('It should execute default validations on command `npx release-checker` ', () => {
     // Given
     const command = `npx ${packageFilepath}`;
 
@@ -30,18 +31,7 @@ describe('npx - CLI options parsing', () => {
     const result = exec(command);
 
     // Then
-    expect(result).toContain(usage);
-  });
-
-  test('It should show usage on command `npx release-checker --yo` ', () => {
-    // Given
-    const command = `npx ${packageFilepath}`;
-
-    // When
-    const result = exec(command);
-
-    // Then
-    expect(result).toContain(usage);
+    expect(result).toContain(validators.packageJsonValidator.statusToDisplayWhileValidating);
   });
 
   test('It should show usage on command `npx release-checker --help` ', () => {
