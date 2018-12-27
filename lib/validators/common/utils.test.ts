@@ -1,4 +1,4 @@
-import { ensureThatValidator } from './utils';
+import { all, ensureThatValidator } from './utils';
 import { Validator } from './validator-interface';
 
 describe('Validators utils', () => {
@@ -33,5 +33,35 @@ describe('Validators utils', () => {
     expect(() => ensureThatValidator(validator).canRun()).toThrow(
       new Error(`Missing method ${methodName}() in Validator '${validator.id}'`),
     );
+  });
+
+  test('It should check if all validators has passed` ', () => {
+    // Given
+    const validator1: Partial<Validator> = { hasErrors: false };
+    const validator2: Partial<Validator> = { hasErrors: false };
+    const validator3: Partial<Validator> = { hasErrors: false };
+    const validator4: Partial<Validator> = { hasErrors: false };
+    const validators = [validator1, validator2, validator3, validator4];
+
+    // When
+    const result = all(validators).hasPassed();
+
+    // Then
+    expect(result).toBe(true);
+  });
+
+  test('It should detect that one validator has failed` ', () => {
+    // Given
+    const validator1: Partial<Validator> = { hasErrors: false };
+    const validator2: Partial<Validator> = { hasErrors: false };
+    const validator3: Partial<Validator> = { hasErrors: true };
+    const validator4: Partial<Validator> = { hasErrors: false };
+    const validators = [validator1, validator2, validator3, validator4];
+
+    // When
+    const result = all(validators).hasPassed();
+
+    // Then
+    expect(result).toBe(false);
   });
 });
