@@ -33,118 +33,116 @@ const argv = {
   'release-checker -h -foo=far': ['/usr/local/bin/node', '/usr/local/bin/release-checker', '-h', '-foo=far'],
 };
 
-describe('CLI options parsing', () => {
-  let nativeProcessArgv: string[];
+let nativeProcessArgv: string[];
 
-  beforeEach(() => {
-    nativeProcessArgv = process.argv;
-  });
-  afterEach(() => {
-    process.argv = nativeProcessArgv;
-  });
+beforeEach(() => {
+  nativeProcessArgv = process.argv;
+});
+afterEach(() => {
+  process.argv = nativeProcessArgv;
+});
 
-  test('It should set default options on command `npx release-checker` ', () => {
-    // Given
-    process.argv = argv['npx release-checker'];
+test('It should set default options on command `npx release-checker` ', () => {
+  // Given
+  process.argv = argv['npx release-checker'];
 
-    // When
-    const options = getCliOptions();
-    const commandLineHasNoOption = allKeysAreUndefindIn(options);
+  // When
+  const options = getCliOptions();
+  const commandLineHasNoOption = allKeysAreUndefindIn(options);
 
-    // Then
-    expect(commandLineHasNoOption).toBe(false);
-    expect(options['--package.json']).toBe(true);
-  });
+  // Then
+  expect(commandLineHasNoOption).toBe(false);
+  expect(options['--package.json']).toBe(true);
+});
 
-  test('It should set default options on command `release-checker` ', () => {
-    // Given
-    process.argv = argv['release-checker'];
+test('It should set default options on command `release-checker` ', () => {
+  // Given
+  process.argv = argv['release-checker'];
 
-    // When
-    const options = getCliOptions();
-    const commandLineHasNoOption = allKeysAreUndefindIn(options);
+  // When
+  const options = getCliOptions();
+  const commandLineHasNoOption = allKeysAreUndefindIn(options);
 
-    // Then
-    expect(commandLineHasNoOption).toBe(false);
-    expect(options['--package.json']).toBe(true);
-  });
+  // Then
+  expect(commandLineHasNoOption).toBe(false);
+  expect(options['--package.json']).toBe(true);
+});
 
-  test('It should set default options on command `npm run release-checker` ', () => {
-    // Given
-    process.argv = argv['npm run release-checker'];
+test('It should set default options on command `npm run release-checker` ', () => {
+  // Given
+  process.argv = argv['npm run release-checker'];
 
-    // When
-    const options = getCliOptions();
-    const commandLineHasNoOption = allKeysAreUndefindIn(options);
+  // When
+  const options = getCliOptions();
+  const commandLineHasNoOption = allKeysAreUndefindIn(options);
 
-    // Then
-    expect(commandLineHasNoOption).toBe(false);
-    expect(options['--package.json']).toBe(true);
-  });
+  // Then
+  expect(commandLineHasNoOption).toBe(false);
+  expect(options['--package.json']).toBe(true);
+});
 
-  test('It should parse --help on command `release-checker --help` ', () => {
-    // Given
-    process.argv = argv['release-checker --help'];
+test('It should parse --help on command `release-checker --help` ', () => {
+  // Given
+  process.argv = argv['release-checker --help'];
 
-    // When
-    const options = getCliOptions();
+  // When
+  const options = getCliOptions();
 
-    // Then
-    expect(options['--help']).toBe(true);
-  });
+  // Then
+  expect(options['--help']).toBe(true);
+});
 
-  test('It should parse --help on command `release-checker -h` ', () => {
-    // Given
-    process.argv = argv['release-checker -h'];
+test('It should parse --help on command `release-checker -h` ', () => {
+  // Given
+  process.argv = argv['release-checker -h'];
 
-    // When
-    const options = getCliOptions();
+  // When
+  const options = getCliOptions();
 
-    // Then
-    expect(options['--help']).toBe(true);
-  });
+  // Then
+  expect(options['--help']).toBe(true);
+});
 
-  test('It should parse --help on command `npm run release-checker -- --help` ', () => {
-    // Given
-    process.argv = argv['npm run release-checker -- --help'];
+test('It should parse --help on command `npm run release-checker -- --help` ', () => {
+  // Given
+  process.argv = argv['npm run release-checker -- --help'];
 
-    // When
-    const options = getCliOptions();
+  // When
+  const options = getCliOptions();
 
-    // Then
-    expect(options['--help']).toBe(true);
-  });
+  // Then
+  expect(options['--help']).toBe(true);
+});
 
-  test('It should parse --help on command `npm run release-checker -- -h` ', () => {
-    // Given
-    process.argv = argv['npm run release-checker -- -h'];
+test('It should parse --help on command `npm run release-checker -- -h` ', () => {
+  // Given
+  process.argv = argv['npm run release-checker -- -h'];
 
-    // When
-    const options = getCliOptions();
+  // When
+  const options = getCliOptions();
 
-    // Then
-    expect(options['--help']).toBe(true);
-  });
+  // Then
+  expect(options['--help']).toBe(true);
+});
 
-  test('It should parse --help on command `npx release-checker --help` ', () => {
-    // Given
-    process.argv = argv['npx release-checker --help'];
+test('It should parse --help on command `npx release-checker --help` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --help'];
 
-    // When
-    const options = getCliOptions();
+  // When
+  const options = getCliOptions();
 
-    // Then
-    expect(options['--help']).toBe(true);
-  });
+  // Then
+  expect(options['--help']).toBe(true);
+});
 
-  test('It should parse --help on command `npx release-checker -h` ', () => {
-    // Given
-    process.argv = argv['npx release-checker -h'];
+test('It should parse --help on command `npx release-checker -h` ', () => {
+  // Given
+  process.argv = argv['npx release-checker -h'];
 
-    // When
-    const options = getCliOptions();
+  // When
+  const options = getCliOptions();
 
-    // Then
-    expect(options['--help']).toBe(true);
-  });
+  // Then
+  expect(options['--help']).toBe(true);
 });

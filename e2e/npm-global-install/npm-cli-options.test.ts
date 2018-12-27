@@ -4,62 +4,60 @@ import { usage } from '../../lib/cli-options/usage';
 import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
 import * as validators from '../../lib/validators';
 
-describe('npm globall install - CLI options parsing', () => {
-  let nativeCwd: string;
-  let packageFilename: string;
-  let packageFilepath: string;
-  let packageName: string;
+let nativeCwd: string;
+let packageFilename: string;
+let packageFilepath: string;
+let packageName: string;
 
-  beforeAll(() => {
-    const packageDotJson = readPackageDotJsonInCurrentWorkingDirectory();
-    packageName = packageDotJson.name;
-    packageFilename = `${packageDotJson.name}-${packageDotJson.version}.tgz`;
-    packageFilepath = join(process.cwd(), packageFilename);
+beforeAll(() => {
+  const packageDotJson = readPackageDotJsonInCurrentWorkingDirectory();
+  packageName = packageDotJson.name;
+  packageFilename = `${packageDotJson.name}-${packageDotJson.version}.tgz`;
+  packageFilepath = join(process.cwd(), packageFilename);
 
-    const installCommand = `npm install -g ${packageFilepath}`;
-    exec(installCommand);
-  });
-  beforeEach(() => {
-    nativeCwd = process.cwd();
-  });
-  afterEach(() => {
-    process.chdir(nativeCwd);
-  });
-  afterAll(() => {
-    const uninstallCommand = `npm uninstall -g ${packageName}`;
-    exec(uninstallCommand);
-  });
+  const installCommand = `npm install -g ${packageFilepath}`;
+  exec(installCommand);
+});
+beforeEach(() => {
+  nativeCwd = process.cwd();
+});
+afterEach(() => {
+  process.chdir(nativeCwd);
+});
+afterAll(() => {
+  const uninstallCommand = `npm uninstall -g ${packageName}`;
+  exec(uninstallCommand);
+});
 
-  test.skip('It should execute default validations on command `release-checker` ', () => {
-    // Given
-    const command = `${packageName}`;
+test.skip('It should execute default validations on command `release-checker` ', () => {
+  // Given
+  const command = `${packageName}`;
 
-    // When
-    const result = exec(command);
+  // When
+  const result = exec(command);
 
-    // Then
-    expect(result).toContain(validators.packageJsonValidator.statusToDisplayWhileValidating);
-  });
+  // Then
+  expect(result).toContain(validators.packageJsonValidator.statusToDisplayWhileValidating);
+});
 
-  test('It should show usage on command `release-checker --help` ', () => {
-    // Given
-    const command = `${packageName} --help`;
+test('It should show usage on command `release-checker --help` ', () => {
+  // Given
+  const command = `${packageName} --help`;
 
-    // When
-    const result = exec(command);
+  // When
+  const result = exec(command);
 
-    // Then
-    expect(result).toContain(usage);
-  });
+  // Then
+  expect(result).toContain(usage);
+});
 
-  test('It should show usage on command `release-checker -h` ', () => {
-    // Given
-    const command = `${packageName} -h`;
+test('It should show usage on command `release-checker -h` ', () => {
+  // Given
+  const command = `${packageName} -h`;
 
-    // When
-    const result = exec(command);
+  // When
+  const result = exec(command);
 
-    // Then
-    expect(result).toContain(usage);
-  });
+  // Then
+  expect(result).toContain(usage);
 });

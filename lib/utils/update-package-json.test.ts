@@ -4,74 +4,72 @@ import { exec } from './exec-sync';
 import { PackageDotJson, readPackageDotJsonInCurrentWorkingDirectory } from './read-package-json';
 import { addScriptInPackageDotJsonOfCurrentWorkingDirectory } from './update-package-json';
 
-describe('Update scripts section of package.json file', () => {
-  let nativeProcessArgv: string[];
-  let tempFolder: string;
-  let nativeCwd: string;
+let nativeProcessArgv: string[];
+let tempFolder: string;
+let nativeCwd: string;
 
-  beforeAll(() => {
-    nativeCwd = process.cwd();
-    nativeProcessArgv = process.argv;
-    tempFolder = join(__dirname, 'tmp');
-    exec(`npm run rimraf -- ${tempFolder}`);
-    mkdirSync(tempFolder);
-  });
-  beforeEach(() => {
-    process.chdir(tempFolder);
-  });
-  afterEach(() => {
-    process.chdir(nativeCwd);
-    process.argv = nativeProcessArgv;
-  });
+beforeAll(() => {
+  nativeCwd = process.cwd();
+  nativeProcessArgv = process.argv;
+  tempFolder = join(__dirname, 'tmp');
+  exec(`npm run rimraf -- ${tempFolder}`);
+  mkdirSync(tempFolder);
+});
+beforeEach(() => {
+  process.chdir(tempFolder);
+});
+afterEach(() => {
+  process.chdir(nativeCwd);
+  process.argv = nativeProcessArgv;
+});
 
-  test('It should add script when scripts section does not exist` ', () => {
-    // Given
-    const pkg: Partial<PackageDotJson> = {
-      name: 'testing-repo',
-      version: '1.0.0',
-    };
-    const pkgFilepath = join(tempFolder, 'package.json');
-    writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+test('It should add script when scripts section does not exist` ', () => {
+  // Given
+  const pkg: Partial<PackageDotJson> = {
+    name: 'testing-repo',
+    version: '1.0.0',
+  };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
-    // When
-    addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'bar');
+  // When
+  addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'bar');
 
-    // Then
-    const result = readPackageDotJsonInCurrentWorkingDirectory();
-    expect(result).toHaveProperty('scripts');
-    expect(result.scripts).toHaveProperty('foo');
-    expect(result.scripts.foo).toBe('bar');
-  });
+  // Then
+  const result = readPackageDotJsonInCurrentWorkingDirectory();
+  expect(result).toHaveProperty('scripts');
+  expect(result.scripts).toHaveProperty('foo');
+  expect(result.scripts.foo).toBe('bar');
+});
 
-  test('It should add script when scripts section exists` ', () => {
-    // Given
-    const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: {} };
-    const pkgFilepath = join(tempFolder, 'package.json');
-    writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+test('It should add script when scripts section exists` ', () => {
+  // Given
+  const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: {} };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
-    // When
-    addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'bar');
+  // When
+  addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'bar');
 
-    // Then
-    const result = readPackageDotJsonInCurrentWorkingDirectory();
-    expect(result).toHaveProperty('scripts');
-    expect(result.scripts).toHaveProperty('foo');
-    expect(result.scripts.foo).toBe('bar');
-  });
+  // Then
+  const result = readPackageDotJsonInCurrentWorkingDirectory();
+  expect(result).toHaveProperty('scripts');
+  expect(result.scripts).toHaveProperty('foo');
+  expect(result.scripts.foo).toBe('bar');
+});
 
-  test('It should change script when script exists in scripts section` ', () => {
-    // Given
-    const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: { foo: 'bar' } };
-    const pkgFilepath = join(tempFolder, 'package.json');
-    writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+test('It should change script when script exists in scripts section` ', () => {
+  // Given
+  const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: { foo: 'bar' } };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
-    // When
-    addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'yo');
+  // When
+  addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'yo');
 
-    // Then
-    const result = readPackageDotJsonInCurrentWorkingDirectory();
-    expect(result).toHaveProperty('scripts');
-    expect(result.scripts).toHaveProperty('foo');
-    expect(result.scripts.foo).toBe('yo');
-  });
+  // Then
+  const result = readPackageDotJsonInCurrentWorkingDirectory();
+  expect(result).toHaveProperty('scripts');
+  expect(result.scripts).toHaveProperty('foo');
+  expect(result.scripts.foo).toBe('yo');
 });
