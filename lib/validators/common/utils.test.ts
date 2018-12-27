@@ -12,7 +12,7 @@ test('It should not throw an error when validator has a `canRun` method defined 
   expect(() => ensureThatValidator(validator).canRun()).not.toThrow();
 });
 
-test('It should throw an error when validator has a `canRun` method defined that returns false and has a method whyCannotRun` ', () => {
+test('It should throw an error when validator has a `canRun` method that returns false and has a method whyCannotRun` ', () => {
   // Given
   const validator: Partial<Validator> = { canRun: () => false, whyCannotRun: () => 'Cannot do this because of that' };
 
@@ -20,6 +20,17 @@ test('It should throw an error when validator has a `canRun` method defined that
   // Then
   expect(() => ensureThatValidator(validator).canRun()).toThrow(
     new Error(`${validator.whyCannotRun && validator.whyCannotRun()}`),
+  );
+});
+
+test('It should throw an error when validator has a `canRun` method that returns false but method whyCannotRun is undefined` ', () => {
+  // Given
+  const validator: Partial<Validator> = { canRun: () => false };
+
+  // When
+  // Then
+  expect(() => ensureThatValidator(validator).canRun()).toThrow(
+    new Error("Missing method whyCannotRun() in Validator '{}'"),
   );
 });
 

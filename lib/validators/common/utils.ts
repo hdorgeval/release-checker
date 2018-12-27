@@ -65,7 +65,7 @@ export function ensureThatValidator(validator: Partial<Validator>) {
       ensureThatMethod('whyCannotRun')
         .in(validator)
         .exists();
-      const errorMessage = validator.whyCannotRun ? validator.whyCannotRun() : 'Cannot run validator';
+      const errorMessage = validator.whyCannotRun && validator.whyCannotRun();
       throw new Error(errorMessage);
     },
   };
