@@ -1,4 +1,4 @@
-import { all, ensureThatValidator, showValidationErrorsOf } from './utils';
+import { all, ensureThatValidator, setErrors, showValidationErrorsOf } from './utils';
 import { Validator } from './validator-interface';
 
 test('It should not throw an error when validator has a `canRun` method defined that returns true` ', () => {
@@ -36,7 +36,7 @@ test('It should throw an error when validator has a `canRun` method that returns
 
 test('It should throw an error when validator has `canRun` method undefined` ', () => {
   // Given
-  const validator: Partial<Validator> = { canRun: undefined, id: 'validaotr-id' };
+  const validator: Partial<Validator> = { canRun: undefined, id: 'validator-id' };
   const methodName = 'canRun';
   // When
   // Then
@@ -99,4 +99,25 @@ test('It should show validation errors` ', () => {
   expect(output[0]).toContain(error1.reason);
   expect(output[1]).toContain(error2.reason);
   expect(output[2]).toContain(error3.reason);
+});
+
+test('It should inject validation errors in validator` ', () => {
+  // Given
+  const validator: Partial<Validator> = { canRun: () => false, hasErrors: false };
+  const error1 = { reason: 'error 1 from validator' };
+  const error2 = { reason: 'error 2 from validator' };
+  const error3 = { reason: 'error 3 from validator' };
+  const validationErrors = [error1, error2, error3];
+
+  // When
+  setErrors(validationErrors).in(validator);
+
+  // Then
+  expect(validator.errors).toBeDefined();
+  expect(validator.hasErrors).toBe(true);
+  expect(Array.isArray(validator.errors)).toBe(true);
+  expect(validator.errors && validator.errors.length).toBe(3);
+  expect(validator.errors && validator.errors[0]).toEqual(error1);
+  expect(validator.errors && validator.errors[1]).toEqual(error2);
+  expect(validator.errors && validator.errors[2]).toEqual(error3);
 });
