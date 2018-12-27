@@ -1,6 +1,6 @@
 import { packageJsonValidator } from './index';
 
-describe.only('package.json validator', () => {
+describe('package.json validator', () => {
   test('It should always run` ', () => {
     // Given
     const validator = packageJsonValidator;
