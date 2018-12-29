@@ -1,4 +1,4 @@
-import { all, ensureThatValidator, setErrors, showValidationErrorsOf } from './utils';
+import { all, ensureThatValidator, runValidator, setCatchedError, setErrors, showValidationErrorsOf } from './utils';
 import { Validator } from './validator-interface';
 
 test('It should not throw an error when validator has a `canRun` method defined that returns true` ', () => {
@@ -120,4 +120,65 @@ test('It should inject validation errors in validator` ', () => {
   expect(validator.errors && validator.errors[0]).toEqual(error1);
   expect(validator.errors && validator.errors[1]).toEqual(error2);
   expect(validator.errors && validator.errors[2]).toEqual(error3);
+});
+
+test('It should inject catched errors in validator` ', () => {
+  // Given
+  const validator: Partial<Validator> = { canRun: () => false, hasErrors: false };
+  const error = new Error('error 1 from validator');
+  const validationerrorFromError = {
+    reason: error.message,
+  };
+
+  // When
+  setCatchedError(error).in(validator);
+
+  // Then
+  expect(validator.errors).toBeDefined();
+  expect(validator.hasErrors).toBe(true);
+  expect(Array.isArray(validator.errors)).toBe(true);
+  expect(validator.errors && validator.errors.length).toBe(1);
+  expect(validator.errors && validator.errors[0]).toEqual(validationerrorFromError);
+});
+
+test('It should run validator with success when validator returns no error` ', () => {
+  // Given
+  const validator: Partial<Validator> = {
+    canRun: () => true,
+    hasErrors: false,
+    run: () => [],
+    statusToDisplayWhileValidating: 'Checking that foo is bar',
+  };
+
+  // When
+  const output: string[] = [];
+  jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
+  runValidator(validator);
+
+  // Then
+  expect(validator.hasErrors).toBe(false);
+  expect(output[0]).toContain(`[v] ${validator.statusToDisplayWhileValidating}`);
+});
+
+test('It should run validator with failure when validator returns error` ', () => {
+  // Given
+  const error1 = { reason: 'error 1 from validator' };
+  const validator: Partial<Validator> = {
+    canRun: () => true,
+    hasErrors: false,
+    run: () => [error1],
+    statusToDisplayWhileValidating: 'Checking that foo is bar',
+  };
+
+  // When
+  const output: string[] = [];
+  jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
+  runValidator(validator);
+
+  // Then
+  expect(validator.hasErrors).toBe(true);
+  expect(Array.isArray(validator.errors)).toBe(true);
+  expect(validator.errors && validator.errors.length).toBe(1);
+  expect(validator.errors && validator.errors[0]).toEqual(error1);
+  expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
 });
