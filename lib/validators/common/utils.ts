@@ -24,7 +24,7 @@ export function setCatchedError(error: Error) {
 export function runValidator(validator: Partial<Validator>) {
   try {
     ensureThatValidator(validator).canRun();
-    const validationErrors: ValidationError[] = (validator.run && validator.run()) || [];
+    const validationErrors: ValidationError[] = validator.run!();
     setErrors(validationErrors).in(validator);
   } catch (error) {
     setCatchedError(error).in(validator);
@@ -58,7 +58,11 @@ export function ensureThatValidator(validator: Partial<Validator>) {
       ensureThatMethod('canRun')
         .in(validator)
         .exists();
+
       if (validator.canRun && validator.canRun()) {
+        ensureThatMethod('run')
+          .in(validator)
+          .exists();
         return;
       }
 

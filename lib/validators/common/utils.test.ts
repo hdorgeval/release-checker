@@ -5,6 +5,7 @@ test('It should not throw an error when validator has a `canRun` method defined 
   // Given
   const validator: Partial<Validator> = {
     canRun: () => true,
+    run: () => [],
   };
 
   // When
@@ -160,7 +161,25 @@ test('It should run validator with success when validator returns no error` ', (
   expect(output[0]).toContain(`[v] ${validator.statusToDisplayWhileValidating}`);
 });
 
-test('It should run validator with failure when validator returns error` ', () => {
+test('It should run validator with failure when validator has no run method` ', () => {
+  // Given
+  const validator: Partial<Validator> = {
+    canRun: () => true,
+    hasErrors: false,
+    statusToDisplayWhileValidating: 'Checking that foo is bar',
+  };
+
+  // When
+  const output: string[] = [];
+  jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
+  runValidator(validator);
+
+  // Then
+  expect(validator.hasErrors).toBe(true);
+  expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
+});
+
+test('It should run validator with failure when validator returns a validation error` ', () => {
   // Given
   const error1 = { reason: 'error 1 from validator' };
   const validator: Partial<Validator> = {
@@ -180,5 +199,29 @@ test('It should run validator with failure when validator returns error` ', () =
   expect(Array.isArray(validator.errors)).toBe(true);
   expect(validator.errors && validator.errors.length).toBe(1);
   expect(validator.errors && validator.errors[0]).toEqual(error1);
+  expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
+});
+
+test('It should run validator with failure when validator throws an unexpected error` ', () => {
+  // Given
+  const validator: Partial<Validator> = {
+    canRun: () => true,
+    hasErrors: false,
+    run: () => {
+      throw new Error('unexpected error from validator');
+    },
+    statusToDisplayWhileValidating: 'Checking that foo is bar',
+  };
+
+  // When
+  const output: string[] = [];
+  jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
+  runValidator(validator);
+
+  // Then
+  expect(validator.hasErrors).toBe(true);
+  expect(Array.isArray(validator.errors)).toBe(true);
+  expect(validator.errors && validator.errors.length).toBe(1);
+  expect(validator.errors && validator.errors[0]).toEqual({ reason: 'unexpected error from validator' });
   expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
 });

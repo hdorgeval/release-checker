@@ -1,4 +1,4 @@
-import { allKeysAreUndefindIn, getCliOptions } from './cli-options-parser';
+import { getCliOptions } from './cli-options-parser';
 
 const argv = {
   'npm run release-checker': [
@@ -48,11 +48,10 @@ test('It should set default options on command `npx release-checker` ', () => {
 
   // When
   const options = getCliOptions();
-  const commandLineHasNoOption = allKeysAreUndefindIn(options);
 
   // Then
-  expect(commandLineHasNoOption).toBe(false);
   expect(options['--package.json']).toBe(true);
+  expect(options['--help']).toBe(false);
 });
 
 test('It should set default options on command `release-checker` ', () => {
@@ -61,11 +60,10 @@ test('It should set default options on command `release-checker` ', () => {
 
   // When
   const options = getCliOptions();
-  const commandLineHasNoOption = allKeysAreUndefindIn(options);
 
   // Then
-  expect(commandLineHasNoOption).toBe(false);
   expect(options['--package.json']).toBe(true);
+  expect(options['--help']).toBe(false);
 });
 
 test('It should set default options on command `npm run release-checker` ', () => {
@@ -74,11 +72,10 @@ test('It should set default options on command `npm run release-checker` ', () =
 
   // When
   const options = getCliOptions();
-  const commandLineHasNoOption = allKeysAreUndefindIn(options);
 
   // Then
-  expect(commandLineHasNoOption).toBe(false);
   expect(options['--package.json']).toBe(true);
+  expect(options['--help']).toBe(false);
 });
 
 test('It should parse --help on command `release-checker --help` ', () => {
