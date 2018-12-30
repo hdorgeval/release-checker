@@ -2,7 +2,7 @@ import { join } from 'path';
 import { exec } from '../../lib//utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
 import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
-import * as validators from '../../lib/validators';
+import { packageJsonValidator } from '../../lib/validators/package-json-validator/index';
 
 let nativeCwd: string;
 let packageFilename: string;
@@ -37,7 +37,7 @@ test.skip('It should execute default validations on command `release-checker` ',
   const result = exec(command);
 
   // Then
-  expect(result).toContain(validators.packageJsonValidator.statusToDisplayWhileValidating);
+  expect(result).toContain(packageJsonValidator.statusToDisplayWhileValidating);
 });
 
 test('It should show usage on command `release-checker --help` ', () => {

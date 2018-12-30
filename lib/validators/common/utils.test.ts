@@ -1,4 +1,13 @@
-import { all, ensureThatValidator, runValidator, setCatchedError, setErrors, showValidationErrorsOf } from './utils';
+import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
+import {
+  all,
+  ensureThatValidator,
+  filter,
+  runValidator,
+  setCatchedError,
+  setErrors,
+  showValidationErrorsOf,
+} from './utils';
 import { Validator } from './validator-interface';
 
 test('It should not throw an error when validator has a `canRun` method defined that returns true` ', () => {
@@ -224,4 +233,24 @@ test('It should run validator with failure when validator throws an unexpected e
   expect(validator.errors && validator.errors.length).toBe(1);
   expect(validator.errors && validator.errors[0]).toEqual({ reason: 'unexpected error from validator' });
   expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
+});
+
+test('It should filter validators from command-line options` ', () => {
+  // Given
+  const validator1: Partial<Validator> = { hasErrors: false, cliOption: '--opt1' };
+  const validator2: Partial<Validator> = { hasErrors: false };
+
+  const validators = [validator1, validator2];
+  const options: ReleaseCheckerOptions = {
+    '--help': false,
+    '--opt1': true,
+    '--package.json': true,
+  };
+
+  // When
+  const result = filter(validators).from(options);
+
+  // Then
+  expect(result.length).toBe(1);
+  expect(result[0]).toEqual(validator1);
 });

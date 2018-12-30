@@ -2,6 +2,7 @@ import { ValidationError, Validator } from '../common/validator-interface';
 
 export const packageJsonValidator: Partial<Validator> = {
   canRun: () => true,
+  cliOption: '--package.json',
   id: 'package-json-validator',
   run: () => validate(),
   statusToDisplayWhileValidating: 'Checking that package.json file exists and is valid',

@@ -1,7 +1,7 @@
 import { getCliOptions } from './cli-options/cli-options-parser';
 import { usage } from './cli-options/usage';
-import * as validators from './validators';
-import { all, runValidator, showValidationErrorsOf } from './validators/common/utils';
+import { validators } from './validators';
+import { all, filter, runValidator, showValidationErrorsOf } from './validators/common/utils';
 import { Validator } from './validators/common/validator-interface';
 export function run() {
   const options = getCliOptions();
@@ -18,12 +18,8 @@ export function run() {
   // tslint:disable-next-line:no-console
   console.log('');
 
-  // tslint:disable-next-line:no-console
-  const validatorsToRun: Array<Partial<Validator>> = [];
-  validatorsToRun.push(validators.packageJsonValidator);
-
+  const validatorsToRun: Array<Partial<Validator>> = filter(validators).from(options);
   validatorsToRun.forEach(runValidator);
-
   if (all(validatorsToRun).hasPassed()) {
     return;
   }

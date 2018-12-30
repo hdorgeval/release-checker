@@ -1,3 +1,4 @@
+import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { ValidationError, Validator, ValidatorProps } from './validator-interface';
 
 export function setErrors(errors: ValidationError[]) {
@@ -91,4 +92,15 @@ export function showValidationErrorsOf(validators: Array<Partial<Validator>>) {
       console.log(`  * ${validationError.reason}`);
     });
   });
+}
+
+export function filter(validators: Array<Partial<Validator>>) {
+  return {
+    from(cliOptions: ReleaseCheckerOptions): Array<Partial<Validator>> {
+      return validators.filter((validator) => {
+        const cliOption = validator.cliOption || '';
+        return cliOptions[cliOption];
+      });
+    },
+  };
 }
