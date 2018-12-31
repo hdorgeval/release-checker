@@ -1,5 +1,15 @@
 export interface Validator {
   canRun: () => boolean;
+
+  /**
+   * command-line option associated with the validator
+   * It should be something like '--foo'
+   * You must ensure that this option is also configured in getCliOptions()
+   * The validator will be automatically selected when this option is found in the command-line
+   * The validator will be ignored if this option is not found on the command-line
+   * @type {string}
+   * @memberof Validator
+   */
   cliOption: string;
   errors: ValidationError[];
   hasErrors: boolean;
