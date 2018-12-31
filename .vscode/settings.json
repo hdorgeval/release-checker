@@ -3,5 +3,6 @@
     "tslint.autoFixOnSave": true,
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
-    "jest.autoEnable": false
+    "jest.autoEnable": false,
+    "editor.tabSize": 2
 }
