@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../lib//utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
-import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
+import { read } from '../../lib/utils/read-package-json';
 import { packageJsonValidator } from '../../lib/validators/package-json-validator/index';
 
 let nativeCwd: string;
@@ -11,7 +11,9 @@ let packageFilepath: string;
 let packageName: string;
 
 beforeAll(() => {
-  const packageDotJson = readPackageDotJsonInCurrentWorkingDirectory();
+  const packageDotJson = read('package.json')
+    .inDirectory(process.cwd())
+    .asJson();
   packageName = packageDotJson.name;
   packageFilename = `${packageDotJson.name}-${packageDotJson.version}.tgz`;
   packageFilepath = join(process.cwd(), packageFilename);

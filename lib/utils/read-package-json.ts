@@ -10,6 +10,15 @@ export interface ScriptsSection {
   [index: string]: string;
 }
 
-export function readPackageDotJsonInCurrentWorkingDirectory(): PackageDotJson {
-  return JSON.parse(readFileSync(join(process.cwd(), 'package.json')).toString()) as PackageDotJson;
+export function read(filename: string) {
+  return {
+    inDirectory(directory: string) {
+      return {
+        asJson(): PackageDotJson {
+          const content = readFileSync(join(directory, filename)).toString();
+          return JSON.parse(content);
+        },
+      };
+    },
+  };
 }

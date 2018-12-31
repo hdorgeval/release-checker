@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from './exec-sync';
-import { PackageDotJson, readPackageDotJsonInCurrentWorkingDirectory } from './read-package-json';
+import { PackageDotJson, read } from './read-package-json';
 import { addScriptInPackageDotJsonOfCurrentWorkingDirectory } from './update-package-json';
 
 let nativeProcessArgv: string[];
@@ -36,7 +36,9 @@ test('It should add script when scripts section does not exist` ', () => {
   addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'bar');
 
   // Then
-  const result = readPackageDotJsonInCurrentWorkingDirectory();
+  const result = read('package.json')
+    .inDirectory(process.cwd())
+    .asJson();
   expect(result).toHaveProperty('scripts');
   expect(result.scripts).toHaveProperty('foo');
   expect(result.scripts.foo).toBe('bar');
@@ -52,7 +54,9 @@ test('It should add script when scripts section exists` ', () => {
   addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'bar');
 
   // Then
-  const result = readPackageDotJsonInCurrentWorkingDirectory();
+  const result = read('package.json')
+    .inDirectory(process.cwd())
+    .asJson();
   expect(result).toHaveProperty('scripts');
   expect(result.scripts).toHaveProperty('foo');
   expect(result.scripts.foo).toBe('bar');
@@ -68,7 +72,9 @@ test('It should change script when script exists in scripts section` ', () => {
   addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'yo');
 
   // Then
-  const result = readPackageDotJsonInCurrentWorkingDirectory();
+  const result = read('package.json')
+    .inDirectory(process.cwd())
+    .asJson();
   expect(result).toHaveProperty('scripts');
   expect(result.scripts).toHaveProperty('foo');
   expect(result.scripts.foo).toBe('yo');

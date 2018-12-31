@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../lib//utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
-import { readPackageDotJsonInCurrentWorkingDirectory } from '../../lib/utils/read-package-json';
+import { read } from '../../lib/utils/read-package-json';
 import { addScriptInPackageDotJsonOfCurrentWorkingDirectory } from '../../lib/utils/update-package-json';
 import { packageJsonValidator } from '../../lib/validators/package-json-validator/index';
 
@@ -15,7 +15,9 @@ beforeAll(() => {
   exec('npm run rimraf -- testing-repo-for-release-checker ');
   exec('git clone https://github.com/hdorgeval/testing-repo-for-release-checker.git');
 
-  const packageDotJson = readPackageDotJsonInCurrentWorkingDirectory();
+  const packageDotJson = read('package.json')
+    .inDirectory(process.cwd())
+    .asJson();
   packageName = packageDotJson.name;
   packageFilename = `${packageDotJson.name}-${packageDotJson.version}.tgz`;
   packageFilepath = join(process.cwd(), packageFilename);
