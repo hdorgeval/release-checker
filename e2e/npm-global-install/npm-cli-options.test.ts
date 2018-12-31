@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../lib//utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
@@ -29,15 +30,17 @@ afterAll(() => {
   exec(uninstallCommand);
 });
 
-test.skip('It should execute default validations on command `release-checker` ', () => {
+test('It should execute default validations on command `release-checker` ', () => {
   // Given
-  const command = `${packageName}`;
+  const logFile = 'release-checker.log';
+  const command = `${packageName} > ${logFile}`;
 
   // When
-  const result = exec(command);
+  exec(command);
 
   // Then
-  expect(result).toContain(packageJsonValidator.statusToDisplayWhileValidating);
+  const output = readFileSync(logFile).toString();
+  expect(output).toContain(packageJsonValidator.statusToDisplayWhileValidating);
 });
 
 test('It should show usage on command `release-checker --help` ', () => {

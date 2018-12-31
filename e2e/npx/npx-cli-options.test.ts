@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs';
 import { join } from 'path';
 import { usage } from '../../lib/cli-options/usage';
 import { exec } from '../../lib/utils/exec-sync';
@@ -22,15 +23,17 @@ afterEach(() => {
   process.chdir(nativeCwd);
 });
 
-test.skip('It should execute default validations on command `npx release-checker` ', () => {
+test('It should execute default validations on command `npx release-checker` ', () => {
   // Given
-  const command = `npx ${packageFilepath}`;
+  const logFile = 'npx-release-checker.log';
+  const command = `npx ${packageFilepath} > ${logFile} `;
 
   // When
-  const result = exec(command);
+  exec(command);
 
   // Then
-  expect(result).toContain(packageJsonValidator.statusToDisplayWhileValidating);
+  const output = readFileSync(logFile).toString();
+  expect(output).toContain(packageJsonValidator.statusToDisplayWhileValidating);
 });
 
 test('It should show usage on command `npx release-checker --help` ', () => {
