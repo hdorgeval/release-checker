@@ -84,16 +84,6 @@ export function all(validators: Array<Partial<Validator>>) {
   };
 }
 
-export function showValidationErrorsOf(validators: Array<Partial<Validator>>) {
-  validators.forEach((validator) => {
-    validator.errors = validator.errors || [];
-    validator.errors.forEach((validationError) => {
-      // tslint:disable-next-line:no-console
-      console.log(`  * ${validationError.reason}`);
-    });
-  });
-}
-
 export function filter(validators: Array<Partial<Validator>>) {
   return {
     from(cliOptions: ReleaseCheckerOptions): Array<Partial<Validator>> {
