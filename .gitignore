@@ -67,3 +67,5 @@ package/
 #test files
 testing-repo-for-release-checker/
 **/tmp/
+**/tmp1/
+**/tmp2/
