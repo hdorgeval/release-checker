@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from './exec-sync';
 import { PackageDotJson, read } from './read-package-json';
-import { addScriptInPackageDotJsonOfCurrentWorkingDirectory } from './update-package-json';
+import { addScript } from './update-package-json';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
@@ -33,7 +33,10 @@ test('It should add script when scripts section does not exist` ', () => {
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
   // When
-  addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'bar');
+  addScript('bar')
+    .withKey('foo')
+    .inside('package.json')
+    .ofDirectory(process.cwd());
 
   // Then
   const result = read('package.json')
@@ -51,7 +54,10 @@ test('It should add script when scripts section exists` ', () => {
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
   // When
-  addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'bar');
+  addScript('bar')
+    .withKey('foo')
+    .inside('package.json')
+    .ofDirectory(process.cwd());
 
   // Then
   const result = read('package.json')
@@ -69,7 +75,10 @@ test('It should change script when script exists in scripts section` ', () => {
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
   // When
-  addScriptInPackageDotJsonOfCurrentWorkingDirectory('foo', 'yo');
+  addScript('yo')
+    .withKey('foo')
+    .inside('package.json')
+    .ofDirectory(process.cwd());
 
   // Then
   const result = read('package.json')

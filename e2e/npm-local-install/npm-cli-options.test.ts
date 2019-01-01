@@ -3,7 +3,7 @@ import { join } from 'path';
 import { exec } from '../../lib//utils/exec-sync';
 import { usage } from '../../lib/cli-options/usage';
 import { read } from '../../lib/utils/read-package-json';
-import { addScriptInPackageDotJsonOfCurrentWorkingDirectory } from '../../lib/utils/update-package-json';
+import { addScript } from '../../lib/utils/update-package-json';
 import { packageJsonValidator } from '../../lib/validators/package-json-validator/index';
 
 let nativeCwd: string;
@@ -26,7 +26,10 @@ beforeEach(() => {
   nativeCwd = process.cwd();
   process.chdir('testing-repo-for-release-checker');
   exec(`npm install --save-dev ${packageFilepath}`);
-  addScriptInPackageDotJsonOfCurrentWorkingDirectory(`${packageName}`, `${packageName}`);
+  addScript(`${packageName}`)
+    .withKey(`${packageName}`)
+    .inside('package.json')
+    .ofDirectory(process.cwd());
 });
 afterEach(() => {
   process.chdir(nativeCwd);
