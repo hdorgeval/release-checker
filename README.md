@@ -56,6 +56,22 @@ When you specify no option the following validation is run:
 
 - `package.json` validation: checking that package.json file exists and is valid
 
+### -h, --help
+
+Displays commands' usage information.
+
+```sh
+npx release-checker --help
+```
+
+### -t, --test (unreleased)
+
+Ensure that command `npm test` is successfull
+
+```sh
+npx release-checker --test
+```
+
 ## Authors
 
 - [Ivan Nikulin](https://github.com/inikulin)
