@@ -11,7 +11,7 @@ let nativeCwd: string;
 beforeAll(() => {
   nativeCwd = process.cwd();
   nativeProcessArgv = process.argv;
-  tempFolder = join(__dirname, 'tmp');
+  tempFolder = join(__dirname, 'tmp2');
   exec(`npm run rimraf -- ${tempFolder}`);
   mkdirSync(tempFolder);
 });
