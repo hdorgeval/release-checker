@@ -86,3 +86,18 @@ test('It should return a validation error when version section of package.json i
   expect(result && result.length).toBe(1);
   expect(result && result[0]).toEqual({ reason: 'package.json has no version defined' });
 });
+
+test('It should return no validation error when package.json is valid', () => {
+  // Given
+  const validator = packageJsonValidator;
+  const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: {} };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  // When
+  const result = validator.run && validator.run();
+
+  // Then
+  expect(Array.isArray(result)).toBe(true);
+  expect(result && result.length).toBe(0);
+});
