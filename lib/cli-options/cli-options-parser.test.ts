@@ -15,6 +15,11 @@ const argv = {
     '/Users/user_name/projects/release-checker/build/bin/release-checker',
     '-h',
   ],
+  'npm run release-checker -- -t': [
+    '/usr/local/bin/node',
+    '/Users/user_name/projects/release-checker/build/bin/release-checker',
+    '-t',
+  ],
 
   'npx release-checker': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
 
@@ -24,7 +29,14 @@ const argv = {
     '--help',
   ],
 
+  'npx release-checker --test': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--test',
+  ],
+
   'npx release-checker -h': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker', '-h'],
+  'npx release-checker -t': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker', '-t'],
 
   'release-checker': ['/usr/local/bin/node', '/usr/local/bin/release-checker'],
   'release-checker --help': ['/usr/local/bin/node', '/usr/local/bin/release-checker', '--help'],
@@ -52,6 +64,7 @@ test('It should set default options on command `npx release-checker` ', () => {
   // Then
   expect(options['--package.json']).toBe(true);
   expect(options['--help']).toBe(false);
+  expect(options['--test']).toBe(false);
 });
 
 test('It should set default options on command `release-checker` ', () => {
@@ -64,6 +77,7 @@ test('It should set default options on command `release-checker` ', () => {
   // Then
   expect(options['--package.json']).toBe(true);
   expect(options['--help']).toBe(false);
+  expect(options['--test']).toBe(false);
 });
 
 test('It should set default options on command `npm run release-checker` ', () => {
@@ -76,6 +90,7 @@ test('It should set default options on command `npm run release-checker` ', () =
   // Then
   expect(options['--package.json']).toBe(true);
   expect(options['--help']).toBe(false);
+  expect(options['--test']).toBe(false);
 });
 
 test('It should parse --help on command `release-checker --help` ', () => {
@@ -87,6 +102,7 @@ test('It should parse --help on command `release-checker --help` ', () => {
 
   // Then
   expect(options['--help']).toBe(true);
+  expect(options['--test']).toBe(false);
 });
 
 test('It should parse --help on command `release-checker -h` ', () => {
@@ -98,6 +114,7 @@ test('It should parse --help on command `release-checker -h` ', () => {
 
   // Then
   expect(options['--help']).toBe(true);
+  expect(options['--test']).toBe(false);
 });
 
 test('It should parse --help on command `npm run release-checker -- --help` ', () => {
@@ -109,6 +126,7 @@ test('It should parse --help on command `npm run release-checker -- --help` ', (
 
   // Then
   expect(options['--help']).toBe(true);
+  expect(options['--test']).toBe(false);
 });
 
 test('It should parse --help on command `npm run release-checker -- -h` ', () => {
@@ -120,6 +138,19 @@ test('It should parse --help on command `npm run release-checker -- -h` ', () =>
 
   // Then
   expect(options['--help']).toBe(true);
+  expect(options['--test']).toBe(false);
+});
+
+test('It should parse --test on command `npm run release-checker -- -t` ', () => {
+  // Given
+  process.argv = argv['npm run release-checker -- -t'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--help']).toBe(false);
+  expect(options['--test']).toBe(true);
 });
 
 test('It should parse --help on command `npx release-checker --help` ', () => {
@@ -131,6 +162,19 @@ test('It should parse --help on command `npx release-checker --help` ', () => {
 
   // Then
   expect(options['--help']).toBe(true);
+  expect(options['--test']).toBe(false);
+});
+
+test('It should parse --test on command `npx release-checker --test` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --test'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--help']).toBe(false);
+  expect(options['--test']).toBe(true);
 });
 
 test('It should parse --help on command `npx release-checker -h` ', () => {
@@ -142,4 +186,17 @@ test('It should parse --help on command `npx release-checker -h` ', () => {
 
   // Then
   expect(options['--help']).toBe(true);
+  expect(options['--test']).toBe(false);
+});
+
+test('It should parse --test on command `npx release-checker -t` ', () => {
+  // Given
+  process.argv = argv['npx release-checker -t'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--help']).toBe(false);
+  expect(options['--test']).toBe(true);
 });

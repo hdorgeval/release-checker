@@ -52,6 +52,20 @@ export function ensureThat(filename: string) {
             },
           };
         },
+        hasScript(key: string) {
+          const missingScript = `script '${key}' in ${filename} file is missing`;
+          try {
+            const pkg = read(filename)
+              .inDirectory(directory)
+              .asJson();
+            const script = pkg && pkg.scripts && pkg.scripts[key];
+            if (!script) {
+              throw new Error(missingScript);
+            }
+          } catch (error) {
+            throw new Error(missingScript);
+          }
+        },
       };
     },
   };

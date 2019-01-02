@@ -1,4 +1,4 @@
-import { exec } from './exec-sync';
+import { exec, execOrThrow } from './exec-sync';
 
 let nativeProcessArgv: string[];
 
@@ -33,4 +33,14 @@ test('It should not execute command `npm yo --json` ', () => {
   // Then
   expect(result).toContain('Command failed');
   expect(result).toContain(command);
+});
+
+test('It should throw an error when executing command `npm yo --json` ', () => {
+  // Given
+  const command = 'npm yo --json';
+
+  // When
+  // Then
+  const expectedError = `Command failed: ${command}`;
+  expect(() => execOrThrow(command)).toThrowError(expectedError);
 });

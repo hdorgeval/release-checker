@@ -211,6 +211,7 @@ test('It should filter validators from command-line options` ', () => {
     '--help': false,
     '--opt1': true,
     '--package.json': true,
+    '--test': true,
   };
 
   // When
