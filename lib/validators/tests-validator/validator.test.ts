@@ -45,3 +45,43 @@ test('It should throw an exception when test script is missing in package.json',
   const expectedError = new Error(`script 'test' in package.json file is missing`);
   expect(() => validator.run && validator.run()).toThrowError(expectedError);
 });
+
+test('It should throw an exception when test script exit with code 1', () => {
+  // Given
+  const validator = testsValidator;
+  const pkg: Partial<PackageDotJson> = {
+    name: 'testing-repo',
+    scripts: {
+      test: 'echo "Error: no test specified" && exit 1',
+    },
+    version: '1.0.0',
+  };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  // When
+  // Then
+  const expectedError = `Command failed: npm test
+npm ERR! Test failed.  See above for more details.`;
+  expect(() => validator.run && validator.run()).toThrowError(expectedError);
+});
+
+test('It should not throw an exception when test script is successfull', () => {
+  // Given
+  const validator = testsValidator;
+  const pkg: Partial<PackageDotJson> = {
+    name: 'testing-repo',
+    scripts: {
+      test: 'echo "tests successfull"',
+    },
+    version: '1.0.0',
+  };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  // When
+  const result = validator.run && validator.run();
+
+  // Then
+  expect(result).toEqual([]);
+});

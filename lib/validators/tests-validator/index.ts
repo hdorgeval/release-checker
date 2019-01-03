@@ -1,4 +1,4 @@
-import { execOrThrow } from '../../../lib/utils/exec-sync';
+import { execOrThrow } from '../../utils/exec-sync';
 import { ensureThat } from '../../utils/read-package-json';
 import { ValidationError, Validator } from '../common/validator-interface';
 
@@ -15,8 +15,6 @@ function validate(): ValidationError[] {
     .inDirectory(process.cwd())
     .hasScript('test');
 
-  const result = execOrThrow('npm test');
-  // tslint:disable-next-line:no-console
-  console.log(result);
+  execOrThrow('npm test');
   return [];
 }
