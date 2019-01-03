@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.2.0] - 2019-01-03
 
-### Unreleased
+### Added
 
 - tests validation: checking that command `npm test` is successfull
 
