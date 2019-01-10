@@ -16,9 +16,11 @@ export function run() {
   validatorsToRun.forEach(runValidator);
 
   if (all(validatorsToRun).hasPassed()) {
+    ciReporter.reportValidationWarningsOf(validatorsToRun);
     return;
   }
 
+  ciReporter.reportValidationWarningsOf(validatorsToRun);
   ciReporter.reportValidationErrorsOf(validatorsToRun);
   process.exit(1);
 }
