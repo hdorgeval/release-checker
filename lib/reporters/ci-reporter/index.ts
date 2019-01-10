@@ -44,6 +44,15 @@ function reportValidationErrorsOf(validators: Array<Partial<Validator>>) {
 }
 
 function reportValidationWarningsOf(validators: Array<Partial<Validator>>) {
+  // prettier-ignore
+  const hasNoWarning = validators
+    .filter((validator) => validator.hasWarnings)
+    .length === 0;
+
+  if (hasNoWarning) {
+    return;
+  }
+
   // tslint:disable-next-line:no-console
   console.log('');
   // tslint:disable-next-line:no-console
