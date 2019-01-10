@@ -5,7 +5,9 @@ import { Reporter } from '../common/reporter-interface';
 
 export const ciReporter: Reporter = {
   name: 'ci',
+  reportErrorStatusFor,
   reportIntro,
+  reportSuccessStatusFor,
   reportUsage,
   reportValidationErrorsOf,
   reportValidationWarningsOf,
@@ -59,4 +61,14 @@ function reportValidationWarningsOf(validators: Array<Partial<Validator>>) {
 function reportWarningStatusFor(validator: Partial<Validator>) {
   // tslint:disable-next-line:no-console
   console.log(`[!] ${validator.statusToDisplayWhileValidating}`);
+}
+
+function reportErrorStatusFor(validator: Partial<Validator>) {
+  // tslint:disable-next-line:no-console
+  console.log(`[x] ${validator.statusToDisplayWhileValidating}`);
+}
+
+function reportSuccessStatusFor(validator: Partial<Validator>) {
+  // tslint:disable-next-line:no-console
+  console.log(`[v] ${validator.statusToDisplayWhileValidating}`);
 }

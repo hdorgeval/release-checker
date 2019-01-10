@@ -65,11 +65,17 @@ export function runValidator(validator: Partial<Validator>): void {
     setCatchedError(error).in(validator);
   }
 
-  validator.hasErrors
-    ? // tslint:disable-next-line:no-console
-      console.log(`[x] ${validator.statusToDisplayWhileValidating}`)
-    : // tslint:disable-next-line:no-console
-      console.log(`[v] ${validator.statusToDisplayWhileValidating}`);
+  if (validator.hasErrors) {
+    ciReporter.reportErrorStatusFor(validator);
+    return;
+  }
+
+  if (validator.hasWarnings) {
+    ciReporter.reportWarningStatusFor(validator);
+    return;
+  }
+
+  ciReporter.reportSuccessStatusFor(validator);
 }
 
 export function ensureThatMethod(methodName: ValidatorProps) {
