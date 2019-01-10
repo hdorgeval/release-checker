@@ -1,6 +1,6 @@
 import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { all, ensureThatValidator, filter, runValidator, setCatchedError, setErrors } from './utils';
-import { Validator } from './validator-interface';
+import { ValidationError, Validator } from './validator-interface';
 
 test('It should not throw an error when validator has a `canRun` method defined that returns true` ', () => {
   // Given
@@ -80,9 +80,9 @@ test('It should detect that one validator has failed` ', () => {
 test('It should inject validation errors in validator` ', () => {
   // Given
   const validator: Partial<Validator> = { canRun: () => false, hasErrors: false };
-  const error1 = { reason: 'error 1 from validator' };
-  const error2 = { reason: 'error 2 from validator' };
-  const error3 = { reason: 'error 3 from validator' };
+  const error1: ValidationError = { reason: 'error 1 from validator', severity: 'error' };
+  const error2: ValidationError = { reason: 'error 2 from validator', severity: 'error' };
+  const error3: ValidationError = { reason: 'error 3 from validator', severity: 'error' };
   const validationErrors = [error1, error2, error3];
 
   // When
@@ -102,8 +102,9 @@ test('It should inject catched errors in validator` ', () => {
   // Given
   const validator: Partial<Validator> = { canRun: () => false, hasErrors: false };
   const error = new Error('error 1 from validator');
-  const validationerrorFromError = {
+  const validationerrorFromError: ValidationError = {
     reason: error.message,
+    severity: 'error',
   };
 
   // When
@@ -136,7 +137,7 @@ test('It should run validator with success when validator returns no error` ', (
   expect(output[0]).toContain(`[v] ${validator.statusToDisplayWhileValidating}`);
 });
 
-test('It should run validator with failure when validator has no run method` ', () => {
+test('It should run validator with warning when validator has no run method` ', () => {
   // Given
   const validator: Partial<Validator> = {
     canRun: () => true,
@@ -150,13 +151,14 @@ test('It should run validator with failure when validator has no run method` ', 
   runValidator(validator);
 
   // Then
-  expect(validator.hasErrors).toBe(true);
-  expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
+  expect(validator.hasErrors).toBe(false);
+  expect(validator.hasWarnings).toBe(true);
+  expect(output[0]).toContain(`[!] ${validator.statusToDisplayWhileValidating}`);
 });
 
 test('It should run validator with failure when validator returns a validation error` ', () => {
   // Given
-  const error1 = { reason: 'error 1 from validator' };
+  const error1: ValidationError = { reason: 'error 1 from validator', severity: 'error' };
   const validator: Partial<Validator> = {
     canRun: () => true,
     hasErrors: false,
@@ -194,10 +196,11 @@ test('It should run validator with failure when validator throws an unexpected e
   runValidator(validator);
 
   // Then
+  const expectedValidationError: ValidationError = { reason: 'unexpected error from validator', severity: 'error' };
   expect(validator.hasErrors).toBe(true);
   expect(Array.isArray(validator.errors)).toBe(true);
   expect(validator.errors && validator.errors.length).toBe(1);
-  expect(validator.errors && validator.errors[0]).toEqual({ reason: 'unexpected error from validator' });
+  expect(validator.errors && validator.errors[0]).toEqual(expectedValidationError);
   expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
 });
 

@@ -1,5 +1,5 @@
 import { ensureThat, read } from '../../utils/read-package-json';
-import { ValidationError, Validator } from '../common/validator-interface';
+import { ValidationError, ValidationWarning, Validator } from '../common/validator-interface';
 
 export const packageJsonValidator: Partial<Validator> = {
   canRun: () => true,
@@ -9,7 +9,7 @@ export const packageJsonValidator: Partial<Validator> = {
   statusToDisplayWhileValidating: 'Checking that package.json file exists and is valid',
 };
 
-function validate(): ValidationError[] {
+function validate(): Array<ValidationError | ValidationWarning> {
   const validationsErrors = [];
   ensureThat('package.json')
     .inDirectory(process.cwd())
@@ -26,11 +26,11 @@ function validate(): ValidationError[] {
     .asJson();
 
   if (pkg.name === undefined) {
-    validationsErrors.push({ reason: 'package.json has no name defined' });
+    validationsErrors.push({ reason: 'package.json has no name defined', severity: 'error' } as ValidationError);
   }
 
   if (pkg.version === undefined) {
-    validationsErrors.push({ reason: 'package.json has no version defined' });
+    validationsErrors.push({ reason: 'package.json has no version defined', severity: 'error' } as ValidationError);
   }
 
   return validationsErrors;

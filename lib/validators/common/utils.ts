@@ -1,5 +1,5 @@
 import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
-import { ValidationError, Validator, ValidatorProps } from './validator-interface';
+import { ValidationError, ValidationWarning, Validator, ValidatorProps } from './validator-interface';
 
 export function setErrors(errors: ValidationError[]) {
   return {
@@ -10,23 +10,57 @@ export function setErrors(errors: ValidationError[]) {
   };
 }
 
+export function setErrorsAndWarnings(errorsAndWarnings: Array<ValidationError | ValidationWarning>) {
+  return {
+    in(validator: Partial<Validator>) {
+      const errors = errorsAndWarnings.filter((error) => error.severity === 'error') as ValidationError[];
+      setErrors(errors).in(validator);
+
+      const warnings = errorsAndWarnings.filter((error) => error.severity === 'warning') as ValidationWarning[];
+      setWarnings(warnings).in(validator);
+    },
+  };
+}
+
+export function setWarnings(warnings: ValidationWarning[]) {
+  return {
+    in(validator: Partial<Validator>) {
+      validator.hasWarnings = warnings.length > 0;
+      validator.warnings = [...warnings];
+    },
+  };
+}
+
 export function setCatchedError(error: Error) {
   return {
     in(validator: Partial<Validator>) {
       validator.hasErrors = true;
       const validationError: ValidationError = {
         reason: error.message,
+        severity: 'error',
       };
       validator.errors = [validationError];
     },
   };
 }
 
-export function runValidator(validator: Partial<Validator>) {
+export function runValidator(validator: Partial<Validator>): void {
   try {
     ensureThatValidator(validator).canRun();
-    const validationErrors: ValidationError[] = validator.run!();
-    setErrors(validationErrors).in(validator);
+  } catch (error) {
+    const warning: ValidationWarning = {
+      reason: error.message,
+      severity: 'warning',
+    };
+    setWarnings([warning]).in(validator);
+    // tslint:disable-next-line:no-console
+    console.log(`[!] ${validator.statusToDisplayWhileValidating}`);
+    return;
+  }
+
+  try {
+    const validationErrorsAndWarnings = validator.run!();
+    setErrorsAndWarnings(validationErrorsAndWarnings).in(validator);
   } catch (error) {
     setCatchedError(error).in(validator);
   }
@@ -70,6 +104,7 @@ export function ensureThatValidator(validator: Partial<Validator>) {
       ensureThatMethod('whyCannotRun')
         .in(validator)
         .exists();
+
       const errorMessage = validator.whyCannotRun && validator.whyCannotRun();
       throw new Error(errorMessage);
     },

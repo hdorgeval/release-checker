@@ -2,6 +2,7 @@ import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../utils/exec-sync';
 import { PackageDotJson } from '../../utils/read-package-json';
+import { ValidationError } from '../common/validator-interface';
 import { packageJsonValidator } from './index';
 
 let nativeProcessArgv: string[];
@@ -66,9 +67,10 @@ test('It should return a validation error when name section of package.json is u
   const result = validator.run && validator.run();
 
   // Then
+  const expectedValidationError: ValidationError = { reason: 'package.json has no name defined', severity: 'error' };
   expect(Array.isArray(result)).toBe(true);
   expect(result && result.length).toBe(1);
-  expect(result && result[0]).toEqual({ reason: 'package.json has no name defined' });
+  expect(result && result[0]).toEqual(expectedValidationError);
 });
 
 test('It should return a validation error when version section of package.json is undefined', () => {
@@ -82,9 +84,10 @@ test('It should return a validation error when version section of package.json i
   const result = validator.run && validator.run();
 
   // Then
+  const expectedValidationError: ValidationError = { reason: 'package.json has no version defined', severity: 'error' };
   expect(Array.isArray(result)).toBe(true);
   expect(result && result.length).toBe(1);
-  expect(result && result[0]).toEqual({ reason: 'package.json has no version defined' });
+  expect(result && result[0]).toEqual(expectedValidationError);
 });
 
 test('It should return no validation error when package.json is valid', () => {

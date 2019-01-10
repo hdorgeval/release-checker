@@ -13,9 +13,11 @@ export interface Validator {
   cliOption: string;
   errors: ValidationError[];
   hasErrors: boolean;
+  hasWarnings: boolean;
   id: string;
-  run: () => ValidationError[];
+  run: () => Array<ValidationError | ValidationWarning>;
   statusToDisplayWhileValidating: string;
+  warnings: ValidationWarning[];
   whyCannotRun: () => string;
 }
 
@@ -24,13 +26,21 @@ const noopValidator: Validator = {
   cliOption: '--noop',
   errors: [],
   hasErrors: false,
+  hasWarnings: false,
   id: 'noop',
   run: () => [],
   statusToDisplayWhileValidating: 'noop',
+  warnings: [],
   whyCannotRun: () => '',
 };
 export type ValidatorProps = keyof typeof noopValidator;
 
 export interface ValidationError {
   reason: string;
+  severity: 'error';
+}
+
+export interface ValidationWarning {
+  reason: string;
+  severity: 'warning';
 }
