@@ -38,7 +38,7 @@ afterAll(() => {
   // exec('npm run rimraf -- testing-repo-for-release-checker ');
 });
 
-test('It should execute default validations on command `npm run release-checker` ', () => {
+test.skip('It should execute default validations on command `npm run release-checker` ', () => {
   // Given
   const logFile = 'npm-run-release-checker.log';
   const command = `npm run ${packageName} > ${logFile}`;

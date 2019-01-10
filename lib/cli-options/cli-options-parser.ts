@@ -16,3 +16,11 @@ export function getCliOptions(): ReleaseCheckerOptions {
   };
   return options;
 }
+
+export function no(options: ReleaseCheckerOptions) {
+  return {
+    hasBeenSet(): boolean {
+      return options['--help'] === false && options['--test'] === false;
+    },
+  };
+}

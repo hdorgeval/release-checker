@@ -1,4 +1,4 @@
-import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
+import { no, ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { ciReporter } from '../../reporters/ci-reporter/index';
 import { ValidationError, ValidationWarning, Validator, ValidatorProps } from './validator-interface';
 
@@ -128,6 +128,10 @@ export function all(validators: Array<Partial<Validator>>) {
 export function filter(validators: Array<Partial<Validator>>) {
   return {
     from(cliOptions: ReleaseCheckerOptions): Array<Partial<Validator>> {
+      if (no(cliOptions).hasBeenSet()) {
+        return validators;
+      }
+
       return validators.filter((validator) => {
         const cliOption = validator.cliOption || '';
         return cliOptions[cliOption];

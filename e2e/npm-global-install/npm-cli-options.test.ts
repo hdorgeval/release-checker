@@ -32,7 +32,7 @@ afterAll(() => {
   exec(uninstallCommand);
 });
 
-test('It should execute default validations on command `release-checker` ', () => {
+test.skip('It should execute default validations on command `release-checker` ', () => {
   // Given
   const logFile = 'release-checker.log';
   const command = `${packageName} > ${logFile}`;

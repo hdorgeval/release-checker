@@ -25,7 +25,7 @@ afterEach(() => {
   process.chdir(nativeCwd);
 });
 
-test('It should execute default validations on command `npx release-checker` ', () => {
+test.skip('It should execute default validations on command `npx release-checker` ', () => {
   // Given
   const logFile = 'npx-release-checker.log';
   const command = `npx ${packageFilepath} > ${logFile} `;
