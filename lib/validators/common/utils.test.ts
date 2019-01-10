@@ -1,6 +1,6 @@
 import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
-import { all, ensureThatValidator, filter, runValidator, setCatchedError, setErrors } from './utils';
-import { ValidationError, Validator } from './validator-interface';
+import { all, ensureThatValidator, filter, runValidator, setCatchedError, setErrors, setWarnings } from './utils';
+import { ValidationError, ValidationWarning, Validator } from './validator-interface';
 
 test('It should not throw an error when validator has a `canRun` method defined that returns true` ', () => {
   // Given
@@ -53,7 +53,22 @@ test('It should check if all validators has passed` ', () => {
   const validator2: Partial<Validator> = { hasErrors: false };
   const validator3: Partial<Validator> = { hasErrors: false };
   const validator4: Partial<Validator> = { hasErrors: false };
-  const validators = [validator1, validator2, validator3, validator4];
+  const validator5: Partial<Validator> = { hasErrors: false, hasWarnings: true };
+  const validators = [validator1, validator2, validator3, validator4, validator5];
+
+  // When
+  const result = all(validators).hasPassed();
+
+  // Then
+  expect(result).toBe(true);
+});
+
+test('It should pass when there are only warnings` ', () => {
+  // Given
+  const validator1: Partial<Validator> = { hasWarnings: true };
+  const validator2: Partial<Validator> = { hasWarnings: true };
+  const validator3: Partial<Validator> = { hasWarnings: true };
+  const validators = [validator1, validator2, validator3];
 
   // When
   const result = all(validators).hasPassed();
@@ -96,6 +111,29 @@ test('It should inject validation errors in validator` ', () => {
   expect(validator.errors && validator.errors[0]).toEqual(error1);
   expect(validator.errors && validator.errors[1]).toEqual(error2);
   expect(validator.errors && validator.errors[2]).toEqual(error3);
+});
+
+test('It should inject validation warnings in validator` ', () => {
+  // Given
+  const validator: Partial<Validator> = { canRun: () => false, hasErrors: false };
+  const warning1: ValidationWarning = { reason: 'error 1 from validator', severity: 'warning' };
+  const warning2: ValidationWarning = { reason: 'error 2 from validator', severity: 'warning' };
+  const warning3: ValidationWarning = { reason: 'error 3 from validator', severity: 'warning' };
+  const validationWarnings = [warning1, warning2, warning3];
+
+  // When
+  setWarnings(validationWarnings).in(validator);
+
+  // Then
+  expect(validator.errors).toBeUndefined();
+  expect(validator.warnings).toBeDefined();
+  expect(validator.hasErrors).toBe(false);
+  expect(validator.hasWarnings).toBe(true);
+  expect(Array.isArray(validator.warnings)).toBe(true);
+  expect(validator.warnings && validator.warnings.length).toBe(3);
+  expect(validator.warnings && validator.warnings[0]).toEqual(warning1);
+  expect(validator.warnings && validator.warnings[1]).toEqual(warning2);
+  expect(validator.warnings && validator.warnings[2]).toEqual(warning3);
 });
 
 test('It should inject catched errors in validator` ', () => {
