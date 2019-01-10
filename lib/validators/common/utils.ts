@@ -1,4 +1,5 @@
 import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
+import { ciReporter } from '../../reporters/ci-reporter/index';
 import { ValidationError, ValidationWarning, Validator, ValidatorProps } from './validator-interface';
 
 export function setErrors(errors: ValidationError[]) {
@@ -53,8 +54,7 @@ export function runValidator(validator: Partial<Validator>): void {
       severity: 'warning',
     };
     setWarnings([warning]).in(validator);
-    // tslint:disable-next-line:no-console
-    console.log(`[!] ${validator.statusToDisplayWhileValidating}`);
+    ciReporter.reportWarningStatusFor(validator);
     return;
   }
 

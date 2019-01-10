@@ -9,6 +9,7 @@ export const ciReporter: Reporter = {
   reportUsage,
   reportValidationErrorsOf,
   reportValidationWarningsOf,
+  reportWarningStatusFor,
 };
 
 function reportUsage() {
@@ -53,4 +54,9 @@ function reportValidationWarningsOf(validators: Array<Partial<Validator>>) {
       console.log(`  * ${extractFirstLineOf(validationWarning.reason)}`);
     });
   });
+}
+
+function reportWarningStatusFor(validator: Partial<Validator>) {
+  // tslint:disable-next-line:no-console
+  console.log(`[!] ${validator.statusToDisplayWhileValidating}`);
 }

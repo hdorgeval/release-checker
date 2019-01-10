@@ -6,4 +6,5 @@ export interface Reporter {
   reportUsage: () => void;
   reportValidationErrorsOf: (validators: Array<Partial<Validator>>) => void;
   reportValidationWarningsOf: (validators: Array<Partial<Validator>>) => void;
+  reportWarningStatusFor: (validator: Partial<Validator>) => void;
 }
