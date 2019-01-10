@@ -217,6 +217,32 @@ test('It should run validator with failure when validator returns a validation e
   expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
 });
 
+test('It should run validator with warning when validator returns a validation warning` ', () => {
+  // Given
+  const warning1: ValidationWarning = { reason: 'error 1 from validator', severity: 'warning' };
+  const validator: Partial<Validator> = {
+    canRun: () => true,
+    hasErrors: false,
+    run: () => [warning1],
+    statusToDisplayWhileValidating: 'Checking that foo is bar',
+  };
+
+  // When
+  const output: string[] = [];
+  jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
+  runValidator(validator);
+
+  // Then
+  expect(validator.hasErrors).toBe(false);
+  expect(validator.hasWarnings).toBe(true);
+  expect(Array.isArray(validator.errors)).toBe(true);
+  expect(Array.isArray(validator.warnings)).toBe(true);
+  expect(validator.errors && validator.errors.length).toBe(0);
+  expect(validator.warnings && validator.warnings.length).toBe(1);
+  expect(validator.warnings && validator.warnings[0]).toEqual(warning1);
+  expect(output[0]).toContain(`[!] ${validator.statusToDisplayWhileValidating}`);
+});
+
 test('It should run validator with failure when validator throws an unexpected error` ', () => {
   // Given
   const validator: Partial<Validator> = {
