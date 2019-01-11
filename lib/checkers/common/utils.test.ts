@@ -63,100 +63,100 @@ test('It should determine that all checkers has passed` ', () => {
 
 test('It should pass when there are only warnings` ', () => {
   // Given
-  const validator1: Partial<Checker> = { hasWarnings: true };
-  const validator2: Partial<Checker> = { hasWarnings: true };
-  const validator3: Partial<Checker> = { hasWarnings: true };
-  const validators = [validator1, validator2, validator3];
+  const checker1: Partial<Checker> = { hasWarnings: true };
+  const checker2: Partial<Checker> = { hasWarnings: true };
+  const checker3: Partial<Checker> = { hasWarnings: true };
+  const checkers = [checker1, checker2, checker3];
 
   // When
-  const result = all(validators).hasPassed();
+  const result = all(checkers).hasPassed();
 
   // Then
   expect(result).toBe(true);
 });
 
-test('It should detect that one validator has failed` ', () => {
+test('It should detect that one checker has failed` ', () => {
   // Given
-  const validator1: Partial<Checker> = { hasErrors: false };
-  const validator2: Partial<Checker> = { hasErrors: false };
-  const validator3: Partial<Checker> = { hasErrors: true };
-  const validator4: Partial<Checker> = { hasErrors: false };
-  const validators = [validator1, validator2, validator3, validator4];
+  const checker1: Partial<Checker> = { hasErrors: false };
+  const checker2: Partial<Checker> = { hasErrors: false };
+  const checker3: Partial<Checker> = { hasErrors: true };
+  const checker4: Partial<Checker> = { hasErrors: false, hasWarnings: true };
+  const checkers = [checker1, checker2, checker3, checker4];
 
   // When
-  const result = all(validators).hasPassed();
+  const result = all(checkers).hasPassed();
 
   // Then
   expect(result).toBe(false);
 });
 
-test('It should inject validation errors in validator` ', () => {
+test('It should inject validation errors in checker` ', () => {
   // Given
-  const validator: Partial<Checker> = { canRun: () => false, hasErrors: false };
-  const error1: ValidationError = { reason: 'error 1 from validator', severity: 'error' };
-  const error2: ValidationError = { reason: 'error 2 from validator', severity: 'error' };
-  const error3: ValidationError = { reason: 'error 3 from validator', severity: 'error' };
+  const checker: Partial<Checker> = { canRun: () => false, hasErrors: false };
+  const error1: ValidationError = { reason: 'error 1 from checker', severity: 'error' };
+  const error2: ValidationError = { reason: 'error 2 from checker', severity: 'error' };
+  const error3: ValidationError = { reason: 'error 3 from checker', severity: 'error' };
   const validationErrors = [error1, error2, error3];
 
   // When
-  setErrors(validationErrors).in(validator);
+  setErrors(validationErrors).in(checker);
 
   // Then
-  expect(validator.errors).toBeDefined();
-  expect(validator.hasErrors).toBe(true);
-  expect(Array.isArray(validator.errors)).toBe(true);
-  expect(validator.errors && validator.errors.length).toBe(3);
-  expect(validator.errors && validator.errors[0]).toEqual(error1);
-  expect(validator.errors && validator.errors[1]).toEqual(error2);
-  expect(validator.errors && validator.errors[2]).toEqual(error3);
+  expect(checker.errors).toBeDefined();
+  expect(checker.hasErrors).toBe(true);
+  expect(Array.isArray(checker.errors)).toBe(true);
+  expect(checker.errors && checker.errors.length).toBe(3);
+  expect(checker.errors && checker.errors[0]).toEqual(error1);
+  expect(checker.errors && checker.errors[1]).toEqual(error2);
+  expect(checker.errors && checker.errors[2]).toEqual(error3);
 });
 
-test('It should inject validation warnings in validator` ', () => {
+test('It should inject validation warnings in checker` ', () => {
   // Given
-  const validator: Partial<Checker> = { canRun: () => false, hasErrors: false };
-  const warning1: ValidationWarning = { reason: 'error 1 from validator', severity: 'warning' };
-  const warning2: ValidationWarning = { reason: 'error 2 from validator', severity: 'warning' };
-  const warning3: ValidationWarning = { reason: 'error 3 from validator', severity: 'warning' };
+  const checker: Partial<Checker> = { canRun: () => false, hasErrors: false };
+  const warning1: ValidationWarning = { reason: 'error 1 from checker', severity: 'warning' };
+  const warning2: ValidationWarning = { reason: 'error 2 from checker', severity: 'warning' };
+  const warning3: ValidationWarning = { reason: 'error 3 from checker', severity: 'warning' };
   const validationWarnings = [warning1, warning2, warning3];
 
   // When
-  setWarnings(validationWarnings).in(validator);
+  setWarnings(validationWarnings).in(checker);
 
   // Then
-  expect(validator.errors).toBeUndefined();
-  expect(validator.warnings).toBeDefined();
-  expect(validator.hasErrors).toBe(false);
-  expect(validator.hasWarnings).toBe(true);
-  expect(Array.isArray(validator.warnings)).toBe(true);
-  expect(validator.warnings && validator.warnings.length).toBe(3);
-  expect(validator.warnings && validator.warnings[0]).toEqual(warning1);
-  expect(validator.warnings && validator.warnings[1]).toEqual(warning2);
-  expect(validator.warnings && validator.warnings[2]).toEqual(warning3);
+  expect(checker.errors).toBeUndefined();
+  expect(checker.warnings).toBeDefined();
+  expect(checker.hasErrors).toBe(false);
+  expect(checker.hasWarnings).toBe(true);
+  expect(Array.isArray(checker.warnings)).toBe(true);
+  expect(checker.warnings && checker.warnings.length).toBe(3);
+  expect(checker.warnings && checker.warnings[0]).toEqual(warning1);
+  expect(checker.warnings && checker.warnings[1]).toEqual(warning2);
+  expect(checker.warnings && checker.warnings[2]).toEqual(warning3);
 });
 
-test('It should inject catched errors in validator` ', () => {
+test('It should inject catched errors in checker` ', () => {
   // Given
-  const validator: Partial<Checker> = { canRun: () => false, hasErrors: false };
-  const error = new Error('error 1 from validator');
+  const checker: Partial<Checker> = { canRun: () => false, hasErrors: false };
+  const error = new Error('error 1 from checker');
   const validationerrorFromError: ValidationError = {
     reason: error.message,
     severity: 'error',
   };
 
   // When
-  setCatchedError(error).in(validator);
+  setCatchedError(error).in(checker);
 
   // Then
-  expect(validator.errors).toBeDefined();
-  expect(validator.hasErrors).toBe(true);
-  expect(Array.isArray(validator.errors)).toBe(true);
-  expect(validator.errors && validator.errors.length).toBe(1);
-  expect(validator.errors && validator.errors[0]).toEqual(validationerrorFromError);
+  expect(checker.errors).toBeDefined();
+  expect(checker.hasErrors).toBe(true);
+  expect(Array.isArray(checker.errors)).toBe(true);
+  expect(checker.errors && checker.errors.length).toBe(1);
+  expect(checker.errors && checker.errors[0]).toEqual(validationerrorFromError);
 });
 
-test('It should run validator with success when validator returns no error` ', () => {
+test('It should run checker with success when checker returns no validation error` ', () => {
   // Given
-  const validator: Partial<Checker> = {
+  const checker: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     run: () => [],
@@ -166,16 +166,16 @@ test('It should run validator with success when validator returns no error` ', (
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runChecker(validator);
+  runChecker(checker);
 
   // Then
-  expect(validator.hasErrors).toBe(false);
-  expect(output[0]).toContain(`[v] ${validator.statusToDisplayWhileValidating}`);
+  expect(checker.hasErrors).toBe(false);
+  expect(output[0]).toContain(`[v] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should run validator with warning when validator has no run method` ', () => {
+test('It should run checker with warning when checker has no run method` ', () => {
   // Given
-  const validator: Partial<Checker> = {
+  const checker: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     statusToDisplayWhileValidating: 'Checking that foo is bar',
@@ -184,18 +184,18 @@ test('It should run validator with warning when validator has no run method` ', 
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runChecker(validator);
+  runChecker(checker);
 
   // Then
-  expect(validator.hasErrors).toBe(false);
-  expect(validator.hasWarnings).toBe(true);
-  expect(output[0]).toContain(`[!] ${validator.statusToDisplayWhileValidating}`);
+  expect(checker.hasErrors).toBe(false);
+  expect(checker.hasWarnings).toBe(true);
+  expect(output[0]).toContain(`[!] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should run validator with failure when validator returns a validation error` ', () => {
+test('It should run checker with failure when checker returns a validation error` ', () => {
   // Given
-  const error1: ValidationError = { reason: 'error 1 from validator', severity: 'error' };
-  const validator: Partial<Checker> = {
+  const error1: ValidationError = { reason: 'error 1 from checker', severity: 'error' };
+  const checker: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     run: () => [error1],
@@ -205,20 +205,20 @@ test('It should run validator with failure when validator returns a validation e
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runChecker(validator);
+  runChecker(checker);
 
   // Then
-  expect(validator.hasErrors).toBe(true);
-  expect(Array.isArray(validator.errors)).toBe(true);
-  expect(validator.errors && validator.errors.length).toBe(1);
-  expect(validator.errors && validator.errors[0]).toEqual(error1);
-  expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
+  expect(checker.hasErrors).toBe(true);
+  expect(Array.isArray(checker.errors)).toBe(true);
+  expect(checker.errors && checker.errors.length).toBe(1);
+  expect(checker.errors && checker.errors[0]).toEqual(error1);
+  expect(output[0]).toContain(`[x] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should run validator with warning when validator returns a validation warning` ', () => {
+test('It should run checker with warning when checker returns a validation warning` ', () => {
   // Given
-  const warning1: ValidationWarning = { reason: 'error 1 from validator', severity: 'warning' };
-  const validator: Partial<Checker> = {
+  const warning1: ValidationWarning = { reason: 'error 1 from checker', severity: 'warning' };
+  const checker: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     run: () => [warning1],
@@ -228,26 +228,26 @@ test('It should run validator with warning when validator returns a validation w
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runChecker(validator);
+  runChecker(checker);
 
   // Then
-  expect(validator.hasErrors).toBe(false);
-  expect(validator.hasWarnings).toBe(true);
-  expect(Array.isArray(validator.errors)).toBe(true);
-  expect(Array.isArray(validator.warnings)).toBe(true);
-  expect(validator.errors && validator.errors.length).toBe(0);
-  expect(validator.warnings && validator.warnings.length).toBe(1);
-  expect(validator.warnings && validator.warnings[0]).toEqual(warning1);
-  expect(output[0]).toContain(`[!] ${validator.statusToDisplayWhileValidating}`);
+  expect(checker.hasErrors).toBe(false);
+  expect(checker.hasWarnings).toBe(true);
+  expect(Array.isArray(checker.errors)).toBe(true);
+  expect(Array.isArray(checker.warnings)).toBe(true);
+  expect(checker.errors && checker.errors.length).toBe(0);
+  expect(checker.warnings && checker.warnings.length).toBe(1);
+  expect(checker.warnings && checker.warnings[0]).toEqual(warning1);
+  expect(output[0]).toContain(`[!] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should run validator with failure when validator throws an unexpected error` ', () => {
+test('It should run checker with failure when checker throws an unexpected error` ', () => {
   // Given
-  const validator: Partial<Checker> = {
+  const checker: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     run: () => {
-      throw new Error('unexpected error from validator');
+      throw new Error('unexpected error from checker');
     },
     statusToDisplayWhileValidating: 'Checking that foo is bar',
   };
@@ -255,23 +255,23 @@ test('It should run validator with failure when validator throws an unexpected e
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runChecker(validator);
+  runChecker(checker);
 
   // Then
-  const expectedValidationError: ValidationError = { reason: 'unexpected error from validator', severity: 'error' };
-  expect(validator.hasErrors).toBe(true);
-  expect(Array.isArray(validator.errors)).toBe(true);
-  expect(validator.errors && validator.errors.length).toBe(1);
-  expect(validator.errors && validator.errors[0]).toEqual(expectedValidationError);
-  expect(output[0]).toContain(`[x] ${validator.statusToDisplayWhileValidating}`);
+  const expectedValidationError: ValidationError = { reason: 'unexpected error from checker', severity: 'error' };
+  expect(checker.hasErrors).toBe(true);
+  expect(Array.isArray(checker.errors)).toBe(true);
+  expect(checker.errors && checker.errors.length).toBe(1);
+  expect(checker.errors && checker.errors[0]).toEqual(expectedValidationError);
+  expect(output[0]).toContain(`[x] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should filter validators from command-line options` ', () => {
+test('It should filter checkers from command-line options` ', () => {
   // Given
-  const validator1: Partial<Checker> = { hasErrors: false, cliOption: '--opt1' };
-  const validator2: Partial<Checker> = { hasErrors: false };
+  const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--opt1' };
+  const checker2: Partial<Checker> = { hasErrors: false };
 
-  const validators = [validator1, validator2];
+  const checkers = [checker1, checker2];
   const options: ReleaseCheckerOptions = {
     '--help': false,
     '--opt1': true,
@@ -280,9 +280,9 @@ test('It should filter validators from command-line options` ', () => {
   };
 
   // When
-  const result = filter(validators).from(options);
+  const result = filter(checkers).from(options);
 
   // Then
   expect(result.length).toBe(1);
-  expect(result[0]).toEqual(validator1);
+  expect(result[0]).toEqual(checker1);
 });
