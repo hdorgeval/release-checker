@@ -85,7 +85,7 @@ export function ensureThatMethod(methodName: CheckerProps) {
         exists(): void {
           if (typeof checker[methodName] !== 'function') {
             const checkerId = checker.id || JSON.stringify(checker);
-            throw new Error(`Missing method ${methodName}() in Validator '${checkerId}'`);
+            throw new Error(`Missing method ${methodName}() in Checker '${checkerId}'`);
           }
         },
       };

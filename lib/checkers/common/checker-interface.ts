@@ -2,7 +2,7 @@ export interface Checker {
   canRun: () => boolean;
 
   /**
-   * command-line option associated with the validator
+   * command-line option associated with the checker
    * It should be something like '--foo'
    * You must ensure that this option is also configured in getCliOptions()
    * @type {string}

@@ -2,62 +2,60 @@ import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { Checker, ValidationError, ValidationWarning } from './checker-interface';
 import { all, ensureThatChecker, filter, runChecker, setCatchedError, setErrors, setWarnings } from './utils';
 
-test('It should not throw an error when validator has a `canRun` method defined that returns true` ', () => {
+test('It should not throw an error when checker has a `canRun` method defined that returns true` ', () => {
   // Given
-  const validator: Partial<Checker> = {
+  const checker: Partial<Checker> = {
     canRun: () => true,
     run: () => [],
   };
 
   // When
   // Then
-  expect(() => ensureThatChecker(validator).canRun()).not.toThrow();
+  expect(() => ensureThatChecker(checker).canRun()).not.toThrow();
 });
 
-test('It should throw an error when validator has a `canRun` method that returns false and has a method whyCannotRun` ', () => {
+test('It should throw an error when checker has a `canRun` method that returns false and has a method whyCannotRun` ', () => {
   // Given
-  const validator: Partial<Checker> = { canRun: () => false, whyCannotRun: () => 'Cannot do this because of that' };
+  const checker: Partial<Checker> = { canRun: () => false, whyCannotRun: () => 'Cannot do this because of that' };
 
   // When
   // Then
-  expect(() => ensureThatChecker(validator).canRun()).toThrow(
-    new Error(`${validator.whyCannotRun && validator.whyCannotRun()}`),
+  expect(() => ensureThatChecker(checker).canRun()).toThrow(
+    new Error(`${checker.whyCannotRun && checker.whyCannotRun()}`),
   );
 });
 
-test('It should throw an error when validator has a `canRun` method that returns false but method whyCannotRun is undefined` ', () => {
+test('It should throw an error when checker has a `canRun` method that returns false but method `whyCannotRun` is undefined` ', () => {
   // Given
-  const validator: Partial<Checker> = { canRun: () => false };
+  const checker: Partial<Checker> = { canRun: () => false };
 
   // When
   // Then
-  expect(() => ensureThatChecker(validator).canRun()).toThrow(
-    new Error("Missing method whyCannotRun() in Validator '{}'"),
-  );
+  expect(() => ensureThatChecker(checker).canRun()).toThrow(new Error("Missing method whyCannotRun() in Checker '{}'"));
 });
 
-test('It should throw an error when validator has `canRun` method undefined` ', () => {
+test('It should throw an error when checker has `canRun` method undefined` ', () => {
   // Given
-  const validator: Partial<Checker> = { canRun: undefined, id: 'validator-id' };
+  const checker: Partial<Checker> = { canRun: undefined, id: 'checker-id' };
   const methodName = 'canRun';
   // When
   // Then
-  expect(() => ensureThatChecker(validator).canRun()).toThrow(
-    new Error(`Missing method ${methodName}() in Validator '${validator.id}'`),
+  expect(() => ensureThatChecker(checker).canRun()).toThrow(
+    new Error(`Missing method ${methodName}() in Checker '${checker.id}'`),
   );
 });
 
-test('It should check if all validators has passed` ', () => {
+test('It should determine that all checkers has passed` ', () => {
   // Given
-  const validator1: Partial<Checker> = { hasErrors: false };
-  const validator2: Partial<Checker> = { hasErrors: false };
-  const validator3: Partial<Checker> = { hasErrors: false };
-  const validator4: Partial<Checker> = { hasErrors: false };
-  const validator5: Partial<Checker> = { hasErrors: false, hasWarnings: true };
-  const validators = [validator1, validator2, validator3, validator4, validator5];
+  const checker1: Partial<Checker> = { hasErrors: false };
+  const checker2: Partial<Checker> = { hasErrors: false };
+  const checker3: Partial<Checker> = { hasErrors: false };
+  const checker4: Partial<Checker> = { hasErrors: false };
+  const checker5: Partial<Checker> = { hasErrors: false, hasWarnings: true };
+  const checkers = [checker1, checker2, checker3, checker4, checker5];
 
   // When
-  const result = all(validators).hasPassed();
+  const result = all(checkers).hasPassed();
 
   // Then
   expect(result).toBe(true);
