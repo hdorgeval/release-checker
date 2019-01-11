@@ -1,8 +1,8 @@
 import { getCliOptions } from './cli-options/cli-options-parser';
 import { ciReporter } from './reporters/ci-reporter/index';
 import { validators } from './validators';
+import { Checker } from './validators/common/checker-interface';
 import { all, filter, runValidator } from './validators/common/utils';
-import { Checker } from './validators/common/validator-interface';
 export function run() {
   const options = getCliOptions();
   if (options['--help']) {

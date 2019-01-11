@@ -1,7 +1,7 @@
 import * as module from './cli-options/cli-options-parser';
 import { usage } from './cli-options/usage';
 import { run } from './cli-runner';
-import { Checker } from './validators/common/validator-interface';
+import { Checker } from './validators/common/checker-interface';
 import { validators } from './validators/index';
 
 test('It should exit 1 when a vaidator throws an uncaught error` ', () => {

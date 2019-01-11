@@ -1,4 +1,4 @@
-import { Checker } from '../../validators/common/validator-interface';
+import { Checker } from '../../validators/common/checker-interface';
 
 export interface Reporter {
   name: string;

@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../utils/exec-sync';
 import { PackageDotJson } from '../../utils/read-package-json';
-import { ValidationError } from '../common/validator-interface';
+import { ValidationError } from '../common/checker-interface';
 import { packageJsonValidator } from './index';
 
 let nativeProcessArgv: string[];

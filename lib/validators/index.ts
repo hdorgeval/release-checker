@@ -1,4 +1,4 @@
-import { Checker } from './common/validator-interface';
+import { Checker } from './common/checker-interface';
 import { packageJsonValidator } from './package-json-validator/index';
 import { testsValidator } from './tests-validator/index';
 

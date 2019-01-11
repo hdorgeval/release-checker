@@ -1,4 +1,4 @@
-import { Checker, ValidationError, ValidationWarning } from '../../validators/common/validator-interface';
+import { Checker, ValidationError, ValidationWarning } from '../../validators/common/checker-interface';
 import { ciReporter } from './index';
 
 test('It should show validation errors` ', () => {

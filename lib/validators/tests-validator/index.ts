@@ -1,6 +1,6 @@
 import { execOrThrow } from '../../utils/exec-sync';
 import { ensureThat } from '../../utils/read-package-json';
-import { Checker, ValidationError } from '../common/validator-interface';
+import { Checker, ValidationError } from '../common/checker-interface';
 
 export const testsValidator: Partial<Checker> = {
   canRun: () => true,

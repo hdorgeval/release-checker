@@ -1,6 +1,6 @@
 import { no, ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { ciReporter } from '../../reporters/ci-reporter/index';
-import { Checker, CheckerProps, ValidationError, ValidationWarning } from './validator-interface';
+import { Checker, CheckerProps, ValidationError, ValidationWarning } from './checker-interface';
 
 export function setErrors(errors: ValidationError[]) {
   return {

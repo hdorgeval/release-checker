@@ -1,6 +1,6 @@
 import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
+import { Checker, ValidationError, ValidationWarning } from './checker-interface';
 import { all, ensureThatValidator, filter, runValidator, setCatchedError, setErrors, setWarnings } from './utils';
-import { Checker, ValidationError, ValidationWarning } from './validator-interface';
 
 test('It should not throw an error when validator has a `canRun` method defined that returns true` ', () => {
   // Given

@@ -1,5 +1,5 @@
 import { ensureThat, read } from '../../utils/read-package-json';
-import { Checker, ValidationError, ValidationWarning } from '../common/validator-interface';
+import { Checker, ValidationError, ValidationWarning } from '../common/checker-interface';
 
 export const packageJsonValidator: Partial<Checker> = {
   canRun: () => true,
