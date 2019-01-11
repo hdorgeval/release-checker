@@ -1,5 +1,5 @@
+import { Checker } from '../../checkers/common/checker-interface';
 import { usage } from '../../cli-options/usage';
-import { Checker } from '../../validators/common/checker-interface';
 import { extractFirstLineOf } from '../common/extract-first-line-of';
 import { Reporter } from '../common/reporter-interface';
 

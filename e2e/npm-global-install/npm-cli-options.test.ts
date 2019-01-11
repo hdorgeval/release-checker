@@ -1,9 +1,9 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../lib//utils/exec-sync';
+import { packageJsonValidator } from '../../lib/checkers/package-json-checker/index';
 import { usage } from '../../lib/cli-options/usage';
 import { read } from '../../lib/utils/read-package-json';
-import { packageJsonValidator } from '../../lib/validators/package-json-validator/index';
 
 let nativeCwd: string;
 let packageFilename: string;

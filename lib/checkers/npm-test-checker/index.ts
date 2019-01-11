@@ -5,7 +5,7 @@ import { Checker, ValidationError } from '../common/checker-interface';
 export const testsValidator: Partial<Checker> = {
   canRun: () => true,
   cliOption: '--test',
-  id: 'tests-validator',
+  id: 'npm-test-checker',
   run: () => validate(),
   statusToDisplayWhileValidating: 'Checking that tests are successfull',
 };
