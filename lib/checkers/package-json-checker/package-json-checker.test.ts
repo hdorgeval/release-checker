@@ -3,7 +3,7 @@ import { join } from 'path';
 import { exec } from '../../utils/exec-sync';
 import { PackageDotJson } from '../../utils/read-package-json';
 import { ValidationError } from '../common/checker-interface';
-import { packageJsonValidator } from './index';
+import { packageJsonChecker } from './index';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
@@ -25,7 +25,7 @@ afterEach(() => {
 });
 test('It should always run', () => {
   // Given
-  const validator = packageJsonValidator;
+  const validator = packageJsonChecker;
 
   // When
   const result = validator.canRun && validator.canRun();
@@ -36,7 +36,7 @@ test('It should always run', () => {
 
 test('It should throw an exception when package.json is missing', () => {
   // Given
-  const validator = packageJsonValidator;
+  const validator = packageJsonChecker;
 
   // When
   // Then
@@ -46,7 +46,7 @@ test('It should throw an exception when package.json is missing', () => {
 
 test('It should throw an exception when package.json is badly formed', () => {
   // Given
-  const validator = packageJsonValidator;
+  const validator = packageJsonChecker;
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, '<bad json>');
 
@@ -58,7 +58,7 @@ test('It should throw an exception when package.json is badly formed', () => {
 
 test('It should return a validation error when name section of package.json is undefined', () => {
   // Given
-  const validator = packageJsonValidator;
+  const validator = packageJsonChecker;
   const pkg: Partial<PackageDotJson> = { version: '1.0.0', scripts: {} };
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
@@ -75,7 +75,7 @@ test('It should return a validation error when name section of package.json is u
 
 test('It should return a validation error when version section of package.json is undefined', () => {
   // Given
-  const validator = packageJsonValidator;
+  const validator = packageJsonChecker;
   const pkg: Partial<PackageDotJson> = { name: 'testing-repo', scripts: {} };
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
@@ -92,7 +92,7 @@ test('It should return a validation error when version section of package.json i
 
 test('It should return no validation error when package.json is valid', () => {
   // Given
-  const validator = packageJsonValidator;
+  const validator = packageJsonChecker;
   const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: {} };
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));

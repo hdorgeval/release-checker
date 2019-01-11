@@ -1,13 +1,13 @@
 import { currentNpmVersion, getCurrentNpmVersion } from '../../utils/npm-infos';
 import { Checker, ValidationError } from '../common/checker-interface';
 
-export const packageJsonValidator: Partial<Checker> = {
+export const sensitiveDataChecker: Partial<Checker> = {
   canRun: () =>
     currentNpmVersion()
       .canReportInJson()
       .packCommand(),
   cliOption: '--sensitivedata',
-  id: 'sensivitive-data-validator',
+  id: 'sensivitive-data-checker',
   run: () => validate(),
   statusToDisplayWhileValidating: 'Checking for the sensitive and non-essential data in the npm package',
   whyCannotRun: () =>

@@ -1,10 +1,10 @@
 import { ensureThat, read } from '../../utils/read-package-json';
 import { Checker, ValidationError, ValidationWarning } from '../common/checker-interface';
 
-export const packageJsonValidator: Partial<Checker> = {
+export const packageJsonChecker: Partial<Checker> = {
   canRun: () => true,
   cliOption: '--package.json',
-  id: 'package-json-validator',
+  id: 'package-json-checker',
   run: () => validate(),
   statusToDisplayWhileValidating: 'Checking that package.json file exists and is valid',
 };

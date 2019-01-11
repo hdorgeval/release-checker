@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../lib//utils/exec-sync';
-import { packageJsonValidator } from '../../lib/checkers/package-json-checker/index';
+import { packageJsonChecker } from '../../lib/checkers/package-json-checker/index';
 import { usage } from '../../lib/cli-options/usage';
 import { read } from '../../lib/utils/read-package-json';
 import { addScript } from '../../lib/utils/update-package-json';
@@ -48,7 +48,7 @@ test.skip('It should execute default validations on command `npm run release-che
 
   // Then
   const output = readFileSync(logFile).toString();
-  expect(output).toContain(packageJsonValidator.statusToDisplayWhileValidating);
+  expect(output).toContain(packageJsonChecker.statusToDisplayWhileValidating);
 });
 
 test('It should show usage on command `npm run release-checker -- --help` ', () => {

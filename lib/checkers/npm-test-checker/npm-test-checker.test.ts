@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../utils/exec-sync';
 import { PackageDotJson } from '../../utils/read-package-json';
-import { testsValidator } from './index';
+import { npmTestChecker } from './index';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
@@ -24,7 +24,7 @@ afterEach(() => {
 });
 test('It should always run', () => {
   // Given
-  const validator = testsValidator;
+  const validator = npmTestChecker;
 
   // When
   const result = validator.canRun && validator.canRun();
@@ -35,7 +35,7 @@ test('It should always run', () => {
 
 test('It should throw an exception when test script is missing in package.json', () => {
   // Given
-  const validator = testsValidator;
+  const validator = npmTestChecker;
   const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: {} };
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
@@ -48,7 +48,7 @@ test('It should throw an exception when test script is missing in package.json',
 
 test('It should throw an exception when test script exit with code 1', () => {
   // Given
-  const validator = testsValidator;
+  const validator = npmTestChecker;
   const pkg: Partial<PackageDotJson> = {
     name: 'testing-repo',
     scripts: {
@@ -68,7 +68,7 @@ npm ERR! Test failed.  See above for more details.`;
 
 test('It should not throw an exception when test script is successfull', () => {
   // Given
-  const validator = testsValidator;
+  const validator = npmTestChecker;
   const pkg: Partial<PackageDotJson> = {
     name: 'testing-repo',
     scripts: {
