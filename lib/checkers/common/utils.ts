@@ -4,88 +4,88 @@ import { Checker, CheckerProps, ValidationError, ValidationWarning } from './che
 
 export function setErrors(errors: ValidationError[]) {
   return {
-    in(validator: Partial<Checker>) {
-      validator.hasErrors = errors.length > 0;
-      validator.errors = [...errors];
+    in(checker: Partial<Checker>) {
+      checker.hasErrors = errors.length > 0;
+      checker.errors = [...errors];
     },
   };
 }
 
 export function setErrorsAndWarnings(errorsAndWarnings: Array<ValidationError | ValidationWarning>) {
   return {
-    in(validator: Partial<Checker>) {
+    in(checker: Partial<Checker>) {
       const errors = errorsAndWarnings.filter((error) => error.severity === 'error') as ValidationError[];
-      setErrors(errors).in(validator);
+      setErrors(errors).in(checker);
 
       const warnings = errorsAndWarnings.filter((error) => error.severity === 'warning') as ValidationWarning[];
-      setWarnings(warnings).in(validator);
+      setWarnings(warnings).in(checker);
     },
   };
 }
 
 export function setWarnings(warnings: ValidationWarning[]) {
   return {
-    in(validator: Partial<Checker>) {
-      validator.hasWarnings = warnings.length > 0;
-      validator.warnings = [...warnings];
+    in(checker: Partial<Checker>) {
+      checker.hasWarnings = warnings.length > 0;
+      checker.warnings = [...warnings];
     },
   };
 }
 
 export function setCatchedError(error: Error) {
   return {
-    in(validator: Partial<Checker>) {
-      validator.hasErrors = true;
+    in(checker: Partial<Checker>) {
+      checker.hasErrors = true;
       const validationError: ValidationError = {
         reason: error.message,
         severity: 'error',
       };
-      validator.errors = [validationError];
+      checker.errors = [validationError];
     },
   };
 }
 
-export function runValidator(validator: Partial<Checker>): void {
+export function runChecker(checker: Partial<Checker>): void {
   try {
-    ensureThatValidator(validator).canRun();
+    ensureThatChecker(checker).canRun();
   } catch (error) {
     const warning: ValidationWarning = {
       reason: error.message,
       severity: 'warning',
     };
-    setWarnings([warning]).in(validator);
-    ciReporter.reportWarningStatusFor(validator);
+    setWarnings([warning]).in(checker);
+    ciReporter.reportWarningStatusFor(checker);
     return;
   }
 
   try {
-    const validationErrorsAndWarnings = validator.run!();
-    setErrorsAndWarnings(validationErrorsAndWarnings).in(validator);
+    const validationErrorsAndWarnings = checker.run!();
+    setErrorsAndWarnings(validationErrorsAndWarnings).in(checker);
   } catch (error) {
-    setCatchedError(error).in(validator);
+    setCatchedError(error).in(checker);
   }
 
-  if (validator.hasErrors) {
-    ciReporter.reportErrorStatusFor(validator);
+  if (checker.hasErrors) {
+    ciReporter.reportErrorStatusFor(checker);
     return;
   }
 
-  if (validator.hasWarnings) {
-    ciReporter.reportWarningStatusFor(validator);
+  if (checker.hasWarnings) {
+    ciReporter.reportWarningStatusFor(checker);
     return;
   }
 
-  ciReporter.reportSuccessStatusFor(validator);
+  ciReporter.reportSuccessStatusFor(checker);
 }
 
 export function ensureThatMethod(methodName: CheckerProps) {
   return {
-    in(validator: Partial<Checker>) {
+    in(checker: Partial<Checker>) {
       return {
         exists(): void {
-          if (typeof validator[methodName] !== 'function') {
-            const validatorId = validator.id || JSON.stringify(validator);
-            throw new Error(`Missing method ${methodName}() in Validator '${validatorId}'`);
+          if (typeof checker[methodName] !== 'function') {
+            const checkerId = checker.id || JSON.stringify(checker);
+            throw new Error(`Missing method ${methodName}() in Validator '${checkerId}'`);
           }
         },
       };
@@ -93,47 +93,47 @@ export function ensureThatMethod(methodName: CheckerProps) {
   };
 }
 
-export function ensureThatValidator(validator: Partial<Checker>) {
+export function ensureThatChecker(checker: Partial<Checker>) {
   return {
     canRun() {
       ensureThatMethod('canRun')
-        .in(validator)
+        .in(checker)
         .exists();
 
-      if (validator.canRun && validator.canRun()) {
+      if (checker.canRun && checker.canRun()) {
         ensureThatMethod('run')
-          .in(validator)
+          .in(checker)
           .exists();
         return;
       }
 
       ensureThatMethod('whyCannotRun')
-        .in(validator)
+        .in(checker)
         .exists();
 
-      const errorMessage = validator.whyCannotRun && validator.whyCannotRun();
+      const errorMessage = checker.whyCannotRun && checker.whyCannotRun();
       throw new Error(errorMessage);
     },
   };
 }
 
-export function all(validators: Array<Partial<Checker>>) {
+export function all(checkers: Array<Partial<Checker>>) {
   return {
     hasPassed(): boolean {
-      return validators.filter((validator) => validator.hasErrors).length === 0;
+      return checkers.filter((checker) => checker.hasErrors).length === 0;
     },
   };
 }
 
-export function filter(validators: Array<Partial<Checker>>) {
+export function filter(checkers: Array<Partial<Checker>>) {
   return {
     from(cliOptions: ReleaseCheckerOptions): Array<Partial<Checker>> {
       if (no(cliOptions).hasBeenSet()) {
-        return validators;
+        return checkers;
       }
 
-      return validators.filter((validator) => {
-        const cliOption = validator.cliOption || '';
+      return checkers.filter((checker) => {
+        const cliOption = checker.cliOption || '';
         return cliOptions[cliOption];
       });
     },

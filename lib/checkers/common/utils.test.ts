@@ -1,6 +1,6 @@
 import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { Checker, ValidationError, ValidationWarning } from './checker-interface';
-import { all, ensureThatValidator, filter, runValidator, setCatchedError, setErrors, setWarnings } from './utils';
+import { all, ensureThatChecker, filter, runChecker, setCatchedError, setErrors, setWarnings } from './utils';
 
 test('It should not throw an error when validator has a `canRun` method defined that returns true` ', () => {
   // Given
@@ -11,7 +11,7 @@ test('It should not throw an error when validator has a `canRun` method defined 
 
   // When
   // Then
-  expect(() => ensureThatValidator(validator).canRun()).not.toThrow();
+  expect(() => ensureThatChecker(validator).canRun()).not.toThrow();
 });
 
 test('It should throw an error when validator has a `canRun` method that returns false and has a method whyCannotRun` ', () => {
@@ -20,7 +20,7 @@ test('It should throw an error when validator has a `canRun` method that returns
 
   // When
   // Then
-  expect(() => ensureThatValidator(validator).canRun()).toThrow(
+  expect(() => ensureThatChecker(validator).canRun()).toThrow(
     new Error(`${validator.whyCannotRun && validator.whyCannotRun()}`),
   );
 });
@@ -31,7 +31,7 @@ test('It should throw an error when validator has a `canRun` method that returns
 
   // When
   // Then
-  expect(() => ensureThatValidator(validator).canRun()).toThrow(
+  expect(() => ensureThatChecker(validator).canRun()).toThrow(
     new Error("Missing method whyCannotRun() in Validator '{}'"),
   );
 });
@@ -42,7 +42,7 @@ test('It should throw an error when validator has `canRun` method undefined` ', 
   const methodName = 'canRun';
   // When
   // Then
-  expect(() => ensureThatValidator(validator).canRun()).toThrow(
+  expect(() => ensureThatChecker(validator).canRun()).toThrow(
     new Error(`Missing method ${methodName}() in Validator '${validator.id}'`),
   );
 });
@@ -168,7 +168,7 @@ test('It should run validator with success when validator returns no error` ', (
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runValidator(validator);
+  runChecker(validator);
 
   // Then
   expect(validator.hasErrors).toBe(false);
@@ -186,7 +186,7 @@ test('It should run validator with warning when validator has no run method` ', 
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runValidator(validator);
+  runChecker(validator);
 
   // Then
   expect(validator.hasErrors).toBe(false);
@@ -207,7 +207,7 @@ test('It should run validator with failure when validator returns a validation e
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runValidator(validator);
+  runChecker(validator);
 
   // Then
   expect(validator.hasErrors).toBe(true);
@@ -230,7 +230,7 @@ test('It should run validator with warning when validator returns a validation w
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runValidator(validator);
+  runChecker(validator);
 
   // Then
   expect(validator.hasErrors).toBe(false);
@@ -257,7 +257,7 @@ test('It should run validator with failure when validator throws an unexpected e
   // When
   const output: string[] = [];
   jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
-  runValidator(validator);
+  runChecker(validator);
 
   // Then
   const expectedValidationError: ValidationError = { reason: 'unexpected error from validator', severity: 'error' };

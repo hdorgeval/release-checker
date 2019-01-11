@@ -1,5 +1,5 @@
 import { Checker } from './checkers/common/checker-interface';
-import { validators } from './checkers/index';
+import { checkers } from './checkers/index';
 import * as module from './cli-options/cli-options-parser';
 import { usage } from './cli-options/usage';
 import { run } from './cli-runner';
@@ -15,7 +15,7 @@ test('It should exit 1 when a vaidator throws an uncaught error` ', () => {
     },
     statusToDisplayWhileValidating: 'Checking that foo is bar',
   };
-  validators.push(validator);
+  checkers.push(validator);
 
   // When
   jest.spyOn(module, 'getCliOptions').mockImplementation(() => {
@@ -41,7 +41,7 @@ test('It should exit 0 when all validators pass` ', () => {
     run: () => [],
     statusToDisplayWhileValidating: 'Checking that foo is valid',
   };
-  validators.push(fooValidator);
+  checkers.push(fooValidator);
 
   const barValidator: Partial<Checker> = {
     canRun: () => true,
@@ -49,7 +49,7 @@ test('It should exit 0 when all validators pass` ', () => {
     run: () => [],
     statusToDisplayWhileValidating: 'Checking that bar is valid',
   };
-  validators.push(barValidator);
+  checkers.push(barValidator);
 
   // When
   jest.spyOn(module, 'getCliOptions').mockImplementation(() => {
@@ -76,7 +76,7 @@ test('It should display usage when --help is found in command-line` ', () => {
     run: () => [],
     statusToDisplayWhileValidating: 'Checking that foo is valid',
   };
-  validators.push(fooValidator);
+  checkers.push(fooValidator);
 
   const barValidator: Partial<Checker> = {
     canRun: () => true,
@@ -84,7 +84,7 @@ test('It should display usage when --help is found in command-line` ', () => {
     run: () => [],
     statusToDisplayWhileValidating: 'Checking that bar is valid',
   };
-  validators.push(barValidator);
+  checkers.push(barValidator);
 
   // When
   jest.spyOn(module, 'getCliOptions').mockImplementation(() => {

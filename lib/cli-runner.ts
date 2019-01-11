@@ -1,6 +1,6 @@
-import { validators } from './checkers';
+import { checkers } from './checkers';
 import { Checker } from './checkers/common/checker-interface';
-import { all, filter, runValidator } from './checkers/common/utils';
+import { all, filter, runChecker } from './checkers/common/utils';
 import { getCliOptions } from './cli-options/cli-options-parser';
 import { ciReporter } from './reporters/ci-reporter/index';
 export function run() {
@@ -12,15 +12,15 @@ export function run() {
 
   ciReporter.reportIntro();
 
-  const validatorsToRun: Array<Partial<Checker>> = filter(validators).from(options);
-  validatorsToRun.forEach(runValidator);
+  const checkersToRun: Array<Partial<Checker>> = filter(checkers).from(options);
+  checkersToRun.forEach(runChecker);
 
-  if (all(validatorsToRun).hasPassed()) {
-    ciReporter.reportValidationWarningsOf(validatorsToRun);
+  if (all(checkersToRun).hasPassed()) {
+    ciReporter.reportValidationWarningsOf(checkersToRun);
     return;
   }
 
-  ciReporter.reportValidationWarningsOf(validatorsToRun);
-  ciReporter.reportValidationErrorsOf(validatorsToRun);
+  ciReporter.reportValidationWarningsOf(checkersToRun);
+  ciReporter.reportValidationErrorsOf(checkersToRun);
   process.exit(1);
 }
