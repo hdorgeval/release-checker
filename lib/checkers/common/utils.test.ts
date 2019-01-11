@@ -14,7 +14,7 @@ test('It should not throw an error when checker has a `canRun` method defined th
   expect(() => ensureThatChecker(checker).canRun()).not.toThrow();
 });
 
-test('It should throw an error when checker has a `canRun` method that returns false and has a method whyCannotRun` ', () => {
+test('It should throw an error when checker has a `canRun()` method that returns false and has a method whyCannotRun()', () => {
   // Given
   const checker: Partial<Checker> = { canRun: () => false, whyCannotRun: () => 'Cannot do this because of that' };
 
@@ -25,7 +25,7 @@ test('It should throw an error when checker has a `canRun` method that returns f
   );
 });
 
-test('It should throw an error when checker has a `canRun` method that returns false but method `whyCannotRun` is undefined` ', () => {
+test('It should throw an error when checker has a `canRun()` method that returns false but method `whyCannotRun()` is undefined', () => {
   // Given
   const checker: Partial<Checker> = { canRun: () => false };
 
@@ -34,7 +34,7 @@ test('It should throw an error when checker has a `canRun` method that returns f
   expect(() => ensureThatChecker(checker).canRun()).toThrow(new Error("Missing method whyCannotRun() in Checker '{}'"));
 });
 
-test('It should throw an error when checker has `canRun` method undefined` ', () => {
+test('It should throw an error when checker has `canRun()` method undefined', () => {
   // Given
   const checker: Partial<Checker> = { canRun: undefined, id: 'checker-id' };
   const methodName = 'canRun';
@@ -45,7 +45,7 @@ test('It should throw an error when checker has `canRun` method undefined` ', ()
   );
 });
 
-test('It should determine that all checkers has passed` ', () => {
+test('It should determine that all checkers has passed', () => {
   // Given
   const checker1: Partial<Checker> = { hasErrors: false };
   const checker2: Partial<Checker> = { hasErrors: false };
@@ -61,7 +61,7 @@ test('It should determine that all checkers has passed` ', () => {
   expect(result).toBe(true);
 });
 
-test('It should pass when there are only warnings` ', () => {
+test('It should pass when there are only warnings', () => {
   // Given
   const checker1: Partial<Checker> = { hasWarnings: true };
   const checker2: Partial<Checker> = { hasWarnings: true };
@@ -75,7 +75,7 @@ test('It should pass when there are only warnings` ', () => {
   expect(result).toBe(true);
 });
 
-test('It should detect that one checker has failed` ', () => {
+test('It should detect that one checker has failed', () => {
   // Given
   const checker1: Partial<Checker> = { hasErrors: false };
   const checker2: Partial<Checker> = { hasErrors: false };
@@ -90,7 +90,7 @@ test('It should detect that one checker has failed` ', () => {
   expect(result).toBe(false);
 });
 
-test('It should inject validation errors in checker` ', () => {
+test('It should inject validation errors in checker', () => {
   // Given
   const checker: Partial<Checker> = { canRun: () => false, hasErrors: false };
   const error1: ValidationError = { reason: 'error 1 from checker', severity: 'error' };
@@ -111,7 +111,7 @@ test('It should inject validation errors in checker` ', () => {
   expect(checker.errors && checker.errors[2]).toEqual(error3);
 });
 
-test('It should inject validation warnings in checker` ', () => {
+test('It should inject validation warnings in checker', () => {
   // Given
   const checker: Partial<Checker> = { canRun: () => false, hasErrors: false };
   const warning1: ValidationWarning = { reason: 'error 1 from checker', severity: 'warning' };
@@ -134,7 +134,7 @@ test('It should inject validation warnings in checker` ', () => {
   expect(checker.warnings && checker.warnings[2]).toEqual(warning3);
 });
 
-test('It should inject catched errors in checker` ', () => {
+test('It should inject catched errors in checker', () => {
   // Given
   const checker: Partial<Checker> = { canRun: () => false, hasErrors: false };
   const error = new Error('error 1 from checker');
@@ -154,7 +154,7 @@ test('It should inject catched errors in checker` ', () => {
   expect(checker.errors && checker.errors[0]).toEqual(validationerrorFromError);
 });
 
-test('It should run checker with success when checker returns no validation error` ', () => {
+test('It should run checker with success when checker returns no validation error', () => {
   // Given
   const checker: Partial<Checker> = {
     canRun: () => true,
@@ -173,7 +173,7 @@ test('It should run checker with success when checker returns no validation erro
   expect(output[0]).toContain(`[v] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should run checker with warning when checker has no run method` ', () => {
+test('It should run checker with warning when checker has no `run()` method', () => {
   // Given
   const checker: Partial<Checker> = {
     canRun: () => true,
@@ -192,7 +192,7 @@ test('It should run checker with warning when checker has no run method` ', () =
   expect(output[0]).toContain(`[!] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should run checker with failure when checker returns a validation error` ', () => {
+test('It should run checker with failure when checker returns a validation error', () => {
   // Given
   const error1: ValidationError = { reason: 'error 1 from checker', severity: 'error' };
   const checker: Partial<Checker> = {
@@ -215,7 +215,7 @@ test('It should run checker with failure when checker returns a validation error
   expect(output[0]).toContain(`[x] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should run checker with warning when checker returns a validation warning` ', () => {
+test('It should run checker with warning when checker returns a validation warning', () => {
   // Given
   const warning1: ValidationWarning = { reason: 'error 1 from checker', severity: 'warning' };
   const checker: Partial<Checker> = {
@@ -241,7 +241,7 @@ test('It should run checker with warning when checker returns a validation warni
   expect(output[0]).toContain(`[!] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should run checker with failure when checker throws an unexpected error` ', () => {
+test('It should run checker with failure when checker throws an unexpected error', () => {
   // Given
   const checker: Partial<Checker> = {
     canRun: () => true,
@@ -266,7 +266,7 @@ test('It should run checker with failure when checker throws an unexpected error
   expect(output[0]).toContain(`[x] ${checker.statusToDisplayWhileValidating}`);
 });
 
-test('It should filter checkers from command-line options` ', () => {
+test('It should filter checkers from command-line options', () => {
   // Given
   const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--opt1' };
   const checker2: Partial<Checker> = { hasErrors: false };
@@ -285,4 +285,27 @@ test('It should filter checkers from command-line options` ', () => {
   // Then
   expect(result.length).toBe(1);
   expect(result[0]).toEqual(checker1);
+});
+
+test('It should take all checkers when there is no option on the command-line', () => {
+  // Given
+  const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--foo' };
+  const checker2: Partial<Checker> = { hasErrors: false, cliOption: '--bar' };
+
+  const checkers = [checker1, checker2];
+  const options: ReleaseCheckerOptions = {
+    '--bar': false,
+    '--foo': false,
+    '--help': false,
+    '--package.json': true,
+    '--test': false,
+  };
+
+  // When
+  const result = filter(checkers).from(options);
+
+  // Then
+  expect(result.length).toBe(2);
+  expect(result[0]).toEqual(checker1);
+  expect(result[1]).toEqual(checker2);
 });
