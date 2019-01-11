@@ -1,6 +1,6 @@
 import { no, ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { ciReporter } from '../../reporters/ci-reporter/index';
-import { Checker, ValidationError, ValidationWarning, ValidatorProps } from './validator-interface';
+import { Checker, CheckerProps, ValidationError, ValidationWarning } from './validator-interface';
 
 export function setErrors(errors: ValidationError[]) {
   return {
@@ -78,7 +78,7 @@ export function runValidator(validator: Partial<Checker>): void {
   ciReporter.reportSuccessStatusFor(validator);
 }
 
-export function ensureThatMethod(methodName: ValidatorProps) {
+export function ensureThatMethod(methodName: CheckerProps) {
   return {
     in(validator: Partial<Checker>) {
       return {
