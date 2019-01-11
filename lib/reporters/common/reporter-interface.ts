@@ -1,12 +1,12 @@
-import { Validator } from '../../validators/common/validator-interface';
+import { Checker } from '../../validators/common/validator-interface';
 
 export interface Reporter {
   name: string;
   reportIntro: () => void;
   reportUsage: () => void;
-  reportValidationErrorsOf: (validators: Array<Partial<Validator>>) => void;
-  reportValidationWarningsOf: (validators: Array<Partial<Validator>>) => void;
-  reportErrorStatusFor: (validator: Partial<Validator>) => void;
-  reportSuccessStatusFor: (validator: Partial<Validator>) => void;
-  reportWarningStatusFor: (validator: Partial<Validator>) => void;
+  reportValidationErrorsOf: (validators: Array<Partial<Checker>>) => void;
+  reportValidationWarningsOf: (validators: Array<Partial<Checker>>) => void;
+  reportErrorStatusFor: (validator: Partial<Checker>) => void;
+  reportSuccessStatusFor: (validator: Partial<Checker>) => void;
+  reportWarningStatusFor: (validator: Partial<Checker>) => void;
 }

@@ -1,13 +1,13 @@
 import * as module from './cli-options/cli-options-parser';
 import { usage } from './cli-options/usage';
 import { run } from './cli-runner';
-import { Validator } from './validators/common/validator-interface';
+import { Checker } from './validators/common/validator-interface';
 import { validators } from './validators/index';
 
 test('It should exit 1 when a vaidator throws an uncaught error` ', () => {
   // Given
   const error = new Error('uncaught error from yo validator');
-  const validator: Partial<Validator> = {
+  const validator: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--yo',
     run: () => {
@@ -35,7 +35,7 @@ test('It should exit 1 when a vaidator throws an uncaught error` ', () => {
 
 test('It should exit 0 when all validators pass` ', () => {
   // Given
-  const fooValidator: Partial<Validator> = {
+  const fooValidator: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--foo',
     run: () => [],
@@ -43,7 +43,7 @@ test('It should exit 0 when all validators pass` ', () => {
   };
   validators.push(fooValidator);
 
-  const barValidator: Partial<Validator> = {
+  const barValidator: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--bar',
     run: () => [],
@@ -70,7 +70,7 @@ test('It should exit 0 when all validators pass` ', () => {
 
 test('It should display usage when --help is found in command-line` ', () => {
   // Given
-  const fooValidator: Partial<Validator> = {
+  const fooValidator: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--foo',
     run: () => [],
@@ -78,7 +78,7 @@ test('It should display usage when --help is found in command-line` ', () => {
   };
   validators.push(fooValidator);
 
-  const barValidator: Partial<Validator> = {
+  const barValidator: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--bar',
     run: () => [],

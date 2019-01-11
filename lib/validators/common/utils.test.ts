@@ -1,10 +1,10 @@
 import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { all, ensureThatValidator, filter, runValidator, setCatchedError, setErrors, setWarnings } from './utils';
-import { ValidationError, ValidationWarning, Validator } from './validator-interface';
+import { Checker, ValidationError, ValidationWarning } from './validator-interface';
 
 test('It should not throw an error when validator has a `canRun` method defined that returns true` ', () => {
   // Given
-  const validator: Partial<Validator> = {
+  const validator: Partial<Checker> = {
     canRun: () => true,
     run: () => [],
   };
@@ -16,7 +16,7 @@ test('It should not throw an error when validator has a `canRun` method defined 
 
 test('It should throw an error when validator has a `canRun` method that returns false and has a method whyCannotRun` ', () => {
   // Given
-  const validator: Partial<Validator> = { canRun: () => false, whyCannotRun: () => 'Cannot do this because of that' };
+  const validator: Partial<Checker> = { canRun: () => false, whyCannotRun: () => 'Cannot do this because of that' };
 
   // When
   // Then
@@ -27,7 +27,7 @@ test('It should throw an error when validator has a `canRun` method that returns
 
 test('It should throw an error when validator has a `canRun` method that returns false but method whyCannotRun is undefined` ', () => {
   // Given
-  const validator: Partial<Validator> = { canRun: () => false };
+  const validator: Partial<Checker> = { canRun: () => false };
 
   // When
   // Then
@@ -38,7 +38,7 @@ test('It should throw an error when validator has a `canRun` method that returns
 
 test('It should throw an error when validator has `canRun` method undefined` ', () => {
   // Given
-  const validator: Partial<Validator> = { canRun: undefined, id: 'validator-id' };
+  const validator: Partial<Checker> = { canRun: undefined, id: 'validator-id' };
   const methodName = 'canRun';
   // When
   // Then
@@ -49,11 +49,11 @@ test('It should throw an error when validator has `canRun` method undefined` ', 
 
 test('It should check if all validators has passed` ', () => {
   // Given
-  const validator1: Partial<Validator> = { hasErrors: false };
-  const validator2: Partial<Validator> = { hasErrors: false };
-  const validator3: Partial<Validator> = { hasErrors: false };
-  const validator4: Partial<Validator> = { hasErrors: false };
-  const validator5: Partial<Validator> = { hasErrors: false, hasWarnings: true };
+  const validator1: Partial<Checker> = { hasErrors: false };
+  const validator2: Partial<Checker> = { hasErrors: false };
+  const validator3: Partial<Checker> = { hasErrors: false };
+  const validator4: Partial<Checker> = { hasErrors: false };
+  const validator5: Partial<Checker> = { hasErrors: false, hasWarnings: true };
   const validators = [validator1, validator2, validator3, validator4, validator5];
 
   // When
@@ -65,9 +65,9 @@ test('It should check if all validators has passed` ', () => {
 
 test('It should pass when there are only warnings` ', () => {
   // Given
-  const validator1: Partial<Validator> = { hasWarnings: true };
-  const validator2: Partial<Validator> = { hasWarnings: true };
-  const validator3: Partial<Validator> = { hasWarnings: true };
+  const validator1: Partial<Checker> = { hasWarnings: true };
+  const validator2: Partial<Checker> = { hasWarnings: true };
+  const validator3: Partial<Checker> = { hasWarnings: true };
   const validators = [validator1, validator2, validator3];
 
   // When
@@ -79,10 +79,10 @@ test('It should pass when there are only warnings` ', () => {
 
 test('It should detect that one validator has failed` ', () => {
   // Given
-  const validator1: Partial<Validator> = { hasErrors: false };
-  const validator2: Partial<Validator> = { hasErrors: false };
-  const validator3: Partial<Validator> = { hasErrors: true };
-  const validator4: Partial<Validator> = { hasErrors: false };
+  const validator1: Partial<Checker> = { hasErrors: false };
+  const validator2: Partial<Checker> = { hasErrors: false };
+  const validator3: Partial<Checker> = { hasErrors: true };
+  const validator4: Partial<Checker> = { hasErrors: false };
   const validators = [validator1, validator2, validator3, validator4];
 
   // When
@@ -94,7 +94,7 @@ test('It should detect that one validator has failed` ', () => {
 
 test('It should inject validation errors in validator` ', () => {
   // Given
-  const validator: Partial<Validator> = { canRun: () => false, hasErrors: false };
+  const validator: Partial<Checker> = { canRun: () => false, hasErrors: false };
   const error1: ValidationError = { reason: 'error 1 from validator', severity: 'error' };
   const error2: ValidationError = { reason: 'error 2 from validator', severity: 'error' };
   const error3: ValidationError = { reason: 'error 3 from validator', severity: 'error' };
@@ -115,7 +115,7 @@ test('It should inject validation errors in validator` ', () => {
 
 test('It should inject validation warnings in validator` ', () => {
   // Given
-  const validator: Partial<Validator> = { canRun: () => false, hasErrors: false };
+  const validator: Partial<Checker> = { canRun: () => false, hasErrors: false };
   const warning1: ValidationWarning = { reason: 'error 1 from validator', severity: 'warning' };
   const warning2: ValidationWarning = { reason: 'error 2 from validator', severity: 'warning' };
   const warning3: ValidationWarning = { reason: 'error 3 from validator', severity: 'warning' };
@@ -138,7 +138,7 @@ test('It should inject validation warnings in validator` ', () => {
 
 test('It should inject catched errors in validator` ', () => {
   // Given
-  const validator: Partial<Validator> = { canRun: () => false, hasErrors: false };
+  const validator: Partial<Checker> = { canRun: () => false, hasErrors: false };
   const error = new Error('error 1 from validator');
   const validationerrorFromError: ValidationError = {
     reason: error.message,
@@ -158,7 +158,7 @@ test('It should inject catched errors in validator` ', () => {
 
 test('It should run validator with success when validator returns no error` ', () => {
   // Given
-  const validator: Partial<Validator> = {
+  const validator: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     run: () => [],
@@ -177,7 +177,7 @@ test('It should run validator with success when validator returns no error` ', (
 
 test('It should run validator with warning when validator has no run method` ', () => {
   // Given
-  const validator: Partial<Validator> = {
+  const validator: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     statusToDisplayWhileValidating: 'Checking that foo is bar',
@@ -197,7 +197,7 @@ test('It should run validator with warning when validator has no run method` ', 
 test('It should run validator with failure when validator returns a validation error` ', () => {
   // Given
   const error1: ValidationError = { reason: 'error 1 from validator', severity: 'error' };
-  const validator: Partial<Validator> = {
+  const validator: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     run: () => [error1],
@@ -220,7 +220,7 @@ test('It should run validator with failure when validator returns a validation e
 test('It should run validator with warning when validator returns a validation warning` ', () => {
   // Given
   const warning1: ValidationWarning = { reason: 'error 1 from validator', severity: 'warning' };
-  const validator: Partial<Validator> = {
+  const validator: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     run: () => [warning1],
@@ -245,7 +245,7 @@ test('It should run validator with warning when validator returns a validation w
 
 test('It should run validator with failure when validator throws an unexpected error` ', () => {
   // Given
-  const validator: Partial<Validator> = {
+  const validator: Partial<Checker> = {
     canRun: () => true,
     hasErrors: false,
     run: () => {
@@ -270,8 +270,8 @@ test('It should run validator with failure when validator throws an unexpected e
 
 test('It should filter validators from command-line options` ', () => {
   // Given
-  const validator1: Partial<Validator> = { hasErrors: false, cliOption: '--opt1' };
-  const validator2: Partial<Validator> = { hasErrors: false };
+  const validator1: Partial<Checker> = { hasErrors: false, cliOption: '--opt1' };
+  const validator2: Partial<Checker> = { hasErrors: false };
 
   const validators = [validator1, validator2];
   const options: ReleaseCheckerOptions = {

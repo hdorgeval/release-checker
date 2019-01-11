@@ -1,4 +1,4 @@
-export interface Validator {
+export interface Checker {
   canRun: () => boolean;
 
   /**
@@ -21,7 +21,7 @@ export interface Validator {
   whyCannotRun: () => string;
 }
 
-const noopValidator: Validator = {
+const noopValidator: Checker = {
   canRun: () => false,
   cliOption: '--noop',
   errors: [],

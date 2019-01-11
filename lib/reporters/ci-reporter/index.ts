@@ -1,5 +1,5 @@
 import { usage } from '../../cli-options/usage';
-import { Validator } from '../../validators/common/validator-interface';
+import { Checker } from '../../validators/common/validator-interface';
 import { extractFirstLineOf } from '../common/extract-first-line-of';
 import { Reporter } from '../common/reporter-interface';
 
@@ -28,7 +28,7 @@ function reportIntro() {
   console.log('');
 }
 
-function reportValidationErrorsOf(validators: Array<Partial<Validator>>) {
+function reportValidationErrorsOf(validators: Array<Partial<Checker>>) {
   // tslint:disable-next-line:no-console
   console.log('');
   // tslint:disable-next-line:no-console
@@ -43,7 +43,7 @@ function reportValidationErrorsOf(validators: Array<Partial<Validator>>) {
   });
 }
 
-function reportValidationWarningsOf(validators: Array<Partial<Validator>>) {
+function reportValidationWarningsOf(validators: Array<Partial<Checker>>) {
   // prettier-ignore
   const hasNoWarning = validators
     .filter((validator) => validator.hasWarnings)
@@ -67,17 +67,17 @@ function reportValidationWarningsOf(validators: Array<Partial<Validator>>) {
   });
 }
 
-function reportWarningStatusFor(validator: Partial<Validator>) {
+function reportWarningStatusFor(validator: Partial<Checker>) {
   // tslint:disable-next-line:no-console
   console.log(`[!] ${validator.statusToDisplayWhileValidating}`);
 }
 
-function reportErrorStatusFor(validator: Partial<Validator>) {
+function reportErrorStatusFor(validator: Partial<Checker>) {
   // tslint:disable-next-line:no-console
   console.log(`[x] ${validator.statusToDisplayWhileValidating}`);
 }
 
-function reportSuccessStatusFor(validator: Partial<Validator>) {
+function reportSuccessStatusFor(validator: Partial<Checker>) {
   // tslint:disable-next-line:no-console
   console.log(`[v] ${validator.statusToDisplayWhileValidating}`);
 }

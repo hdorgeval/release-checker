@@ -1,4 +1,4 @@
-import { ValidationError, ValidationWarning, Validator } from '../../validators/common/validator-interface';
+import { Checker, ValidationError, ValidationWarning } from '../../validators/common/validator-interface';
 import { ciReporter } from './index';
 
 test('It should show validation errors` ', () => {
@@ -7,13 +7,13 @@ test('It should show validation errors` ', () => {
   const error2: ValidationError = { reason: 'error 1 from validator3', severity: 'error' };
   const error3: ValidationError = { reason: 'error 2 from validator3', severity: 'error' };
   const warning4: ValidationWarning = { reason: 'warning from validator4', severity: 'warning' };
-  const validator1: Partial<Validator> = { hasErrors: false };
-  const validator2: Partial<Validator> = { hasErrors: true, errors: [error1] };
-  const validator3: Partial<Validator> = {
+  const validator1: Partial<Checker> = { hasErrors: false };
+  const validator2: Partial<Checker> = { hasErrors: true, errors: [error1] };
+  const validator3: Partial<Checker> = {
     errors: [error2, error3],
     hasErrors: true,
   };
-  const validator4: Partial<Validator> = { hasErrors: false, hasWarnings: true, warnings: [warning4] };
+  const validator4: Partial<Checker> = { hasErrors: false, hasWarnings: true, warnings: [warning4] };
 
   const validators = [validator1, validator2, validator3, validator4];
 
@@ -37,10 +37,10 @@ test('It should show validation warnings` ', () => {
   const warning3: ValidationWarning = { reason: 'warning 2 from validator3', severity: 'warning' };
   const warning4: ValidationWarning = { reason: 'warning from validator4', severity: 'warning' };
   const error1: ValidationError = { reason: 'warning from validator4', severity: 'error' };
-  const validator1: Partial<Validator> = { hasWarnings: false, hasErrors: true };
-  const validator2: Partial<Validator> = { hasWarnings: true, warnings: [warning1] };
-  const validator3: Partial<Validator> = { hasWarnings: true, warnings: [warning2, warning3] };
-  const validator4: Partial<Validator> = { hasErrors: true, hasWarnings: true, errors: [error1], warnings: [warning4] };
+  const validator1: Partial<Checker> = { hasWarnings: false, hasErrors: true };
+  const validator2: Partial<Checker> = { hasWarnings: true, warnings: [warning1] };
+  const validator3: Partial<Checker> = { hasWarnings: true, warnings: [warning2, warning3] };
+  const validator4: Partial<Checker> = { hasErrors: true, hasWarnings: true, errors: [error1], warnings: [warning4] };
 
   const validators = [validator1, validator2, validator3, validator4];
 

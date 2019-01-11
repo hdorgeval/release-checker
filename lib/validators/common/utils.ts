@@ -1,10 +1,10 @@
 import { no, ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { ciReporter } from '../../reporters/ci-reporter/index';
-import { ValidationError, ValidationWarning, Validator, ValidatorProps } from './validator-interface';
+import { Checker, ValidationError, ValidationWarning, ValidatorProps } from './validator-interface';
 
 export function setErrors(errors: ValidationError[]) {
   return {
-    in(validator: Partial<Validator>) {
+    in(validator: Partial<Checker>) {
       validator.hasErrors = errors.length > 0;
       validator.errors = [...errors];
     },
@@ -13,7 +13,7 @@ export function setErrors(errors: ValidationError[]) {
 
 export function setErrorsAndWarnings(errorsAndWarnings: Array<ValidationError | ValidationWarning>) {
   return {
-    in(validator: Partial<Validator>) {
+    in(validator: Partial<Checker>) {
       const errors = errorsAndWarnings.filter((error) => error.severity === 'error') as ValidationError[];
       setErrors(errors).in(validator);
 
@@ -25,7 +25,7 @@ export function setErrorsAndWarnings(errorsAndWarnings: Array<ValidationError | 
 
 export function setWarnings(warnings: ValidationWarning[]) {
   return {
-    in(validator: Partial<Validator>) {
+    in(validator: Partial<Checker>) {
       validator.hasWarnings = warnings.length > 0;
       validator.warnings = [...warnings];
     },
@@ -34,7 +34,7 @@ export function setWarnings(warnings: ValidationWarning[]) {
 
 export function setCatchedError(error: Error) {
   return {
-    in(validator: Partial<Validator>) {
+    in(validator: Partial<Checker>) {
       validator.hasErrors = true;
       const validationError: ValidationError = {
         reason: error.message,
@@ -45,7 +45,7 @@ export function setCatchedError(error: Error) {
   };
 }
 
-export function runValidator(validator: Partial<Validator>): void {
+export function runValidator(validator: Partial<Checker>): void {
   try {
     ensureThatValidator(validator).canRun();
   } catch (error) {
@@ -80,7 +80,7 @@ export function runValidator(validator: Partial<Validator>): void {
 
 export function ensureThatMethod(methodName: ValidatorProps) {
   return {
-    in(validator: Partial<Validator>) {
+    in(validator: Partial<Checker>) {
       return {
         exists(): void {
           if (typeof validator[methodName] !== 'function') {
@@ -93,7 +93,7 @@ export function ensureThatMethod(methodName: ValidatorProps) {
   };
 }
 
-export function ensureThatValidator(validator: Partial<Validator>) {
+export function ensureThatValidator(validator: Partial<Checker>) {
   return {
     canRun() {
       ensureThatMethod('canRun')
@@ -117,7 +117,7 @@ export function ensureThatValidator(validator: Partial<Validator>) {
   };
 }
 
-export function all(validators: Array<Partial<Validator>>) {
+export function all(validators: Array<Partial<Checker>>) {
   return {
     hasPassed(): boolean {
       return validators.filter((validator) => validator.hasErrors).length === 0;
@@ -125,9 +125,9 @@ export function all(validators: Array<Partial<Validator>>) {
   };
 }
 
-export function filter(validators: Array<Partial<Validator>>) {
+export function filter(validators: Array<Partial<Checker>>) {
   return {
-    from(cliOptions: ReleaseCheckerOptions): Array<Partial<Validator>> {
+    from(cliOptions: ReleaseCheckerOptions): Array<Partial<Checker>> {
       if (no(cliOptions).hasBeenSet()) {
         return validators;
       }

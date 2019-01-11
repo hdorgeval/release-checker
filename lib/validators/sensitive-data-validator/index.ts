@@ -1,7 +1,7 @@
 import { currentNpmVersion, getCurrentNpmVersion } from '../../utils/npm-infos';
-import { ValidationError, Validator } from '../common/validator-interface';
+import { Checker, ValidationError } from '../common/validator-interface';
 
-export const packageJsonValidator: Partial<Validator> = {
+export const packageJsonValidator: Partial<Checker> = {
   canRun: () =>
     currentNpmVersion()
       .canReportInJson()

@@ -2,7 +2,7 @@ import { getCliOptions } from './cli-options/cli-options-parser';
 import { ciReporter } from './reporters/ci-reporter/index';
 import { validators } from './validators';
 import { all, filter, runValidator } from './validators/common/utils';
-import { Validator } from './validators/common/validator-interface';
+import { Checker } from './validators/common/validator-interface';
 export function run() {
   const options = getCliOptions();
   if (options['--help']) {
@@ -12,7 +12,7 @@ export function run() {
 
   ciReporter.reportIntro();
 
-  const validatorsToRun: Array<Partial<Validator>> = filter(validators).from(options);
+  const validatorsToRun: Array<Partial<Checker>> = filter(validators).from(options);
   validatorsToRun.forEach(runValidator);
 
   if (all(validatorsToRun).hasPassed()) {

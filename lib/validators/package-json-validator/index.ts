@@ -1,7 +1,7 @@
 import { ensureThat, read } from '../../utils/read-package-json';
-import { ValidationError, ValidationWarning, Validator } from '../common/validator-interface';
+import { Checker, ValidationError, ValidationWarning } from '../common/validator-interface';
 
-export const packageJsonValidator: Partial<Validator> = {
+export const packageJsonValidator: Partial<Checker> = {
   canRun: () => true,
   cliOption: '--package.json',
   id: 'package-json-validator',
