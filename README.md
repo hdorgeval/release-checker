@@ -6,55 +6,66 @@
 
 There are numerous ways to "shoot yourself in the foot" using `npm publish`. The purpose of this module is to validate that your project is ready to be published in a safe way.
 
+It checks the following:
+
+- package.json file is valid
+- build pass (unreleased)
+- tests pass
+- there is no sensitive data embedded in the package that will be send to the registry (unreleased)
+- there is no useless files (like tests files) embedded in the package that will be send to the registry (unreleased)
+- there is no vulnerable dependencies (unreleased)
+- there are no uncommitted changes in the working tree (unreleased)
+- there are no untracked files in the working tree (unreleased)
+- current branch is master (unreleased)
+- git tag matches version specified in the `package.json` (unreleased)
+
 ## Install
 
-Install with [npm](https://www.npmjs.com/):
+- local install
 
-### local install
+  ```sh
+  npm install --save-dev release-checker
+  ```
 
-```sh
-npm install --save-dev release-checker
-```
+  Then add this script in the `scripts` section of the `package.json` file:
 
-Then add this script in the `scripts` section of the `package.json` file:
+  ```json
+  "scripts": {
+      "release-checker": "release-checker"
+    },
+  ```
 
-```json
-"scripts": {
-    "release-checker": "release-checker"
-  },
-```
+- global install
 
-### global install
-
-```sh
-npm install -g release-checker
-```
+  ```sh
+  npm install -g release-checker
+  ```
 
 ## Basic usage
 
-### local install
+- local install
 
-```sh
-npm run release-checker -- <options>
-```
+  ```sh
+  npm run release-checker
+  ```
 
-### global install
+- global install
 
-```sh
-release-checker <options>
-```
+  ```sh
+  release-checker
+  ```
 
-### zero install
+- zero install
 
-```sh
-npx release-checker <options>
-```
+  ```sh
+  npx release-checker
+  ```
 
 ## Command-line Options
 
-When you specify no option the following validation is run:
+When you specify no option, all checkers will run.
 
-- `package.json` validation: checking that package.json file exists and is valid
+if you want to run only specific checkers, use the command-line options specific to these checkers.
 
 ### -h, --help
 
