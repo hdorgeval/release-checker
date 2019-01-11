@@ -24,10 +24,10 @@ afterEach(() => {
 });
 test('It should always run', () => {
   // Given
-  const validator = npmTestChecker;
+  const checker = npmTestChecker;
 
   // When
-  const result = validator.canRun && validator.canRun();
+  const result = checker.canRun && checker.canRun();
 
   // Then
   expect(result).toBe(true);
@@ -35,7 +35,7 @@ test('It should always run', () => {
 
 test('It should throw an exception when test script is missing in package.json', () => {
   // Given
-  const validator = npmTestChecker;
+  const checker = npmTestChecker;
   const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: {} };
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
@@ -43,12 +43,12 @@ test('It should throw an exception when test script is missing in package.json',
   // When
   // Then
   const expectedError = new Error(`script 'test' in package.json file is missing`);
-  expect(() => validator.run && validator.run()).toThrowError(expectedError);
+  expect(() => checker.run && checker.run()).toThrowError(expectedError);
 });
 
 test('It should throw an exception when test script exit with code 1', () => {
   // Given
-  const validator = npmTestChecker;
+  const checker = npmTestChecker;
   const pkg: Partial<PackageDotJson> = {
     name: 'testing-repo',
     scripts: {
@@ -63,12 +63,12 @@ test('It should throw an exception when test script exit with code 1', () => {
   // Then
   const expectedError = `Command failed: npm test
 npm ERR! Test failed.  See above for more details.`;
-  expect(() => validator.run && validator.run()).toThrowError(expectedError);
+  expect(() => checker.run && checker.run()).toThrowError(expectedError);
 });
 
 test('It should not throw an exception when test script is successfull', () => {
   // Given
-  const validator = npmTestChecker;
+  const checker = npmTestChecker;
   const pkg: Partial<PackageDotJson> = {
     name: 'testing-repo',
     scripts: {
@@ -80,7 +80,7 @@ test('It should not throw an exception when test script is successfull', () => {
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
   // When
-  const result = validator.run && validator.run();
+  const result = checker.run && checker.run();
 
   // Then
   expect(result).toEqual([]);

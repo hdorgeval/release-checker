@@ -28,25 +28,25 @@ function reportIntro() {
   console.log('');
 }
 
-function reportValidationErrorsOf(validators: Array<Partial<Checker>>) {
+function reportValidationErrorsOf(checkers: Array<Partial<Checker>>) {
   // tslint:disable-next-line:no-console
   console.log('');
   // tslint:disable-next-line:no-console
   console.log('ERRORS:');
 
-  validators.forEach((validator) => {
-    validator.errors = validator.errors || [];
-    validator.errors.forEach((validationError) => {
+  checkers.forEach((checker) => {
+    checker.errors = checker.errors || [];
+    checker.errors.forEach((validationError) => {
       // tslint:disable-next-line:no-console
       console.log(`  * ${extractFirstLineOf(validationError.reason)}`);
     });
   });
 }
 
-function reportValidationWarningsOf(validators: Array<Partial<Checker>>) {
+function reportValidationWarningsOf(checkers: Array<Partial<Checker>>) {
   // prettier-ignore
-  const hasNoWarning = validators
-    .filter((validator) => validator.hasWarnings)
+  const hasNoWarning = checkers
+    .filter((checker) => checker.hasWarnings)
     .length === 0;
 
   if (hasNoWarning) {
@@ -58,26 +58,26 @@ function reportValidationWarningsOf(validators: Array<Partial<Checker>>) {
   // tslint:disable-next-line:no-console
   console.log('WARNINGS:');
 
-  validators.forEach((validator) => {
-    validator.warnings = validator.warnings || [];
-    validator.warnings.forEach((validationWarning) => {
+  checkers.forEach((checker) => {
+    checker.warnings = checker.warnings || [];
+    checker.warnings.forEach((validationWarning) => {
       // tslint:disable-next-line:no-console
       console.log(`  * ${extractFirstLineOf(validationWarning.reason)}`);
     });
   });
 }
 
-function reportWarningStatusFor(validator: Partial<Checker>) {
+function reportWarningStatusFor(checker: Partial<Checker>) {
   // tslint:disable-next-line:no-console
-  console.log(`[!] ${validator.statusToDisplayWhileValidating}`);
+  console.log(`[!] ${checker.statusToDisplayWhileValidating}`);
 }
 
-function reportErrorStatusFor(validator: Partial<Checker>) {
+function reportErrorStatusFor(checker: Partial<Checker>) {
   // tslint:disable-next-line:no-console
-  console.log(`[x] ${validator.statusToDisplayWhileValidating}`);
+  console.log(`[x] ${checker.statusToDisplayWhileValidating}`);
 }
 
-function reportSuccessStatusFor(validator: Partial<Checker>) {
+function reportSuccessStatusFor(checker: Partial<Checker>) {
   // tslint:disable-next-line:no-console
-  console.log(`[v] ${validator.statusToDisplayWhileValidating}`);
+  console.log(`[v] ${checker.statusToDisplayWhileValidating}`);
 }

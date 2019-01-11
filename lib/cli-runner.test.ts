@@ -4,10 +4,10 @@ import * as module from './cli-options/cli-options-parser';
 import { usage } from './cli-options/usage';
 import { run } from './cli-runner';
 
-test('It should exit 1 when a vaidator throws an uncaught error` ', () => {
+test('It should exit 1 when a checker throws an uncaught error` ', () => {
   // Given
-  const error = new Error('uncaught error from yo validator');
-  const validator: Partial<Checker> = {
+  const error = new Error('uncaught error from yo checker');
+  const checker: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--yo',
     run: () => {
@@ -15,7 +15,7 @@ test('It should exit 1 when a vaidator throws an uncaught error` ', () => {
     },
     statusToDisplayWhileValidating: 'Checking that foo is bar',
   };
-  checkers.push(validator);
+  checkers.push(checker);
 
   // When
   jest.spyOn(module, 'getCliOptions').mockImplementation(() => {
@@ -33,23 +33,23 @@ test('It should exit 1 when a vaidator throws an uncaught error` ', () => {
   expect(exitCode).toBe(1);
 });
 
-test('It should exit 0 when all validators pass` ', () => {
+test('It should exit 0 when all checkers pass` ', () => {
   // Given
-  const fooValidator: Partial<Checker> = {
+  const foochecker: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--foo',
     run: () => [],
     statusToDisplayWhileValidating: 'Checking that foo is valid',
   };
-  checkers.push(fooValidator);
+  checkers.push(foochecker);
 
-  const barValidator: Partial<Checker> = {
+  const barchecker: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--bar',
     run: () => [],
     statusToDisplayWhileValidating: 'Checking that bar is valid',
   };
-  checkers.push(barValidator);
+  checkers.push(barchecker);
 
   // When
   jest.spyOn(module, 'getCliOptions').mockImplementation(() => {
@@ -70,21 +70,21 @@ test('It should exit 0 when all validators pass` ', () => {
 
 test('It should display usage when --help is found in command-line` ', () => {
   // Given
-  const fooValidator: Partial<Checker> = {
+  const foochecker: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--foo',
     run: () => [],
     statusToDisplayWhileValidating: 'Checking that foo is valid',
   };
-  checkers.push(fooValidator);
+  checkers.push(foochecker);
 
-  const barValidator: Partial<Checker> = {
+  const barchecker: Partial<Checker> = {
     canRun: () => true,
     cliOption: '--bar',
     run: () => [],
     statusToDisplayWhileValidating: 'Checking that bar is valid',
   };
-  checkers.push(barValidator);
+  checkers.push(barchecker);
 
   // When
   jest.spyOn(module, 'getCliOptions').mockImplementation(() => {

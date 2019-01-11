@@ -25,10 +25,10 @@ afterEach(() => {
 });
 test('It should always run', () => {
   // Given
-  const validator = packageJsonChecker;
+  const checker = packageJsonChecker;
 
   // When
-  const result = validator.canRun && validator.canRun();
+  const result = checker.canRun && checker.canRun();
 
   // Then
   expect(result).toBe(true);
@@ -36,35 +36,35 @@ test('It should always run', () => {
 
 test('It should throw an exception when package.json is missing', () => {
   // Given
-  const validator = packageJsonChecker;
+  const checker = packageJsonChecker;
 
   // When
   // Then
   const expectedError = new Error(`package.json file is missing in '${tempFolder}' `);
-  expect(() => validator.run && validator.run()).toThrowError(expectedError);
+  expect(() => checker.run && checker.run()).toThrowError(expectedError);
 });
 
 test('It should throw an exception when package.json is badly formed', () => {
   // Given
-  const validator = packageJsonChecker;
+  const checker = packageJsonChecker;
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, '<bad json>');
 
   // When
   // Then
   const expectedError = new Error(`package.json file in '${tempFolder}' is badly formed`);
-  expect(() => validator.run && validator.run()).toThrowError(expectedError);
+  expect(() => checker.run && checker.run()).toThrowError(expectedError);
 });
 
 test('It should return a validation error when name section of package.json is undefined', () => {
   // Given
-  const validator = packageJsonChecker;
+  const checker = packageJsonChecker;
   const pkg: Partial<PackageDotJson> = { version: '1.0.0', scripts: {} };
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
   // When
-  const result = validator.run && validator.run();
+  const result = checker.run && checker.run();
 
   // Then
   const expectedValidationError: ValidationError = { reason: 'package.json has no name defined', severity: 'error' };
@@ -75,13 +75,13 @@ test('It should return a validation error when name section of package.json is u
 
 test('It should return a validation error when version section of package.json is undefined', () => {
   // Given
-  const validator = packageJsonChecker;
+  const checker = packageJsonChecker;
   const pkg: Partial<PackageDotJson> = { name: 'testing-repo', scripts: {} };
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
   // When
-  const result = validator.run && validator.run();
+  const result = checker.run && checker.run();
 
   // Then
   const expectedValidationError: ValidationError = { reason: 'package.json has no version defined', severity: 'error' };
@@ -92,13 +92,13 @@ test('It should return a validation error when version section of package.json i
 
 test('It should return no validation error when package.json is valid', () => {
   // Given
-  const validator = packageJsonChecker;
+  const checker = packageJsonChecker;
   const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: {} };
   const pkgFilepath = join(tempFolder, 'package.json');
   writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
 
   // When
-  const result = validator.run && validator.run();
+  const result = checker.run && checker.run();
 
   // Then
   expect(Array.isArray(result)).toBe(true);

@@ -4,9 +4,9 @@ export interface Reporter {
   name: string;
   reportIntro: () => void;
   reportUsage: () => void;
-  reportValidationErrorsOf: (validators: Array<Partial<Checker>>) => void;
-  reportValidationWarningsOf: (validators: Array<Partial<Checker>>) => void;
-  reportErrorStatusFor: (validator: Partial<Checker>) => void;
-  reportSuccessStatusFor: (validator: Partial<Checker>) => void;
-  reportWarningStatusFor: (validator: Partial<Checker>) => void;
+  reportValidationErrorsOf: (checkers: Array<Partial<Checker>>) => void;
+  reportValidationWarningsOf: (checkers: Array<Partial<Checker>>) => void;
+  reportErrorStatusFor: (checker: Partial<Checker>) => void;
+  reportSuccessStatusFor: (checker: Partial<Checker>) => void;
+  reportWarningStatusFor: (checker: Partial<Checker>) => void;
 }
