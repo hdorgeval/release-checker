@@ -241,6 +241,32 @@ test('It should run checker with warning when checker returns a validation warni
   expect(output[0]).toContain(`[!] ${checker.statusToDisplayWhileValidating}`);
 });
 
+test('It should run checker with warning when checker cannot run', () => {
+  // Given
+  const checker: Partial<Checker> = {
+    canRun: () => false,
+    hasErrors: false,
+    run: () => [],
+    statusToDisplayWhileValidating: 'Checking that foo is bar',
+    whyCannotRun: () => 'Checker cannot run because this and that',
+  };
+
+  // When
+  const output: string[] = [];
+  jest.spyOn(global.console, 'log').mockImplementation((...args) => output.push(...args));
+  runChecker(checker);
+
+  // Then
+  const expectedWarning: ValidationWarning = { reason: checker.whyCannotRun!(), severity: 'warning' };
+  expect(checker.hasErrors).toBe(false);
+  expect(checker.hasWarnings).toBe(true);
+  expect(Array.isArray(checker.errors)).toBe(false);
+  expect(Array.isArray(checker.warnings)).toBe(true);
+  expect(checker.warnings && checker.warnings.length).toBe(1);
+  expect(checker.warnings && checker.warnings[0]).toEqual(expectedWarning);
+  expect(output[0]).toContain(`[!] ${checker.statusToDisplayWhileValidating}`);
+});
+
 test('It should run checker with failure when checker throws an unexpected error', () => {
   // Given
   const checker: Partial<Checker> = {
