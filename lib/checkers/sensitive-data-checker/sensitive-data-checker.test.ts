@@ -66,6 +66,7 @@ test('It should not run when npm version < 5.9.0', () => {
 
 test('It should create a package file and read it as json', () => {
   // Given
+  execSpy.mockRestore();
   const checker = sensitiveDataChecker;
   const testFileContent = 'foo';
   const testFilepath = join(tempFolder, 'foo.test.js');
