@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync, unlink } from 'fs';
 import { join } from 'path';
 import { exec } from '../../../../utils/exec-sync';
 import { read } from '../../../../utils/read-package-json';
@@ -53,4 +53,22 @@ test('It should execute on command `npx release-checker --test`  ', () => {
   // Then
   const output = readFileSync(logFile).toString();
   expect(output).toContain(packageJsonChecker.statusToDisplayWhileValidating);
+});
+
+test('It should detect that package.json is missing', () => {
+  // Given
+  const logFile = 'npx-release-checker.log';
+  const command = `npx ${packageFilepath} --test > ${logFile} `;
+
+  const file = join(process.cwd(), 'package.json');
+  unlink(file, () => void 0);
+
+  // When
+  exec(command);
+
+  // Then
+  const output = readFileSync(logFile).toString();
+  expect(output).toContain(`[x] ${packageJsonChecker.statusToDisplayWhileValidating}`);
+  expect(output).toContain('ERRORS:');
+  expect(output).toContain('package.json file is missing');
 });
