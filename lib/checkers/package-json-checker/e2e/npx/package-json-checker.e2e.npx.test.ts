@@ -1,4 +1,4 @@
-import { readFileSync, unlink } from 'fs';
+import { readFileSync, unlink, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../../../utils/exec-sync';
 import { read } from '../../../../utils/read-package-json';
@@ -71,4 +71,23 @@ test('It should detect that package.json is missing', () => {
   expect(output).toContain(`[x] ${packageJsonChecker.statusToDisplayWhileValidating}`);
   expect(output).toContain('ERRORS:');
   expect(output).toContain('package.json file is missing');
+});
+
+test('It should detect that package.json is badly formed', () => {
+  // Given
+  const logFile = 'npx-release-checker.log';
+  const command = `npx ${packageFilepath} --test > ${logFile} `;
+
+  const currentFolder = process.cwd();
+  const file = join(process.cwd(), 'package.json');
+  writeFileSync(file, '<bad json>');
+
+  // When
+  exec(command);
+
+  // Then
+  const output = readFileSync(logFile).toString();
+  expect(output).toContain(`[x] ${packageJsonChecker.statusToDisplayWhileValidating}`);
+  expect(output).toContain('ERRORS:');
+  expect(output).toContain(`package.json file in '${currentFolder}' is badly formed`);
 });
