@@ -63,7 +63,6 @@
     "@types/minimist": "1.2.0",
     "@types/node": "10.12.18",
     "minimist": "1.2.0",
-    "osenv": "0.1.5",
     "semver": "5.6.0"
   },
   "engines": {
