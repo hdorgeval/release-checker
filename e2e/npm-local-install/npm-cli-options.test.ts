@@ -1,7 +1,5 @@
-import { readFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../lib//utils/exec-sync';
-import { packageJsonChecker } from '../../lib/checkers/package-json-checker/index';
 import { usage } from '../../lib/cli-options/usage';
 import { read } from '../../lib/utils/read-package-json';
 import { addScript } from '../../lib/utils/update-package-json';
@@ -36,19 +34,6 @@ afterEach(() => {
 });
 afterAll(() => {
   // exec('npm run rimraf -- testing-repo-for-release-checker ');
-});
-
-test.skip('It should execute default validations on command `npm run release-checker` ', () => {
-  // Given
-  const logFile = 'npm-run-release-checker.log';
-  const command = `npm run ${packageName} > ${logFile}`;
-
-  // When
-  exec(command);
-
-  // Then
-  const output = readFileSync(logFile).toString();
-  expect(output).toContain(packageJsonChecker.statusToDisplayWhileValidating);
 });
 
 test('It should show usage on command `npm run release-checker -- --help` ', () => {
