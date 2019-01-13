@@ -19,6 +19,12 @@ It checks the following:
 - current branch is master (unreleased)
 - git tag matches version specified in the `package.json` (unreleased)
 
+## Warning
+
+> If you are running node 8 or above, and the `package.json` file has an already existing `prepublish` script, you should rename that script to `prepublishOnly` before using `release-checker`.
+>
+> - Run `npm help scripts` to get more details.
+
 ## Install
 
 - local install
