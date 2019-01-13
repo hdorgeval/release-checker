@@ -70,3 +70,17 @@ export function ensureThat(filename: string) {
     },
   };
 }
+
+export function jsonPackage() {
+  return {
+    inDirectory(directory: string) {
+      return {
+        hasScript(key: string): boolean {
+          const content = readFileSync(join(directory, 'package.json')).toString();
+          const pkg = JSON.parse(content) as PackageDotJson;
+          return Boolean(pkg && pkg.scripts && pkg.scripts[key]);
+        },
+      };
+    },
+  };
+}

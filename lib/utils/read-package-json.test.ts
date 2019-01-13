@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from './exec-sync';
-import { ensureThat } from './read-package-json';
+import { ensureThat, jsonPackage, PackageDotJson } from './read-package-json';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
@@ -50,4 +50,60 @@ test('It should ensure that package.json is readable as JSON` ', () => {
       .canBeRead()
       .asJson(),
   ).toThrowError(expectedError);
+});
+
+test('It should detect that package.json has specific script` ', () => {
+  // Given
+  const pkg: Partial<PackageDotJson> = {
+    name: 'testing-repo',
+    scripts: { prepublish: 'echo "running pre-publish script..."' },
+    version: '1.0.0',
+  };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  // When
+  const result = jsonPackage()
+    .inDirectory(tempFolder)
+    .hasScript('prepublish');
+
+  // Then
+  expect(result).toBe(true);
+});
+
+test('It should detect that package.json has not a specific script` ', () => {
+  // Given
+  const pkg: Partial<PackageDotJson> = {
+    name: 'testing-repo',
+    scripts: { foo: 'bar' },
+    version: '1.0.0',
+  };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  // When
+  const result = jsonPackage()
+    .inDirectory(tempFolder)
+    .hasScript('bar');
+
+  // Then
+  expect(result).toBe(false);
+});
+
+test('It should detect that package.json has no script at all` ', () => {
+  // Given
+  const pkg: Partial<PackageDotJson> = {
+    name: 'testing-repo',
+    version: '1.0.0',
+  };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  // When
+  const result = jsonPackage()
+    .inDirectory(tempFolder)
+    .hasScript('test');
+
+  // Then
+  expect(result).toBe(false);
 });
