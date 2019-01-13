@@ -1,7 +1,9 @@
-import { readFileSync, unlink, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../../../utils/exec-sync';
+import { removeFile } from '../../../../utils/fs';
 import { read } from '../../../../utils/read-package-json';
+import { addScript } from '../../../../utils/update-package-json';
 import { packageJsonChecker } from '../../index';
 
 let nativeCwd: string;
@@ -60,8 +62,7 @@ test('It should detect that package.json is missing', () => {
   const logFile = 'npx-release-checker.log';
   const command = `npx ${packageFilepath} --test > ${logFile} `;
 
-  const file = join(process.cwd(), 'package.json');
-  unlink(file, () => void 0);
+  removeFile('package.json').fromDirectory(process.cwd());
 
   // When
   exec(command);
@@ -90,4 +91,25 @@ test('It should detect that package.json is badly formed', () => {
   expect(output).toContain(`[x] ${packageJsonChecker.statusToDisplayWhileValidating}`);
   expect(output).toContain('ERRORS:');
   expect(output).toContain(`package.json file in '${currentFolder}' is badly formed`);
+});
+
+test('It should warn when package.json has a "prepublish" script', () => {
+  // Given
+  const logFile = 'npx-release-checker.log';
+  const command = `npx ${packageFilepath} --test > ${logFile} `;
+
+  const currentFolder = process.cwd();
+  addScript('yo')
+    .withKey('prepublish')
+    .inside('package.json')
+    .ofDirectory(currentFolder);
+
+  // When
+  exec(command);
+
+  // Then
+  const output = readFileSync(logFile).toString();
+  expect(output).toContain(`[!] ${packageJsonChecker.statusToDisplayWhileValidating}`);
+  expect(output).toContain('WARNINGS:');
+  expect(output).toContain('Consider to rename the "prepublish" script in package.json to "prepublishOnly"');
 });

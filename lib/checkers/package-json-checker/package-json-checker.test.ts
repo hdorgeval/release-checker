@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../utils/exec-sync';
 import { PackageDotJson } from '../../utils/read-package-json';
-import { ValidationError } from '../common/checker-interface';
+import { ValidationError, ValidationWarning } from '../common/checker-interface';
 import { packageJsonChecker } from './index';
 
 let nativeProcessArgv: string[];
@@ -103,4 +103,24 @@ test('It should return no validation error when package.json is valid', () => {
   // Then
   expect(Array.isArray(result)).toBe(true);
   expect(result && result.length).toBe(0);
+});
+
+test('It should return a validation warning when package.json has a "prepublish" script', () => {
+  // Given
+  const checker = packageJsonChecker;
+  const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '1.0.0', scripts: { prepublish: 'yo' } };
+  const pkgFilepath = join(tempFolder, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  // When
+  const result = checker.run && checker.run();
+
+  // Then
+  const expectedValidationWarning: ValidationWarning = {
+    reason: 'Consider to rename the "prepublish" script in package.json to "prepublishOnly"',
+    severity: 'warning',
+  };
+  expect(Array.isArray(result)).toBe(true);
+  expect(result && result.length).toBe(1);
+  expect(result && result[0]).toEqual(expectedValidationWarning);
 });
