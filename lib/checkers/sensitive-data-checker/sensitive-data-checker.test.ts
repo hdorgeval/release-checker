@@ -130,3 +130,21 @@ test('It should create a package file and read it as json even when there is a p
   // tslint:disable-next-line:no-unused-expression
   checker.canRun && checker.canRun() && expect(result).toMatchObject(expectedResult);
 });
+
+test('It should throw an error when log file cannot be parsed to json', () => {
+  // Given
+  execSpy.mockRestore();
+  const checker = sensitiveDataChecker;
+
+  if (checker.canRun && checker.canRun()) {
+    // When
+    const spy = jest.spyOn(global.JSON, 'parse').mockImplementation(() => {
+      throw new Error('yo');
+    });
+
+    // Then
+    const expectedError = /^cannot parse to JSON the content of file.*$/;
+    expect(() => createPackageAndReadAsJson()).toThrowError(expectedError);
+    spy.mockRestore();
+  }
+});

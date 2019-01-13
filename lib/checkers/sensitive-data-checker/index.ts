@@ -3,7 +3,7 @@ import { tmpdir } from 'os';
 import { join, sep } from 'path';
 import { execOrThrow } from '../../utils/exec-sync';
 import { currentNpmVersion, getCurrentNpmVersion } from '../../utils/npm-infos';
-import { Checker, ValidationError } from '../common/checker-interface';
+import { Checker, ValidationError, ValidationWarning } from '../common/checker-interface';
 
 export const sensitiveDataChecker: Partial<Checker> = {
   canRun: () =>
@@ -18,7 +18,7 @@ export const sensitiveDataChecker: Partial<Checker> = {
     `Cannot check sensitive and non-essential data because npm version is ${getCurrentNpmVersion()}. Upgrade npm to version 5.9.0 or above to enable this check.`,
 };
 
-function validate(): ValidationError[] {
+function validate(): Array<ValidationError | ValidationWarning> {
   throw new Error('Checker not implemented');
 }
 
