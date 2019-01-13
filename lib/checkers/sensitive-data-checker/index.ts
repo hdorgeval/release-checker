@@ -38,8 +38,13 @@ export function createPackageAndReadAsJson(): NpmPackageInfos[] {
   const command = `npm pack --json > ${logFilepath}`;
   execOrThrow(command);
   const content = readFileSync(logFilepath).toString();
-  const result = JSON.parse(content);
-  return result;
+  try {
+    const extractedJson = extractJsonDataFrom(content);
+    const result = JSON.parse(extractedJson);
+    return result;
+  } catch (error) {
+    throw new Error(`cannot parse to JSON the content of file: ${logFilepath}`);
+  }
 }
 
 export interface NpmPackageInfos {
@@ -59,4 +64,32 @@ export interface NpmPackageFileInfos {
   path: string;
   size: number;
   mode: number;
+}
+
+/**
+ * Extract the Json data from input content.
+ * The problem: the 'npm pack --json > output.log' command will run any 'prepublish' script
+ * defined in the package.json file before executing the npm pack command itself.
+ * In the context of publish-please, any already-installed publish-please package
+ * has already a prepublish script:  "prepublish": "publish-please guard"
+ * this will give the following output:
+ *          > testing-repo@1.3.77 prepublish ...
+ *          > publish-please guard
+ *          [{real ouput of npm pack}]
+ *
+ * So the input content may be either a valid json file
+ * or valid json data prefixed by the result of the prepublish script execution
+ * @param {string} content
+ */
+export function extractJsonDataFrom(content: string): string {
+  for (let index = 0; index <= content.length - 1; index++) {
+    try {
+      const extractedContent = content.substr(index);
+      JSON.parse(extractedContent);
+      return extractedContent;
+    } catch (error) {
+      continue;
+    }
+  }
+  throw new Error('Cannot extract JSON data');
 }
