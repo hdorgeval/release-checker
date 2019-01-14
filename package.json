@@ -60,8 +60,10 @@
     "typescript": "3.2.2"
   },
   "dependencies": {
+    "@types/micromatch": "3.1.0",
     "@types/minimist": "1.2.0",
     "@types/node": "10.12.18",
+    "micromatch": "3.1.10",
     "minimist": "1.2.0",
     "semver": "5.6.0"
   },
