@@ -14,6 +14,9 @@ const testData: TestData[] = [
 
   // Test Files
   { filepath: 'foo.test.ts', isSensitiveData: true },
+  { filepath: 'Foo.test.ts', isSensitiveData: true },
+  { filepath: 'lib/foo.test.ts', isSensitiveData: true },
+  { filepath: 'lib/foo/foo.test.ts', isSensitiveData: true },
 
   // Private SSH keys
   { filepath: 'foo_rsa.pub', isSensitiveData: false },
