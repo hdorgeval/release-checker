@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import * as globMatching from 'micromatch';
 import { tmpdir } from 'os';
 import { join, sep } from 'path';
 import { execOrThrow } from '../../utils/exec-sync';
@@ -92,4 +93,64 @@ export function extractJsonDataFrom(content: string): string {
     }
   }
   throw new Error('Cannot extract JSON data');
+}
+
+export interface AllSensitiveDataPatterns {
+  ignoredData: string[];
+  sensitiveData: string[];
+}
+
+/**
+ * get all sensitive data from the '.sensitivedata' file
+ * @param {string} directory - directory that contains a .sensitivedata file
+ */
+export function readSensitiveDataIn(directory: string): AllSensitiveDataPatterns {
+  const sensitiveDataFile = join(directory, '.sensitivedata');
+  const content = readFileSync(sensitiveDataFile).toString();
+  const allPatterns = content
+    .split(/\n|\r/)
+    .map((line) => line.replace(/[\t]/g, ' '))
+    .map((line) => line.trim())
+    .filter((line) => line && line.length > 0)
+    .filter((line) => !line.startsWith('#'));
+
+  const sensitiveData = allPatterns.filter((pattern) => !pattern.startsWith('!'));
+
+  const ignoredData = allPatterns
+    .filter((pattern) => pattern.startsWith('!'))
+    .map((pattern) => pattern.replace('!', ''))
+    .map((pattern) => pattern.trim());
+
+  return { ignoredData, sensitiveData };
+}
+
+export function file(filepath: string) {
+  return {
+    isSensitiveData(allSensitiveDataPatterns: AllSensitiveDataPatterns) {
+      if (
+        filepath &&
+        allSensitiveDataPatterns &&
+        allSensitiveDataPatterns.ignoredData &&
+        globMatching.any(filepath, allSensitiveDataPatterns.ignoredData, {
+          matchBase: true,
+          nocase: true,
+        })
+      ) {
+        return false;
+      }
+
+      if (
+        filepath &&
+        allSensitiveDataPatterns &&
+        allSensitiveDataPatterns.sensitiveData &&
+        globMatching.any(filepath, allSensitiveDataPatterns.sensitiveData, {
+          matchBase: true,
+          nocase: true,
+        })
+      ) {
+        return true;
+      }
+      return false;
+    },
+  };
 }
