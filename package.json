@@ -15,6 +15,7 @@
   ],
   "scripts": {
     "build": "rimraf build && npm run format && npm run lint && tsc",
+    "postbuild": "ncp lib/checkers/sensitive-data-checker/.sensitivedata build/lib/checkers/sensitive-data-checker/.sensitivedata ",
     "check-format": "prettier --list-different \"{bin,lib,e2e}/**/*.ts\"",
     "format": "prettier --write \"{bin,lib,e2e}/**/*.ts\"",
     "jest--init": "jest --init",
