@@ -75,15 +75,23 @@ if you want to run only specific checkers, use the command-line options specific
 
 ### -h, --help
 
-Displays commands' usage information.
+Show help.
 
 ```sh
 npx release-checker --help
 ```
 
-### -t, --test (unreleased)
+### -s, --sensitivedata
 
-Ensure that command `npm test` is successfull
+Ensure there is no sensitive or useless data in the npm package.
+
+```sh
+npx release-checker --sensitivedata
+```
+
+### -t, --test
+
+Ensure that command `npm test` is successfull.
 
 ```sh
 npx release-checker --test
