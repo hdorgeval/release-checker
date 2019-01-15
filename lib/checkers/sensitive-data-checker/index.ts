@@ -3,6 +3,7 @@ import * as globMatching from 'micromatch';
 import { tmpdir } from 'os';
 import { join, sep } from 'path';
 import { execOrThrow } from '../../utils/exec-sync';
+import { removeFile } from '../../utils/fs';
 import { currentNpmVersion, getCurrentNpmVersion } from '../../utils/npm-infos';
 import { Checker, ValidationError, ValidationWarning } from '../common/checker-interface';
 
@@ -34,6 +35,10 @@ function validate(): Array<ValidationError | ValidationWarning> {
           severity: 'error',
         });
       });
+  });
+
+  npmPackagesInfos.forEach((npmPackageInfos) => {
+    removeFile(npmPackageInfos.filename).fromDirectory(process.cwd());
   });
 
   return validationErrorsAndWarnings;

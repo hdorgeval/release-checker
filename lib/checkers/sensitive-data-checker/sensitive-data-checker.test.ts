@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import * as execModule from '../../utils/exec-sync';
 import { exec } from '../../utils/exec-sync';
@@ -188,4 +188,20 @@ test('It should run with error', () => {
   };
   // tslint:disable-next-line:no-unused-expression
   checker.canRun && checker.canRun() && expect(result).toEqual([expectedResult]);
+});
+
+test('It should remove the generated tarball file', () => {
+  // Given
+  execSpy.mockRestore();
+  const checker = sensitiveDataChecker;
+
+  // When
+  // tslint:disable-next-line:no-unused-expression
+  checker.canRun && checker.canRun() && checker.run && checker.run();
+
+  // Then
+  const expectedTarballFile = join(tempFolder, 'testing-repo-1.0.0.tgz');
+  const fileExists = existsSync(expectedTarballFile);
+  // tslint:disable-next-line:no-unused-expression
+  checker.canRun && checker.canRun() && expect(fileExists).toBe(false);
 });
