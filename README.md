@@ -11,8 +11,8 @@ It checks the following:
 - package.json file is valid
 - build pass (unreleased)
 - tests pass
-- there is no sensitive data embedded in the package that will be send to the registry (unreleased)
-- there is no useless files (like tests files) embedded in the package that will be send to the registry (unreleased)
+- there is no sensitive data embedded in the package that will be send to the registry
+- there is no useless files (like tests files) embedded in the package that will be send to the registry
 - there is no vulnerable dependencies (unreleased)
 - there are no uncommitted changes in the working tree (unreleased)
 - there are no untracked files in the working tree (unreleased)
