@@ -5,6 +5,7 @@ import { exec } from '../../utils/exec-sync';
 import { removeFile } from '../../utils/fs';
 import { NpmVersionInfo } from '../../utils/npm-infos';
 import { PackageDotJson } from '../../utils/read-package-json';
+import { ValidationError } from '../common/checker-interface';
 import { createPackageAndReadAsJson, NpmPackageInfos, sensitiveDataChecker } from './index';
 
 let nativeProcessArgv: string[];
@@ -166,4 +167,25 @@ test('It should run without error', () => {
   // Then
   // tslint:disable-next-line:no-unused-expression
   checker.canRun && checker.canRun() && expect(result).toEqual([]);
+});
+
+test('It should run with error', () => {
+  // Given
+  execSpy.mockRestore();
+  const checker = sensitiveDataChecker;
+
+  const testFileContent = 'foo';
+  const testFilepath = join(tempFolder, 'foo.test.js');
+  writeFileSync(testFilepath, testFileContent);
+
+  // When
+  const result = checker.canRun && checker.canRun() && checker.run && checker.run();
+
+  // Then
+  const expectedResult: ValidationError = {
+    reason: 'Sensitive or non essential data found in npm package: foo.test.js',
+    severity: 'error',
+  };
+  // tslint:disable-next-line:no-unused-expression
+  checker.canRun && checker.canRun() && expect(result).toEqual([expectedResult]);
 });
