@@ -4,6 +4,7 @@ export interface ReleaseCheckerOptions {
   [index: string]: string | boolean;
   '--help': boolean;
   '--package.json': boolean;
+  '--sensitivedata': boolean;
   '--test': boolean;
 }
 
@@ -12,6 +13,7 @@ export function getCliOptions(): ReleaseCheckerOptions {
   const options: ReleaseCheckerOptions = {
     '--help': args.help || args.h || false,
     '--package.json': true,
+    '--sensitivedata': args.sensitivedata || args.s || false,
     '--test': args.test || args.t || false,
   };
   return options;
@@ -20,7 +22,7 @@ export function getCliOptions(): ReleaseCheckerOptions {
 export function no(options: ReleaseCheckerOptions) {
   return {
     hasBeenSet(): boolean {
-      return options['--help'] === false && options['--test'] === false;
+      return options['--help'] === false && options['--test'] === false && options['--sensitivedata'] === false;
     },
   };
 }

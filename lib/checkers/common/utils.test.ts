@@ -296,12 +296,15 @@ test('It should filter checkers from command-line options', () => {
   // Given
   const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--opt1' };
   const checker2: Partial<Checker> = { hasErrors: false };
+  const checker3: Partial<Checker> = { hasErrors: false, cliOption: '--opt2' };
 
-  const checkers = [checker1, checker2];
+  const checkers = [checker1, checker2, checker3];
   const options: ReleaseCheckerOptions = {
     '--help': false,
     '--opt1': true,
+    '--opt2': true,
     '--package.json': true,
+    '--sensitivedata': false,
     '--test': true,
   };
 
@@ -309,8 +312,9 @@ test('It should filter checkers from command-line options', () => {
   const result = filter(checkers).from(options);
 
   // Then
-  expect(result.length).toBe(1);
+  expect(result.length).toBe(2);
   expect(result[0]).toEqual(checker1);
+  expect(result[1]).toEqual(checker3);
 });
 
 test('It should take all checkers when there is no option on the command-line', () => {
@@ -324,6 +328,7 @@ test('It should take all checkers when there is no option on the command-line', 
     '--foo': false,
     '--help': false,
     '--package.json': true,
+    '--sensitivedata': false,
     '--test': false,
   };
 
