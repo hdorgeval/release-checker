@@ -1,6 +1,6 @@
 {
   "name": "release-checker",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Check your release before publishing",
   "main": "build/lib/index.js",
   "typings": "build/lib/index.d.ts",
