@@ -1,6 +1,6 @@
 import { getCliOptions } from './cli-options-parser';
 
-const argv = {
+export const argv = {
   'npm run release-checker': [
     '/usr/local/bin/node',
     '/Users/user_name/projects/release-checker/build/bin/release-checker',
