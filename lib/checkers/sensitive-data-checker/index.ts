@@ -20,7 +20,23 @@ export const sensitiveDataChecker: Partial<Checker> = {
 };
 
 function validate(): Array<ValidationError | ValidationWarning> {
-  throw new Error('Checker not implemented');
+  const validationErrorsAndWarnings: Array<ValidationError | ValidationWarning> = [];
+  const npmPackagesInfos = createPackageAndReadAsJson();
+  const allSensitiveDataPatterns = readSensitiveDataIn(__dirname);
+
+  npmPackagesInfos.forEach((npmPackageInfos) => {
+    npmPackageInfos.files
+      .map((fileInfo) => fileInfo.path)
+      .filter((path) => file(path).isSensitiveData(allSensitiveDataPatterns))
+      .forEach((path) => {
+        validationErrorsAndWarnings.push({
+          reason: `Sensitive or non essential data found in npm package: ${path}`,
+          severity: 'error',
+        });
+      });
+  });
+
+  return validationErrorsAndWarnings;
 }
 
 function getLogFilepath(): string {
