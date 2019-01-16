@@ -55,8 +55,6 @@ function getLogFilepath(): string {
 
 export function createPackageAndReadAsJson(): NpmPackageInfos[] {
   const logFilepath = getLogFilepath();
-  // tslint:disable-next-line:no-console
-  console.log(logFilepath);
   const command = `npm pack --json > ${logFilepath}`;
   execOrThrow(command);
   const content = readFileSync(logFilepath).toString();
