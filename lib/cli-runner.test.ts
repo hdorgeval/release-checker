@@ -1,5 +1,6 @@
 import { Checker } from './checkers/common/checker-interface';
 import { checkers } from './checkers/index';
+import * as sensitivedataModule from './checkers/sensitive-data-checker/index';
 import * as module from './cli-options/cli-options-parser';
 import { usage } from './cli-options/usage';
 import { run } from './cli-runner';
@@ -105,4 +106,43 @@ test('It should display usage when --help is found in command-line` ', () => {
   // Then
   expect(exitCode).toBe(0);
   expect(output).toContain(usage);
+});
+
+test('It should eject .sensitivedata file when --customize-sensitivedata is found in command-line` ', () => {
+  // Given
+  const foochecker: Partial<Checker> = {
+    canRun: () => true,
+    cliOption: '--foo',
+    run: () => [],
+    statusToDisplayWhileValidating: 'Checking that foo is valid',
+  };
+  checkers.push(foochecker);
+
+  const barchecker: Partial<Checker> = {
+    canRun: () => true,
+    cliOption: '--bar',
+    run: () => [],
+    statusToDisplayWhileValidating: 'Checking that bar is valid',
+  };
+  checkers.push(barchecker);
+
+  // When
+  jest.spyOn(module, 'getCliOptions').mockImplementation(() => {
+    return {
+      '--bar': true,
+      '--customize-sensitivedata': true,
+      '--foo': true,
+      '--help': false,
+      '--package.json': true,
+    };
+  });
+  let exitCode: number = 0;
+  jest.spyOn(global.process, 'exit').mockImplementation((code) => (exitCode = code));
+
+  const sensitiveDataSpy = jest.spyOn(sensitivedataModule, 'ejectSensitiveData').mockImplementation(() => void 0);
+  run();
+
+  // Then
+  expect(exitCode).toBe(0);
+  expect(sensitiveDataSpy).toHaveBeenCalled();
 });
