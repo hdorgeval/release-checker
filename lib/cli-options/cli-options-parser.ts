@@ -2,6 +2,7 @@ import minimist from 'minimist';
 
 export interface ReleaseCheckerOptions {
   [index: string]: string | boolean;
+  '--customize-sensitivedata': boolean;
   '--help': boolean;
   '--package.json': boolean;
   '--sensitivedata': boolean;
@@ -10,7 +11,10 @@ export interface ReleaseCheckerOptions {
 
 export function getCliOptions(): ReleaseCheckerOptions {
   const args = minimist(process.argv.slice(2));
+  // tslint:disable-next-line:no-console
+  console.log(args);
   const options: ReleaseCheckerOptions = {
+    '--customize-sensitivedata': args['customize-sensitivedata'] || false,
     '--help': args.help || args.h || false,
     '--package.json': true,
     '--sensitivedata': args.sensitivedata || args.s || false,
@@ -22,7 +26,12 @@ export function getCliOptions(): ReleaseCheckerOptions {
 export function no(options: ReleaseCheckerOptions) {
   return {
     hasBeenSet(): boolean {
-      return options['--help'] === false && options['--test'] === false && options['--sensitivedata'] === false;
+      return (
+        options['--help'] === false &&
+        options['--test'] === false &&
+        options['--sensitivedata'] === false &&
+        options['--customize-sensitivedata'] === false
+      );
     },
   };
 }
