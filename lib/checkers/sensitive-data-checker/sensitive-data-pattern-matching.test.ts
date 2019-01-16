@@ -1,4 +1,4 @@
-import { AllSensitiveDataPatterns, file, readSensitiveDataIn } from './index';
+import { AllSensitiveDataPatterns, packagedFile, readSensitiveDataIn } from './index';
 
 let nativeCwd: string;
 let allSensitiveDataPatterns: AllSensitiveDataPatterns;
@@ -39,7 +39,7 @@ testData.forEach((data) => {
     const filepath = data.filepath;
 
     // When
-    const result = file(filepath).isSensitiveData(allSensitiveDataPatterns);
+    const result = packagedFile(filepath).isSensitiveData(allSensitiveDataPatterns);
 
     // Then
     const expectedResult = data.isSensitiveData;

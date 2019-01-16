@@ -11,8 +11,6 @@ export interface ReleaseCheckerOptions {
 
 export function getCliOptions(): ReleaseCheckerOptions {
   const args = minimist(process.argv.slice(2));
-  // tslint:disable-next-line:no-console
-  console.log(args);
   const options: ReleaseCheckerOptions = {
     '--customize-sensitivedata': args['customize-sensitivedata'] || false,
     '--help': args.help || args.h || false,

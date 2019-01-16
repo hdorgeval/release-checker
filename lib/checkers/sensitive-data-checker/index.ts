@@ -3,7 +3,7 @@ import * as globMatching from 'micromatch';
 import { tmpdir } from 'os';
 import { join, sep } from 'path';
 import { execOrThrow } from '../../utils/exec-sync';
-import { removeFile } from '../../utils/fs';
+import { copyFile, file, removeFile } from '../../utils/fs';
 import { currentNpmVersion, getCurrentNpmVersion } from '../../utils/npm-infos';
 import { Checker, ValidationError, ValidationWarning } from '../common/checker-interface';
 
@@ -28,7 +28,7 @@ function validate(): Array<ValidationError | ValidationWarning> {
   npmPackagesInfos.forEach((npmPackageInfos) => {
     npmPackageInfos.files
       .map((fileInfo) => fileInfo.path)
-      .filter((path) => file(path).isSensitiveData(allSensitiveDataPatterns))
+      .filter((path) => packagedFile(path).isSensitiveData(allSensitiveDataPatterns))
       .forEach((path) => {
         validationErrorsAndWarnings.push({
           reason: `Sensitive or non essential data found in npm package: ${path}`,
@@ -143,7 +143,7 @@ export function readSensitiveDataIn(directory: string): AllSensitiveDataPatterns
   return { ignoredData, sensitiveData };
 }
 
-export function file(filepath: string) {
+export function packagedFile(filepath: string) {
   return {
     isSensitiveData(allSensitiveDataPatterns: AllSensitiveDataPatterns) {
       if (
@@ -172,4 +172,13 @@ export function file(filepath: string) {
       return false;
     },
   };
+}
+
+export function ejectSensitiveData() {
+  if (file('.sensitivedata').existsInDirectory(process.cwd())) {
+    return;
+  }
+  copyFile('.sensitivedata')
+    .fromDirectory(__dirname)
+    .toDirectory(process.cwd());
 }
