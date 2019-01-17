@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, unlinkSync } from 'fs';
+import { copyFileSync, existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 export function removeFile(filename: string) {
@@ -22,10 +22,14 @@ export function copyFile(filename: string) {
   return {
     fromDirectory(sourceDirectory: string) {
       return {
-        toDirectory(targetDirectory: string) {
+        toDirectory(targetDirectory: string): void {
           const sourceFile = join(sourceDirectory, filename);
           const targetFile = join(targetDirectory, filename);
-          copyFileSync(sourceFile, targetFile);
+          if (typeof copyFileSync === 'function') {
+            copyFileSync(sourceFile, targetFile);
+            return;
+          }
+          writeFileSync(targetFile, readFileSync(sourceFile));
         },
       };
     },
