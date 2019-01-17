@@ -11,8 +11,8 @@ It checks the following:
 - package.json file is valid
 - build pass (unreleased)
 - tests pass
-- there is no sensitive data embedded in the package that will be send to the registry
-- there is no useless files (like tests files) embedded in the package that will be send to the registry
+- there is no sensitive data embedded in the package that will be sent to the registry
+- there is no useless files (like tests files) embedded in the package that will be sent to the registry
 - there is no vulnerable dependencies (unreleased)
 - there are no uncommitted changes in the working tree (unreleased)
 - there are no untracked files in the working tree (unreleased)
@@ -73,10 +73,10 @@ When you specify no option, all checkers will run.
 
 if you want to run only specific checkers, use the command-line options specific to these checkers.
 
-### --customize-sensitivedata (unreleased)
+### --customize-sensitivedata
 
 Customize the sensitive or useless data checker.
-This will create a `.sensitivedata` that you can customize to fit your needs.
+This will create, in the current directory, a `.sensitivedata` file that you can customize to fit your needs.
 
 ```sh
 npx release-checker --customize-sensitivedata
@@ -138,7 +138,7 @@ This Checker checks there is no sensitive and no useless files inside the to-be-
     - you may completely override this file by creating a `.sensitivedata` file in the root of your project so that this checker fits your needs.
         - to create this file, just run the command:
         ```sh
-        npx release-checker --customize-sensitivedata (unrelased)
+        npx release-checker --customize-sensitivedata
         ```
 
         - if you create your own `.sensitivedata` file, and the `package.json` file has no `files` section, consider adding `.sensitivedata` to the `.npmignore` file.
