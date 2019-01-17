@@ -23,7 +23,7 @@ export const sensitiveDataChecker: Partial<Checker> = {
 function validate(): Array<ValidationError | ValidationWarning> {
   const validationErrorsAndWarnings: Array<ValidationError | ValidationWarning> = [];
   const npmPackagesInfos = createPackageAndReadAsJson();
-  const allSensitiveDataPatterns = readSensitiveDataIn(__dirname);
+  const allSensitiveDataPatterns = getSensitiveData();
 
   npmPackagesInfos.forEach((npmPackageInfos) => {
     npmPackageInfos.files
@@ -117,6 +117,13 @@ export function extractJsonDataFrom(content: string): string {
 export interface AllSensitiveDataPatterns {
   ignoredData: string[];
   sensitiveData: string[];
+}
+
+export function getSensitiveData(): AllSensitiveDataPatterns {
+  if (file('.sensitivedata').existsInDirectory(process.cwd())) {
+    return readSensitiveDataIn(process.cwd());
+  }
+  return readSensitiveDataIn(__dirname);
 }
 
 /**

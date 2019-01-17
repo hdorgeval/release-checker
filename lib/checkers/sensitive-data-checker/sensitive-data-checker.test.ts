@@ -6,7 +6,13 @@ import { removeFile } from '../../utils/fs';
 import { NpmVersionInfo } from '../../utils/npm-infos';
 import { PackageDotJson } from '../../utils/read-package-json';
 import { ValidationError } from '../common/checker-interface';
-import { createPackageAndReadAsJson, ejectSensitiveData, NpmPackageInfos, sensitiveDataChecker } from './index';
+import {
+  createPackageAndReadAsJson,
+  ejectSensitiveData,
+  getSensitiveData,
+  NpmPackageInfos,
+  sensitiveDataChecker,
+} from './index';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
@@ -235,4 +241,35 @@ test('It should not eject the `.sensitivedata` file when file already exists in 
 
   // Then
   expect(result).toBe('foo');
+});
+
+test('It should take the custom `.sensitivedata` file', () => {
+  // Given
+  execSpy.mockRestore();
+  const testFileContent = `
+  # foo bar
+  foo
+  !bar
+  `;
+  const expectedFile = join(tempFolder, '.sensitivedata');
+  writeFileSync(expectedFile, testFileContent);
+
+  // When
+  const result = getSensitiveData();
+
+  // Then
+  expect(result.sensitiveData[0]).toBe('foo');
+  expect(result.ignoredData[0]).toBe('bar');
+});
+
+test('It should take the built-in `.sensitivedata` file', () => {
+  // Given
+  execSpy.mockRestore();
+
+  // When
+  const result = getSensitiveData();
+
+  // Then
+  expect(result.sensitiveData[0]).toBe('benchmark/**');
+  expect(result.ignoredData[0]).toBe('*_rsa.pub');
 });
