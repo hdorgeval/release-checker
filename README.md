@@ -110,38 +110,41 @@ npx release-checker --test
 
 This Checker checks there is no sensitive and no useless files inside the to-be-published package. This check performs only if npm version is 5.9.0 or above.
 
-    - it will detect the following files:
-        - Benchmark files
-        - Configuration files
-           - CI
-           - eslint
-           - GitHub
-           - JetBrains
-           - Visual Studio Code
-        - Coverage files
-        - Demo files
-        - Dependency directories
-        - Doc files
-        - Example files
-        - Log files
-        - Private SSH key
-        - Script files
-        - Secret files
-        - Source files
-        - Temp files
-        - Test files
-        - Zip files
-           - Output of 'npm pack'
+It will detect the following files:
 
-    - these files are defined inside this built-in [.sensitivedata](lib/checkers/sensitive-data-checker/.sensitivedata) file.
+> - Benchmark files
+> - Configuration files
+>   - CI
+>   - eslint
+>   - GitHub
+>   - JetBrains
+>   - Visual Studio Code
+> - Coverage files
+> - Demo files
+> - Dependency directories
+> - Doc files
+> - Example files
+> - Log files
+> - Private SSH key
+> - Script files
+> - Secret files
+> - Source files
+> - Temp files
+> - Test files
+> - Zip files
+>   - Output of 'npm pack' command
 
-    - you may completely override this file by creating a `.sensitivedata` file in the root of your project so that this checker fits your needs.
-        - to create this file, just run the command:
-        ```sh
-        npx release-checker --customize-sensitivedata
-        ```
+These files are defined inside the built-in [.sensitivedata](lib/checkers/sensitive-data-checker/.sensitivedata) file.
 
-        - if you create your own `.sensitivedata` file, and the `package.json` file has no `files` section, consider adding `.sensitivedata` to the `.npmignore` file.
+You may completely override this file by creating a `.sensitivedata` file in the root directory of your project so that this checker fits your needs:
+
+- to create this file, just run the command:
+
+```sh
+npx release-checker --customize-sensitivedata
+```
+
+- if you create your own `.sensitivedata` file, and the `package.json` file has n`files` section, consider adding `.sensitivedata` to the `.npmignore` file.
 
 ## Authors
 
