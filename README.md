@@ -18,6 +18,7 @@ It checks the following:
 - there are no untracked files in the working tree (unreleased)
 - current branch is master (unreleased)
 - git tag matches version specified in the `package.json` (unreleased)
+- all licences declared in dependencies are valid (unreleased)
 
 ## Warning
 
