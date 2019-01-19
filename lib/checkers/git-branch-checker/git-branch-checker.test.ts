@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import * as execModule from '../../utils/exec-sync';
-import { gitBranchChecker } from './index';
+import { getCurrentBranch, gitBranchChecker } from './index';
 
 test('It should not run when git is not installed', () => {
   // Given
@@ -29,4 +29,14 @@ test('It should run when git is installed', () => {
 
   // Then
   expect(result).toBe(true);
+});
+
+test('It should get current branch', () => {
+  // Given
+
+  // When
+  const result = getCurrentBranch();
+
+  // Then
+  expect(result).toBe('master');
 });
