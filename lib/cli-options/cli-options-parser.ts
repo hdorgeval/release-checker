@@ -28,10 +28,10 @@ export function no(options: ReleaseCheckerOptions) {
     hasBeenSet(): boolean {
       return (
         options['--branch'] === false &&
+        options['--customize-sensitivedata'] === false &&
         options['--help'] === false &&
-        options['--test'] === false &&
         options['--sensitivedata'] === false &&
-        options['--customize-sensitivedata'] === false
+        options['--test'] === false
       );
     },
   };

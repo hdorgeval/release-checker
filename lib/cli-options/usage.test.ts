@@ -1,6 +1,15 @@
 import { getCliOptions } from './cli-options-parser';
-import { argv } from './cli-options-parser.test';
 import { usage } from './usage';
+
+const argv = {
+  'npm run release-checker': [
+    '/usr/local/bin/node',
+    '/Users/user_name/projects/release-checker/build/bin/release-checker',
+  ],
+
+  'npx release-checker': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
+  'release-checker': ['/usr/local/bin/node', '/usr/local/bin/release-checker'],
+};
 
 let nativeProcessArgv: string[];
 
