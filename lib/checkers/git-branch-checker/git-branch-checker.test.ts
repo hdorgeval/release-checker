@@ -20,7 +20,6 @@ beforeEach(() => {
   process.chdir(tempFolder);
   const testingRepo = join(tempFolder, 'testing-repo-for-release-checker');
   exec(`npm run rimraf -- ${testingRepo} `);
-  process.chdir(tempFolder);
   exec('git clone https://github.com/hdorgeval/testing-repo-for-release-checker.git');
   process.chdir(testingRepo);
 });
@@ -103,4 +102,16 @@ test('It should detect that HEAD is detached', () => {
 
   // Then
   expect(result).toContain('HEAD detached at');
+});
+
+test('It should throw an error when git command failed', () => {
+  // Given
+  const spy = jest.spyOn(execModule, 'exec').mockImplementation(() => {
+    return 'git command failed';
+  });
+
+  // When
+  // Then
+  expect(() => getCurrentBranch()).toThrowError('git command failed');
+  spy.mockRestore();
 });
