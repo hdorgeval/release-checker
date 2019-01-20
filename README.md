@@ -149,7 +149,7 @@ You may completely override this file by creating a `.sensitivedata` file in the
 npx release-checker --customize-sensitivedata
 ```
 
-- if you create your own `.sensitivedata` file, and the `package.json` file has n`files` section, consider adding `.sensitivedata` to the `.npmignore` file.
+- if you create your own `.sensitivedata` file, and the `package.json` file has no `files` section, consider adding `.sensitivedata` to the `.npmignore` file.
 
 ## Authors
 
