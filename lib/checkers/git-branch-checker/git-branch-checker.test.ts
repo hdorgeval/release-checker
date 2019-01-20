@@ -3,6 +3,7 @@ import { mkdirSync } from 'fs';
 import { join } from 'path';
 import * as execModule from '../../utils/exec-sync';
 import { exec } from '../../utils/exec-sync';
+import { ValidationError } from '../common/checker-interface';
 import { getCurrentBranch, gitBranchChecker } from './index';
 
 let nativeProcessArgv: string[];
@@ -22,6 +23,12 @@ beforeEach(() => {
   exec(`npm run rimraf -- ${testingRepo} `);
   exec('git clone https://github.com/hdorgeval/testing-repo-for-release-checker.git');
   process.chdir(testingRepo);
+
+  // remove any errors and warnings in Checker
+  gitBranchChecker.errors = undefined;
+  gitBranchChecker.warnings = undefined;
+  gitBranchChecker.hasErrors = undefined;
+  gitBranchChecker.hasWarnings = undefined;
 });
 afterEach(() => {
   process.chdir(nativeCwd);
@@ -114,4 +121,49 @@ test('It should throw an error when git command failed', () => {
   // Then
   expect(() => getCurrentBranch()).toThrowError('git command failed');
   spy.mockRestore();
+});
+
+test('It should run without error when current branch is master', () => {
+  // Given
+  const checker = gitBranchChecker;
+
+  // When
+  const result = checker.canRun && checker.canRun() && checker.run && checker.run();
+
+  // Then
+  expect(result).toEqual([]);
+});
+
+test('It should run without error when current branch is release', () => {
+  // Given
+  const checker = gitBranchChecker;
+  exec('git branch foo');
+  exec('git branch bar');
+  exec('git branch release');
+  exec('git checkout release');
+
+  // When
+  const result = checker.canRun && checker.canRun() && checker.run && checker.run();
+
+  // Then
+  expect(result).toEqual([]);
+});
+
+test('It should run with error when current branch is foo', () => {
+  // Given
+  const checker = gitBranchChecker;
+  exec('git branch foo');
+  exec('git branch bar');
+  exec('git branch release');
+  exec('git checkout foo');
+
+  // When
+  const result = checker.canRun && checker.canRun() && checker.run && checker.run();
+
+  // Then
+  const expectedVaidationError: ValidationError = {
+    reason: `Current branch is 'foo', but it should be 'master' or 'release'.`,
+    severity: 'error',
+  };
+  expect(result).toEqual([expectedVaidationError]);
 });

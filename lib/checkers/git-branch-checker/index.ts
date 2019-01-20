@@ -11,7 +11,17 @@ export const gitBranchChecker: Partial<Checker> = {
 };
 
 function validate(): Array<ValidationError | ValidationWarning> {
-  throw new Error('Checker not implemented');
+  const currentBranch = getCurrentBranch();
+  if (currentBranch === 'master' || currentBranch === 'release') {
+    return [];
+  }
+
+  const validationError: ValidationError = {
+    reason: `Current branch is '${currentBranch}', but it should be 'master' or 'release'.`,
+    severity: 'error',
+  };
+
+  return [validationError];
 }
 
 function gitIsInstalled() {
