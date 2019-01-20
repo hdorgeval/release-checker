@@ -300,6 +300,7 @@ test('It should filter checkers from command-line options', () => {
 
   const checkers = [checker1, checker2, checker3];
   const options: ReleaseCheckerOptions = {
+    '--branch': false,
     '--customize-sensitivedata': false,
     '--help': false,
     '--opt1': true,
@@ -326,6 +327,7 @@ test('It should take all checkers when there is no option on the command-line', 
   const checkers = [checker1, checker2];
   const options: ReleaseCheckerOptions = {
     '--bar': false,
+    '--branch': false,
     '--customize-sensitivedata': false,
     '--foo': false,
     '--help': false,

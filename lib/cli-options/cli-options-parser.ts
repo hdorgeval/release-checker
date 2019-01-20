@@ -2,6 +2,7 @@ import minimist from 'minimist';
 
 export interface ReleaseCheckerOptions {
   [index: string]: string | boolean;
+  '--branch': boolean;
   '--customize-sensitivedata': boolean;
   '--help': boolean;
   '--package.json': boolean;
@@ -12,6 +13,7 @@ export interface ReleaseCheckerOptions {
 export function getCliOptions(): ReleaseCheckerOptions {
   const args = minimist(process.argv.slice(2));
   const options: ReleaseCheckerOptions = {
+    '--branch': args.branch || args.b || false,
     '--customize-sensitivedata': args['customize-sensitivedata'] || false,
     '--help': args.help || args.h || false,
     '--package.json': true,
@@ -25,6 +27,7 @@ export function no(options: ReleaseCheckerOptions) {
   return {
     hasBeenSet(): boolean {
       return (
+        options['--branch'] === false &&
         options['--help'] === false &&
         options['--test'] === false &&
         options['--sensitivedata'] === false &&

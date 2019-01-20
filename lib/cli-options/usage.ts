@@ -2,6 +2,7 @@ export const usage = `
 Usage: release-checker [options]
 
 Options:
+    --branch, -b                Ensure that current branch is 'master' or 'release'
     --customize-sensitivedata   Customize the sensitive or useless data checker
                                 This will create a .sensitivedata file that you can customize  
     
