@@ -16,7 +16,7 @@ It checks the following:
 - there is no vulnerable dependencies (unreleased)
 - there are no uncommitted changes in the working tree (unreleased)
 - there are no untracked files in the working tree (unreleased)
-- current branch is `master` or `release` (unreleased)
+- current branch is `master` or `release`
 - git tag matches version specified in the `package.json` (unreleased)
 - all licences declared in dependencies are valid (unreleased)
 
@@ -74,7 +74,7 @@ When you specify no option, all checkers will run.
 
 if you want to run only specific checkers, use the command-line options specific to these checkers.
 
-### -b, --branch (unreleased)
+### -b, --branch
 
 Ensure that current branch is `master` or `release`.
 
