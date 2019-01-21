@@ -4,7 +4,7 @@ import { join } from 'path';
 import * as execModule from '../../utils/exec-sync';
 import { exec } from '../../utils/exec-sync';
 import { ValidationError } from '../common/checker-interface';
-import { getCurrentBranch, gitBranchChecker } from './index';
+import { gitBranchChecker } from './index';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
@@ -75,52 +75,6 @@ test('It should run when git is installed and HEAD is not detached', () => {
 
   // Then
   expect(result).toBe(true);
-});
-
-test('It should detect that current branch is master', () => {
-  // Given
-
-  // When
-  const result = getCurrentBranch();
-
-  // Then
-  expect(result).toBe('master');
-});
-
-test('It should detect that current branch is foo', () => {
-  // Given
-  exec('git branch foo');
-  exec('git branch bar');
-  exec('git checkout foo');
-
-  // When
-  const result = getCurrentBranch();
-
-  // Then
-  expect(result).toBe('foo');
-});
-
-test('It should detect that HEAD is detached', () => {
-  // Given
-  exec('git checkout --detach');
-
-  // When
-  const result = getCurrentBranch();
-
-  // Then
-  expect(result).toContain('HEAD detached at');
-});
-
-test('It should throw an error when git command failed', () => {
-  // Given
-  const spy = jest.spyOn(execModule, 'exec').mockImplementation(() => {
-    return 'git command failed';
-  });
-
-  // When
-  // Then
-  expect(() => getCurrentBranch()).toThrowError('git command failed');
-  spy.mockRestore();
 });
 
 test('It should run without error when current branch is master', () => {
