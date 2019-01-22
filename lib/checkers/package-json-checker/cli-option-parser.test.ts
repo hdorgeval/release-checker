@@ -1,4 +1,4 @@
-import { getCliOptions } from '../../cli-options/cli-options-parser';
+import { getCliOptions, no } from '../../cli-options/cli-options-parser';
 
 const argv = {
   'npm run release-checker': [
@@ -40,6 +40,7 @@ test('It should set default options on command `npx release-checker` ', () => {
 
   // Then
   expect(options['--package.json']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
 });
 
 test('It should set default options on command `release-checker` ', () => {
@@ -51,6 +52,7 @@ test('It should set default options on command `release-checker` ', () => {
 
   // Then
   expect(options['--package.json']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
 });
 
 test('It should set default options on command `npm run release-checker` ', () => {
@@ -62,6 +64,7 @@ test('It should set default options on command `npm run release-checker` ', () =
 
   // Then
   expect(options['--package.json']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
 });
 
 test('It should parse --package.json on command `release-checker --package.json` ', () => {
@@ -73,6 +76,7 @@ test('It should parse --package.json on command `release-checker --package.json`
 
   // Then
   expect(options['--package.json']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
 });
 
 test('It should parse --package.json on command `npm run release-checker -- --package.json` ', () => {
@@ -84,6 +88,7 @@ test('It should parse --package.json on command `npm run release-checker -- --pa
 
   // Then
   expect(options['--package.json']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
 });
 
 test('It should parse --package.json on command `npx release-checker --package.json` ', () => {
@@ -95,4 +100,5 @@ test('It should parse --package.json on command `npx release-checker --package.j
 
   // Then
   expect(options['--package.json']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
 });

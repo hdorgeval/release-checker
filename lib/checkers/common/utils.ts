@@ -127,7 +127,7 @@ export function all(checkers: Array<Partial<Checker>>) {
 
 export function filter(checkers: Array<Partial<Checker>>) {
   return {
-    from(cliOptions: ReleaseCheckerOptions): Array<Partial<Checker>> {
+    from(cliOptions: Partial<ReleaseCheckerOptions>): Array<Partial<Checker>> {
       if (no(cliOptions).hasBeenSet()) {
         return checkers;
       }

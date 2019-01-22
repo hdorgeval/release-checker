@@ -1,4 +1,4 @@
-import { getCliOptions } from '../../cli-options/cli-options-parser';
+import { getCliOptions, no } from '../../cli-options/cli-options-parser';
 
 const argv = {
   'npm run release-checker': [
@@ -47,6 +47,7 @@ test('It should set default options on command `npx release-checker` ', () => {
 
   // Then
   expect(options['--test']).toBe(false);
+  expect(no(options).hasBeenSet()).toBe(true);
 });
 
 test('It should set default options on command `release-checker` ', () => {
@@ -58,6 +59,7 @@ test('It should set default options on command `release-checker` ', () => {
 
   // Then
   expect(options['--test']).toBe(false);
+  expect(no(options).hasBeenSet()).toBe(true);
 });
 
 test('It should set default options on command `npm run release-checker` ', () => {
@@ -69,6 +71,7 @@ test('It should set default options on command `npm run release-checker` ', () =
 
   // Then
   expect(options['--test']).toBe(false);
+  expect(no(options).hasBeenSet()).toBe(true);
 });
 
 test('It should parse --test on command `release-checker --test` ', () => {
@@ -80,6 +83,7 @@ test('It should parse --test on command `release-checker --test` ', () => {
 
   // Then
   expect(options['--test']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(false);
 });
 
 test('It should parse --test on command `release-checker -t` ', () => {
@@ -91,6 +95,7 @@ test('It should parse --test on command `release-checker -t` ', () => {
 
   // Then
   expect(options['--test']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(false);
 });
 
 test('It should parse --test on command `npm run release-checker -- --test` ', () => {
@@ -102,6 +107,7 @@ test('It should parse --test on command `npm run release-checker -- --test` ', (
 
   // Then
   expect(options['--test']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(false);
 });
 
 test('It should parse --test on command `npm run release-checker -- -t` ', () => {
@@ -113,6 +119,7 @@ test('It should parse --test on command `npm run release-checker -- -t` ', () =>
 
   // Then
   expect(options['--test']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(false);
 });
 
 test('It should parse --test on command `npx release-checker --test` ', () => {
@@ -124,6 +131,7 @@ test('It should parse --test on command `npx release-checker --test` ', () => {
 
   // Then
   expect(options['--test']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(false);
 });
 
 test('It should parse --test on command `npx release-checker -t` ', () => {
@@ -135,4 +143,5 @@ test('It should parse --test on command `npx release-checker -t` ', () => {
 
   // Then
   expect(options['--test']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(false);
 });

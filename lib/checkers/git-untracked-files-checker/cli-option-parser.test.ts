@@ -5,28 +5,28 @@ const argv = {
     '/usr/local/bin/node',
     '/Users/user_name/projects/release-checker/build/bin/release-checker',
   ],
-  'npm run release-checker -- --branch': [
+  'npm run release-checker -- --untracked-files': [
     '/usr/local/bin/node',
     '/Users/user_name/projects/release-checker/build/bin/release-checker',
-    '--branch',
+    '--untracked-files',
   ],
-  'npm run release-checker -- -b': [
+  'npm run release-checker -- -u': [
     '/usr/local/bin/node',
     '/Users/user_name/projects/release-checker/build/bin/release-checker',
-    '-b',
+    '-u',
   ],
 
   'npx release-checker': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
-  'npx release-checker --branch': [
+  'npx release-checker --untracked-files': [
     '/usr/local/bin/node',
     '/Users/user_name/.npm/_npx/49244/bin/release-checker',
-    '--branch',
+    '--untracked-files',
   ],
-  'npx release-checker -b': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker', '-b'],
+  'npx release-checker -u': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker', '-u'],
 
   'release-checker': ['/usr/local/bin/node', '/usr/local/bin/release-checker'],
-  'release-checker --branch': ['/usr/local/bin/node', '/usr/local/bin/release-checker', '--branch'],
-  'release-checker -b': ['/usr/local/bin/node', '/usr/local/bin/release-checker', '-b'],
+  'release-checker --untracked-files': ['/usr/local/bin/node', '/usr/local/bin/release-checker', '--untracked-files'],
+  'release-checker -u': ['/usr/local/bin/node', '/usr/local/bin/release-checker', '-u'],
 };
 
 let nativeProcessArgv: string[];
@@ -46,7 +46,7 @@ test('It should set default options on command `npx release-checker` ', () => {
   const options = getCliOptions();
 
   // Then
-  expect(options['--branch']).toBe(false);
+  expect(options['--untracked-files']).toBe(false);
   expect(no(options).hasBeenSet()).toBe(true);
 });
 
@@ -58,7 +58,7 @@ test('It should set default options on command `release-checker` ', () => {
   const options = getCliOptions();
 
   // Then
-  expect(options['--branch']).toBe(false);
+  expect(options['--untracked-files']).toBe(false);
   expect(no(options).hasBeenSet()).toBe(true);
 });
 
@@ -70,78 +70,78 @@ test('It should set default options on command `npm run release-checker` ', () =
   const options = getCliOptions();
 
   // Then
-  expect(options['--branch']).toBe(false);
+  expect(options['--untracked-files']).toBe(false);
   expect(no(options).hasBeenSet()).toBe(true);
 });
 
-test('It should parse --branch on command `release-checker --branch` ', () => {
+test('It should parse --untracked-files on command `release-checker --untracked-files` ', () => {
   // Given
-  process.argv = argv['release-checker --branch'];
+  process.argv = argv['release-checker --untracked-files'];
 
   // When
   const options = getCliOptions();
 
   // Then
-  expect(options['--branch']).toBe(true);
+  expect(options['--untracked-files']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(false);
 });
 
-test('It should parse --branch on command `release-checker -b` ', () => {
+test('It should parse --untracked-files on command `release-checker -u` ', () => {
   // Given
-  process.argv = argv['release-checker -b'];
+  process.argv = argv['release-checker -u'];
 
   // When
   const options = getCliOptions();
 
   // Then
-  expect(options['--branch']).toBe(true);
+  expect(options['--untracked-files']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(false);
 });
 
-test('It should parse --branch on command `npm run release-checker -- --branch` ', () => {
+test('It should parse --untracked-files on command `npm run release-checker -- --untracked-files` ', () => {
   // Given
-  process.argv = argv['npm run release-checker -- --branch'];
+  process.argv = argv['npm run release-checker -- --untracked-files'];
 
   // When
   const options = getCliOptions();
 
   // Then
-  expect(options['--branch']).toBe(true);
+  expect(options['--untracked-files']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(false);
 });
 
-test('It should parse --branch on command `npm run release-checker -- -b` ', () => {
+test('It should parse --untracked-files on command `npm run release-checker -- -u` ', () => {
   // Given
-  process.argv = argv['npm run release-checker -- -b'];
+  process.argv = argv['npm run release-checker -- -u'];
 
   // When
   const options = getCliOptions();
 
   // Then
-  expect(options['--branch']).toBe(true);
+  expect(options['--untracked-files']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(false);
 });
 
-test('It should parse --branch on command `npx release-checker --branch` ', () => {
+test('It should parse --untracked-files on command `npx release-checker --untracked-files` ', () => {
   // Given
-  process.argv = argv['npx release-checker --branch'];
+  process.argv = argv['npx release-checker --untracked-files'];
 
   // When
   const options = getCliOptions();
 
   // Then
-  expect(options['--branch']).toBe(true);
+  expect(options['--untracked-files']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(false);
 });
 
-test('It should parse --branch on command `npx release-checker -b` ', () => {
+test('It should parse --untracked-files on command `npx release-checker -u` ', () => {
   // Given
-  process.argv = argv['npx release-checker -b'];
+  process.argv = argv['npx release-checker -u'];
 
   // When
   const options = getCliOptions();
 
   // Then
-  expect(options['--branch']).toBe(true);
+  expect(options['--untracked-files']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(false);
 });

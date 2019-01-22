@@ -8,6 +8,7 @@ export interface ReleaseCheckerOptions {
   '--package.json': boolean;
   '--sensitivedata': boolean;
   '--test': boolean;
+  '--untracked-files': boolean;
 }
 
 export function getCliOptions(): ReleaseCheckerOptions {
@@ -19,11 +20,12 @@ export function getCliOptions(): ReleaseCheckerOptions {
     '--package.json': true,
     '--sensitivedata': args.sensitivedata || args.s || false,
     '--test': args.test || args.t || false,
+    '--untracked-files': args['untracked-files'] || args.u || false,
   };
   return options;
 }
 
-export function no(options: ReleaseCheckerOptions) {
+export function no(options: Partial<ReleaseCheckerOptions>) {
   return {
     hasBeenSet(): boolean {
       return (
@@ -31,7 +33,8 @@ export function no(options: ReleaseCheckerOptions) {
         options['--customize-sensitivedata'] === false &&
         options['--help'] === false &&
         options['--sensitivedata'] === false &&
-        options['--test'] === false
+        options['--test'] === false &&
+        options['--untracked-files'] === false
       );
     },
   };
