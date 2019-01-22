@@ -15,7 +15,7 @@ It checks the following:
 - there is no useless files (like tests files) embedded in the package that will be sent to the registry
 - there is no vulnerable dependencies (unreleased)
 - there are no uncommitted changes in the working tree (unreleased)
-- there are no untracked files in the working tree (unreleased)
+- there are no untracked files in the working tree
 - current branch is `master` or `release`
 - git tag matches version specified in the `package.json` (unreleased)
 - all licences declared in dependencies are valid (unreleased)
@@ -113,7 +113,7 @@ npx release-checker --test
 
 ### -u, --untracked-files
 
-Ensure there are no untracked files in the working tree
+Ensure there are no untracked files in the working tree.
 
 ```sh
 npx release-checker --untracked-files
