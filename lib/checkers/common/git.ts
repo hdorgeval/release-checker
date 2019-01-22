@@ -34,3 +34,16 @@ export function getCurrentBranch(): string {
 
   return currentBranch[0];
 }
+
+export function getUntrackedFiles(): string[] {
+  const gitExecutionResult = exec('git status --untracked-files --porcelain');
+  const untrackedFiles = gitExecutionResult
+    .split(/\n|\r/)
+    .map((line) => line.replace(/[\t]/g, ' '))
+    .map((line) => line.trim())
+    .filter((line) => line && line.length > 0)
+    .filter((line) => line.startsWith('??'))
+    .map((line) => line.replace('??', '').trim());
+
+  return untrackedFiles;
+}

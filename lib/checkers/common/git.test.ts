@@ -1,13 +1,15 @@
 import { execSync } from 'child_process';
-import { mkdirSync } from 'fs';
+import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import * as execModule from '../../utils/exec-sync';
 import { exec } from '../../utils/exec-sync';
-import { getCurrentBranch, gitIsInstalled, headIsDetached, headIsNotDetached } from './git';
+import { PackageDotJson } from '../../utils/read-package-json';
+import { getCurrentBranch, getUntrackedFiles, gitIsInstalled, headIsDetached, headIsNotDetached } from './git';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
 let nativeCwd: string;
+let testingRepo: string;
 
 beforeAll(() => {
   nativeCwd = process.cwd();
@@ -18,7 +20,7 @@ beforeAll(() => {
 });
 beforeEach(() => {
   process.chdir(tempFolder);
-  const testingRepo = join(tempFolder, 'testing-repo-for-release-checker');
+  testingRepo = join(tempFolder, 'testing-repo-for-release-checker');
   exec(`npm run rimraf -- ${testingRepo} `);
   exec('git clone https://github.com/hdorgeval/testing-repo-for-release-checker.git');
   process.chdir(testingRepo);
@@ -122,4 +124,58 @@ test('It should check that HEAD is not detached when current branch is master', 
 
   // Then
   expect(result).toEqual(true);
+});
+
+test('It should detect there is no untracked file', () => {
+  // Given
+
+  // When
+  const result = getUntrackedFiles();
+
+  // Then
+  expect(result).toEqual([]);
+});
+
+test('It should detect there are untracked files', () => {
+  // Given
+  writeFileSync(join(testingRepo, 'foo.txt'), 'foo');
+  writeFileSync(join(testingRepo, 'bar.txt'), 'bar');
+  mkdirSync(join(testingRepo, 'lib'));
+  writeFileSync(join(testingRepo, 'lib', 'foobar.txt'), 'foobar');
+  // When
+  const result = getUntrackedFiles();
+
+  // Then
+  expect(result).toEqual(['bar.txt', 'foo.txt', 'lib/foobar.txt']);
+});
+
+test('It should not detect uncommited files as untracked files', () => {
+  // Given
+  const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '2.0.0', scripts: { prepublish: 'yo' } };
+  const pkgFilepath = join(testingRepo, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  // When
+  const result = getUntrackedFiles();
+
+  // Then
+  expect(result).toEqual([]);
+});
+
+test('It should take only untracked files', () => {
+  // Given
+  const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '2.0.0', scripts: { prepublish: 'yo' } };
+  const pkgFilepath = join(testingRepo, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  writeFileSync(join(testingRepo, 'foo.txt'), 'foo');
+  writeFileSync(join(testingRepo, 'bar.txt'), 'bar');
+  mkdirSync(join(testingRepo, 'lib'));
+  writeFileSync(join(testingRepo, 'lib', 'foobar.txt'), 'foobar');
+
+  // When
+  const result = getUntrackedFiles();
+
+  // Then
+  expect(result).toEqual(['bar.txt', 'foo.txt', 'lib/foobar.txt']);
 });
