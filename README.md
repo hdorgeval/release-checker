@@ -111,6 +111,14 @@ Ensure that command `npm test` is successfull.
 npx release-checker --test
 ```
 
+### -u, --untracked-files
+
+Ensure there are no untracked files in the working tree
+
+```sh
+npx release-checker --untracked-files
+```
+
 ## Sensitive or useless data Checker
 
 This Checker checks there is no sensitive and no useless files inside the to-be-published package. This check performs only if npm version is 5.9.0 or above.
