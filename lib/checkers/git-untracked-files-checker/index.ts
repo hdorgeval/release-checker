@@ -1,5 +1,5 @@
 import { Checker, ValidationError, ValidationWarning } from '../common/checker-interface';
-import { gitIsInstalled } from '../common/git';
+import { getUntrackedFiles, gitIsInstalled } from '../common/git';
 
 export const gitUntrackedFilesChecker: Partial<Checker> = {
   canRun: () => gitIsInstalled(),
@@ -11,5 +11,13 @@ export const gitUntrackedFilesChecker: Partial<Checker> = {
 };
 
 function validate(): Array<ValidationError | ValidationWarning> {
-  throw new Error('Checker not implemented');
+  const untrackedFiles = getUntrackedFiles();
+  const validationErrorsAndWarnings: Array<ValidationError | ValidationWarning> = [];
+  untrackedFiles.forEach((filepath) => {
+    validationErrorsAndWarnings.push({
+      reason: `File '${filepath}' is untracked`,
+      severity: 'error',
+    });
+  });
+  return validationErrorsAndWarnings;
 }
