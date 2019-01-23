@@ -103,6 +103,28 @@ Ensure there is no sensitive or useless data in the npm package.
 npx release-checker --sensitivedata
 ```
 
+### --skip-\<checker\> (unreleased)
+
+Use this option when you want to run all checkers except specific ones.
+
+For example this command will run all checkers except the test checker:
+
+```sh
+npx release-checker --skip-test
+```
+
+This other example will run all checkers except the test checker and the git-branch checker
+
+```sh
+npx release-checker --skip-test --skip-branch
+```
+
+The above command could be also rewritten to:
+
+```sh
+npx release-checker --skip-t --skip-b
+```
+
 ### -t, --test
 
 Ensure that command `npm test` is successfull.
