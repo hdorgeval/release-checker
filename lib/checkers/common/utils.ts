@@ -129,13 +129,29 @@ export function filter(checkers: Array<Partial<Checker>>) {
   return {
     from(cliOptions: Partial<ReleaseCheckerOptions>): Array<Partial<Checker>> {
       if (no(cliOptions).hasBeenSet()) {
-        return checkers;
+        return checkers.filter((checker) => !should(checker).beSkipped(cliOptions));
       }
 
       return checkers.filter((checker) => {
         const cliOption = checker.cliOption || '';
-        return cliOptions[cliOption];
+        return Boolean(cliOptions[cliOption]);
       });
+    },
+  };
+}
+
+export function getShortSyntaxOfCliOption(cliOption: string | undefined) {
+  return (cliOption || '').replace('--', '-').substring(0, 2);
+}
+
+export function should(checker: Partial<Checker>) {
+  return {
+    beSkipped(cliOptions: Partial<ReleaseCheckerOptions>): boolean {
+      const checkerCliOption = checker.cliOption || '';
+      return (
+        Boolean(cliOptions[`--skip${checkerCliOption.replace('--', '-')}`]) ||
+        Boolean(cliOptions[`--skip${getShortSyntaxOfCliOption(checker.cliOption)}`])
+      );
     },
   };
 }

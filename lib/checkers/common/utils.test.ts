@@ -1,6 +1,16 @@
-import { ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
+import { no, ReleaseCheckerOptions } from '../../cli-options/cli-options-parser';
 import { Checker, ValidationError, ValidationWarning } from './checker-interface';
-import { all, ensureThatChecker, filter, runChecker, setCatchedError, setErrors, setWarnings } from './utils';
+import {
+  all,
+  ensureThatChecker,
+  filter,
+  getShortSyntaxOfCliOption,
+  runChecker,
+  setCatchedError,
+  setErrors,
+  setWarnings,
+  should,
+} from './utils';
 
 test('It should not throw an error when checker has a `canRun` method defined that returns true` ', () => {
   // Given
@@ -331,6 +341,128 @@ test('It should take all checkers when there is no option on the command-line', 
     '--help': false,
     '--package.json': true,
     '--sensitivedata': false,
+    '--test': false,
+    '--untracked-files': false,
+  };
+
+  // When
+  const result = filter(checkers).from(options);
+
+  // Then
+  expect(result.length).toBe(2);
+  expect(result[0]).toEqual(checker1);
+  expect(result[1]).toEqual(checker2);
+});
+
+test("It should get short syntax of checker's cli option", () => {
+  // Given
+  const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--foo' };
+  const checker2: Partial<Checker> = { hasErrors: false, cliOption: '--bar' };
+  const checker3: Partial<Checker> = { hasErrors: false, cliOption: '--foo-bar' };
+  const checker4: Partial<Checker> = { hasErrors: false, cliOption: '-f' };
+
+  // When
+  const result1 = getShortSyntaxOfCliOption(checker1.cliOption);
+  const result2 = getShortSyntaxOfCliOption(checker2.cliOption);
+  const result3 = getShortSyntaxOfCliOption(checker3.cliOption);
+  const result4 = getShortSyntaxOfCliOption(checker4.cliOption);
+
+  // Then
+  expect(result1).toBe('-f');
+  expect(result2).toBe('-b');
+  expect(result3).toBe('-f');
+  expect(result4).toBe('-f');
+});
+
+test('It should skip foo checker on --skip-foo', () => {
+  // Given
+  const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--foo' };
+  const options: ReleaseCheckerOptions = {
+    '--branch': false,
+    '--customize-sensitivedata': false,
+    '--foo': false,
+    '--help': false,
+    '--package.json': true,
+    '--sensitivedata': false,
+    '--skip-foo': true,
+    '--test': false,
+    '--untracked-files': false,
+  };
+
+  // When
+  const cliHasNoOption = no(options).hasBeenSet();
+  const result = should(checker1).beSkipped(options);
+
+  // Then
+  expect(cliHasNoOption).toBe(true);
+  expect(result).toBe(true);
+});
+
+test('It should skip foo checker on --skip-f', () => {
+  // Given
+  const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--foo' };
+  const options: ReleaseCheckerOptions = {
+    '--branch': false,
+    '--customize-sensitivedata': false,
+    '--foo': false,
+    '--help': false,
+    '--package.json': true,
+    '--sensitivedata': false,
+    '--skip-f': true,
+    '--test': false,
+    '--untracked-files': false,
+  };
+
+  // When
+  const cliHasNoOption = no(options).hasBeenSet();
+  const result = should(checker1).beSkipped(options);
+
+  // Then
+  expect(cliHasNoOption).toBe(true);
+  expect(result).toBe(true);
+});
+
+test('It should not skip a checker that no cli option defined', () => {
+  // Given
+  const checker1: Partial<Checker> = { hasErrors: false };
+  const options: ReleaseCheckerOptions = {
+    '--branch': false,
+    '--customize-sensitivedata': false,
+    '--foo': false,
+    '--help': false,
+    '--package.json': true,
+    '--sensitivedata': false,
+    '--skip-f': true,
+    '--test': false,
+    '--untracked-files': false,
+  };
+
+  // When
+  const cliHasNoOption = no(options).hasBeenSet();
+  const result = should(checker1).beSkipped(options);
+
+  // Then
+  expect(cliHasNoOption).toBe(true);
+  expect(result).toBe(false);
+});
+
+test('It should take all checkers except those that are skipped', () => {
+  // Given
+  const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--foo' };
+  const checker2: Partial<Checker> = { hasErrors: false, cliOption: '--bar' };
+  const checker3: Partial<Checker> = { hasErrors: false, cliOption: '--foo-bar' };
+
+  const checkers = [checker1, checker2, checker3];
+  const options: ReleaseCheckerOptions = {
+    '--bar': false,
+    '--branch': false,
+    '--customize-sensitivedata': false,
+    '--foo': false,
+    '--foo-bar': false,
+    '--help': false,
+    '--package.json': true,
+    '--sensitivedata': false,
+    '--skip-foo-bar': true,
     '--test': false,
     '--untracked-files': false,
   };
