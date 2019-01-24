@@ -17,6 +17,16 @@ const argv = {
   ],
 
   'npx release-checker': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
+  'npx release-checker --skip-t': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--skip-t',
+  ],
+  'npx release-checker --skip-test': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--skip-test',
+  ],
   'npx release-checker --test': [
     '/usr/local/bin/node',
     '/Users/user_name/.npm/_npx/49244/bin/release-checker',
@@ -47,6 +57,32 @@ test('It should set default options on command `npx release-checker` ', () => {
 
   // Then
   expect(options['--test']).toBe(false);
+  expect(no(options).hasBeenSet()).toBe(true);
+});
+
+test('It should skip on command `npx release-checker --skip-test` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --skip-test'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--test']).toBe(false);
+  expect(options['--skip-test']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
+});
+
+test.only('It should skip on command `npx release-checker --skip-t` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --skip-t'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--test']).toBe(false);
+  expect(options['--skip-t']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(true);
 });
 

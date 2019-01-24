@@ -22,6 +22,16 @@ const argv = {
     '/Users/user_name/.npm/_npx/49244/bin/release-checker',
     '--branch',
   ],
+  'npx release-checker --skip-b': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--skip-b',
+  ],
+  'npx release-checker --skip-branch': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--skip-branch',
+  ],
   'npx release-checker -b': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker', '-b'],
 
   'release-checker': ['/usr/local/bin/node', '/usr/local/bin/release-checker'],
@@ -47,6 +57,32 @@ test('It should set default options on command `npx release-checker` ', () => {
 
   // Then
   expect(options['--branch']).toBe(false);
+  expect(no(options).hasBeenSet()).toBe(true);
+});
+
+test('It should skip on command `npx release-checker --skip-branch` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --skip-branch'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--branch']).toBe(false);
+  expect(options['--skip-branch']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
+});
+
+test.only('It should skip on command `npx release-checker --skip-b` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --skip-b'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--branch']).toBe(false);
+  expect(options['--skip-b']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(true);
 });
 

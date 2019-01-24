@@ -22,6 +22,13 @@ export function getCliOptions(): ReleaseCheckerOptions {
     '--test': args.test || args.t || false,
     '--untracked-files': args['untracked-files'] || args.u || false,
   };
+
+  for (const key in args) {
+    if (args.hasOwnProperty(key) && key.startsWith('skip-')) {
+      options[`--${key}`] = true;
+    }
+  }
+
   return options;
 }
 

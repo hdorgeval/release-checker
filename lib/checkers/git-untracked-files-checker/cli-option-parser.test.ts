@@ -17,6 +17,16 @@ const argv = {
   ],
 
   'npx release-checker': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker'],
+  'npx release-checker --skip-u': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--skip-u',
+  ],
+  'npx release-checker --skip-untracked-files': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--skip-untracked-files',
+  ],
   'npx release-checker --untracked-files': [
     '/usr/local/bin/node',
     '/Users/user_name/.npm/_npx/49244/bin/release-checker',
@@ -47,6 +57,32 @@ test('It should set default options on command `npx release-checker` ', () => {
 
   // Then
   expect(options['--untracked-files']).toBe(false);
+  expect(no(options).hasBeenSet()).toBe(true);
+});
+
+test('It should skip on command `npx release-checker --skip-untracked-files` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --skip-untracked-files'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--untracked-files']).toBe(false);
+  expect(options['--skip-untracked-files']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
+});
+
+test.only('It should skip on command `npx release-checker --skip-u` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --skip-u'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--untracked-files']).toBe(false);
+  expect(options['--skip-u']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(true);
 });
 
