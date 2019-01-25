@@ -103,7 +103,7 @@ Ensure there is no sensitive or useless data in the npm package.
 npx release-checker --sensitivedata
 ```
 
-### --skip-\<checker\> (unreleased)
+### --skip-\<checker\>
 
 Use this option when you want to run all checkers except specific ones.
 

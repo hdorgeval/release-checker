@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.8.0] - 2019-01-25
 
-### Unreleased
+### Added
 
 - be able to skip any checker via command-line option --skip-<checker-option>
 
