@@ -22,6 +22,16 @@ const argv = {
     '/Users/user_name/.npm/_npx/49244/bin/release-checker',
     '--sensitivedata',
   ],
+  'npx release-checker --skip-s': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--skip-s',
+  ],
+  'npx release-checker --skip-sensitivedata': [
+    '/usr/local/bin/node',
+    '/Users/user_name/.npm/_npx/49244/bin/release-checker',
+    '--skip-sensitivedata',
+  ],
   'npx release-checker -s': ['/usr/local/bin/node', '/Users/user_name/.npm/_npx/49244/bin/release-checker', '-s'],
 
   'release-checker': ['/usr/local/bin/node', '/usr/local/bin/release-checker'],
@@ -47,6 +57,32 @@ test('It should set default options on command `npx release-checker` ', () => {
 
   // Then
   expect(options['--sensitivedata']).toBe(false);
+  expect(no(options).hasBeenSet()).toBe(true);
+});
+
+test('It should skip on command `npx release-checker --skip-sensitivedata` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --skip-sensitivedata'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--sensitivedata']).toBe(false);
+  expect(options['--skip-sensitivedata']).toBe(true);
+  expect(no(options).hasBeenSet()).toBe(true);
+});
+
+test('It should skip on command `npx release-checker --skip-s` ', () => {
+  // Given
+  process.argv = argv['npx release-checker --skip-s'];
+
+  // When
+  const options = getCliOptions();
+
+  // Then
+  expect(options['--sensitivedata']).toBe(false);
+  expect(options['--skip-s']).toBe(true);
   expect(no(options).hasBeenSet()).toBe(true);
 });
 
