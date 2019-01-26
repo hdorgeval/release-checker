@@ -3,8 +3,16 @@ import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import * as execModule from '../../utils/exec-sync';
 import { exec } from '../../utils/exec-sync';
+import { removeFile } from '../../utils/fs';
 import { PackageDotJson } from '../../utils/read-package-json';
-import { getCurrentBranch, getUntrackedFiles, gitIsInstalled, headIsDetached, headIsNotDetached } from './git';
+import {
+  getCurrentBranch,
+  getUncommitedFiles,
+  getUntrackedFiles,
+  gitIsInstalled,
+  headIsDetached,
+  headIsNotDetached,
+} from './git';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
@@ -178,4 +186,51 @@ test('It should take only untracked files', () => {
 
   // Then
   expect(result).toEqual(['bar.txt', 'foo.txt', 'lib/foobar.txt']);
+});
+
+test('It should detect uncommited modified files', () => {
+  // Given
+  const pkg: Partial<PackageDotJson> = { name: 'testing-repo', version: '2.0.0', scripts: { prepublish: 'yo' } };
+  const pkgFilepath = join(testingRepo, 'package.json');
+  writeFileSync(pkgFilepath, JSON.stringify(pkg, null, 2));
+
+  // When
+  const result = getUncommitedFiles();
+
+  // Then
+  expect(result).toEqual(['package.json']);
+});
+
+test('It should not detect untracked files as uncommited', () => {
+  // Given
+  writeFileSync(join(testingRepo, 'foo.txt'), 'foo');
+
+  // When
+  const result = getUncommitedFiles();
+
+  // Then
+  expect(result).toEqual([]);
+});
+
+test('It should detect uncommited deleted files', () => {
+  // Given
+  removeFile('package.json').fromDirectory(testingRepo);
+
+  // When
+  const result = getUncommitedFiles();
+
+  // Then
+  expect(result).toEqual(['package.json']);
+});
+
+test('It should detect uncommited added files', () => {
+  // Given
+  writeFileSync(join(testingRepo, 'foo.txt'), 'foo');
+  exec('git add foo.txt');
+
+  // When
+  const result = getUncommitedFiles();
+
+  // Then
+  expect(result).toEqual(['foo.txt']);
 });

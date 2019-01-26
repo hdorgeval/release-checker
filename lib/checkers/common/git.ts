@@ -47,3 +47,31 @@ export function getUntrackedFiles(): string[] {
 
   return untrackedFiles;
 }
+
+export function getUncommitedFiles(): string[] {
+  const gitExecutionResult = exec('git status --porcelain');
+  const uncommitedFiles = gitExecutionResult
+    .split(/\n|\r/)
+    .map((line) => line.replace(/[\t]/g, ' '))
+    .map((line) => line.trim())
+    .filter((line) => line && line.length > 0)
+    .filter(
+      (line) =>
+        line.startsWith('A ') ||
+        line.startsWith('C ') ||
+        line.startsWith('D ') ||
+        line.startsWith('M ') ||
+        line.startsWith('R ') ||
+        line.startsWith('U '),
+    )
+
+    .map((line) => line.replace(/^A\s/, '%%').trim())
+    .map((line) => line.replace(/^C\s/, '%%').trim())
+    .map((line) => line.replace(/^D\s/, '%%').trim())
+    .map((line) => line.replace(/^M\s/, '%%').trim())
+    .map((line) => line.replace(/^R\s/, '%%').trim())
+    .map((line) => line.replace(/^U\s/, '%%').trim())
+    .map((line) => line.replace('%%', '').trim());
+
+  return uncommitedFiles;
+}
