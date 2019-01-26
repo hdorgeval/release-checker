@@ -73,7 +73,7 @@ test('It should skip on command `npx release-checker --skip-branch` ', () => {
   expect(no(options).hasBeenSet()).toBe(true);
 });
 
-test.only('It should skip on command `npx release-checker --skip-b` ', () => {
+test('It should skip on command `npx release-checker --skip-b` ', () => {
   // Given
   process.argv = argv['npx release-checker --skip-b'];
 

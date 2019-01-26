@@ -73,7 +73,7 @@ test('It should skip on command `npx release-checker --skip-untracked-files` ', 
   expect(no(options).hasBeenSet()).toBe(true);
 });
 
-test.only('It should skip on command `npx release-checker --skip-u` ', () => {
+test('It should skip on command `npx release-checker --skip-u` ', () => {
   // Given
   process.argv = argv['npx release-checker --skip-u'];
 
