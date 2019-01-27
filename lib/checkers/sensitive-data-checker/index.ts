@@ -15,6 +15,7 @@ export const sensitiveDataChecker: Partial<Checker> = {
   cliOption: '--sensitivedata',
   id: 'sensivitive-data-checker',
   run: () => validate(),
+  shortCliOption: '-s',
   statusToDisplayWhileValidating: 'Checking for the sensitive and non-essential data in the npm package',
   whyCannotRun: () =>
     `Cannot check sensitive and non-essential data because npm version is ${getCurrentNpmVersion()}. Upgrade npm to version 5.9.0 or above to enable this check.`,

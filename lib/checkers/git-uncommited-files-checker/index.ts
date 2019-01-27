@@ -6,6 +6,7 @@ export const gitUncommitedFilesChecker: Partial<Checker> = {
   cliOption: '--uncommited-files',
   id: 'git-uncommited-files-checker',
   run: () => validate(),
+  shortCliOption: '-c',
   statusToDisplayWhileValidating: 'Checking there are no uncommited files',
   whyCannotRun: () => `git not found. Run 'npm doctor' for more details`,
 };

@@ -400,7 +400,7 @@ test('It should skip foo checker on --skip-foo', () => {
 
 test('It should skip foo checker on --skip-f', () => {
   // Given
-  const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--foo' };
+  const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--foo', shortCliOption: '-f' };
   const options: ReleaseCheckerOptions = {
     '--branch': false,
     '--customize-sensitivedata': false,
@@ -422,9 +422,33 @@ test('It should skip foo checker on --skip-f', () => {
   expect(result).toBe(true);
 });
 
-test('It should not skip a checker that no cli option defined', () => {
+test('It should not skip a checker with no cli option defined', () => {
   // Given
   const checker1: Partial<Checker> = { hasErrors: false };
+  const options: ReleaseCheckerOptions = {
+    '--branch': false,
+    '--customize-sensitivedata': false,
+    '--foo': false,
+    '--help': false,
+    '--package.json': true,
+    '--sensitivedata': false,
+    '--skip-f': true,
+    '--test': false,
+    '--untracked-files': false,
+  };
+
+  // When
+  const cliHasNoOption = no(options).hasBeenSet();
+  const result = should(checker1).beSkipped(options);
+
+  // Then
+  expect(cliHasNoOption).toBe(true);
+  expect(result).toBe(false);
+});
+
+test('It should not skip a checker with no short cli option defined', () => {
+  // Given
+  const checker1: Partial<Checker> = { hasErrors: false, cliOption: '--foo' };
   const options: ReleaseCheckerOptions = {
     '--branch': false,
     '--customize-sensitivedata': false,

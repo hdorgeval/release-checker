@@ -14,6 +14,7 @@ export interface Checker {
   hasWarnings: boolean;
   id: string;
   run: () => Array<ValidationError | ValidationWarning>;
+  shortCliOption: string;
   statusToDisplayWhileValidating: string;
   warnings: ValidationWarning[];
   whyCannotRun: () => string;
@@ -27,6 +28,7 @@ const noopChecker: Checker = {
   hasWarnings: false,
   id: 'noop',
   run: () => [],
+  shortCliOption: '-n',
   statusToDisplayWhileValidating: 'noop',
   warnings: [],
   whyCannotRun: () => '',

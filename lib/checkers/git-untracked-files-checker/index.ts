@@ -6,6 +6,7 @@ export const gitUntrackedFilesChecker: Partial<Checker> = {
   cliOption: '--untracked-files',
   id: 'git-untracked-files-checker',
   run: () => validate(),
+  shortCliOption: '-u',
   statusToDisplayWhileValidating: 'Checking there are no untracked files',
   whyCannotRun: () => `git not found. Run 'npm doctor' for more details`,
 };

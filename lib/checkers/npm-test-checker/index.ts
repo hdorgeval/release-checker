@@ -7,6 +7,7 @@ export const npmTestChecker: Partial<Checker> = {
   cliOption: '--test',
   id: 'npm-test-checker',
   run: () => validate(),
+  shortCliOption: '-t',
   statusToDisplayWhileValidating: 'Checking that tests are successfull',
 };
 

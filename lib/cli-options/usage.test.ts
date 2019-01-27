@@ -1,3 +1,4 @@
+import { checkers } from '../checkers/index';
 import { getCliOptions } from './cli-options-parser';
 import { usage } from './usage';
 
@@ -34,4 +35,16 @@ test('It should show all cli options in usage` ', () => {
     }
     expect(usage).toContain(option);
   }
+});
+
+test('It should show all short cli options in usage` ', () => {
+  // Given
+  // When
+  // Then
+  checkers.forEach((checker) => {
+    if (checker.cliOption === '--package.json' || checker.shortCliOption === undefined) {
+      return;
+    }
+    expect(usage).toContain(checker.shortCliOption);
+  });
 });

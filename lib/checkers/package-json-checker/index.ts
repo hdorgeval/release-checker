@@ -6,6 +6,7 @@ export const packageJsonChecker: Partial<Checker> = {
   cliOption: '--package.json',
   id: 'package-json-checker',
   run: () => validate(),
+  shortCliOption: '-p',
   statusToDisplayWhileValidating: 'Checking that package.json file exists and is valid',
 };
 

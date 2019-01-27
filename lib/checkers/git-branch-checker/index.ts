@@ -6,6 +6,7 @@ export const gitBranchChecker: Partial<Checker> = {
   cliOption: '--branch',
   id: 'git-branch-checker',
   run: () => validate(),
+  shortCliOption: '-b',
   statusToDisplayWhileValidating: 'Checking that current branch is `master` or `release`',
   whyCannotRun: () => `git not found or HEAD is detached. Run 'npm doctor' or 'git branch' for more details`,
 };

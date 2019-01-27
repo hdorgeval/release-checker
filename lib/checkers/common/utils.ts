@@ -148,9 +148,10 @@ export function should(checker: Partial<Checker>) {
   return {
     beSkipped(cliOptions: Partial<ReleaseCheckerOptions>): boolean {
       const checkerCliOption = checker.cliOption || '';
+      const checkerShortCliOption = checker.shortCliOption || '';
       return (
         Boolean(cliOptions[`--skip${checkerCliOption.replace('--', '-')}`]) ||
-        Boolean(cliOptions[`--skip${getShortSyntaxOfCliOption(checker.cliOption)}`])
+        Boolean(cliOptions[`--skip${checkerShortCliOption}`])
       );
     },
   };
