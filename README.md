@@ -14,7 +14,7 @@ It checks the following:
 - there is no sensitive data embedded in the package that will be sent to the registry
 - there is no useless files (like tests files) embedded in the package that will be sent to the registry
 - there is no vulnerable dependencies (unreleased)
-- there are no uncommitted changes in the working tree (unreleased)
+- there are no uncommitted changes in the working tree
 - there are no untracked files in the working tree
 - current branch is `master` or `release`
 - git tag matches version specified in the `package.json` (unreleased)
@@ -77,6 +77,14 @@ if you want to run only specific checkers, use the command-line options specific
 ### -b, --branch
 
 Ensure that current branch is `master` or `release`.
+
+### -c, --uncommited-files
+
+Ensure there are no uncommited files in the working tree.
+
+```sh
+npx release-checker --uncommited-files
+```
 
 ### --customize-sensitivedata
 
