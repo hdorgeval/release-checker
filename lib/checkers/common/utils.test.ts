@@ -342,6 +342,7 @@ test('It should take all checkers when there is no option on the command-line', 
     '--package.json': true,
     '--sensitivedata': false,
     '--test': false,
+    '--uncommited-files': false,
     '--untracked-files': false,
   };
 
@@ -386,6 +387,7 @@ test('It should skip foo checker on --skip-foo', () => {
     '--sensitivedata': false,
     '--skip-foo': true,
     '--test': false,
+    '--uncommited-files': false,
     '--untracked-files': false,
   };
 
@@ -410,6 +412,7 @@ test('It should skip foo checker on --skip-f', () => {
     '--sensitivedata': false,
     '--skip-f': true,
     '--test': false,
+    '--uncommited-files': false,
     '--untracked-files': false,
   };
 
@@ -434,6 +437,7 @@ test('It should not skip a checker with no cli option defined', () => {
     '--sensitivedata': false,
     '--skip-f': true,
     '--test': false,
+    '--uncommited-files': false,
     '--untracked-files': false,
   };
 
@@ -458,6 +462,7 @@ test('It should not skip a checker with no short cli option defined', () => {
     '--sensitivedata': false,
     '--skip-f': true,
     '--test': false,
+    '--uncommited-files': false,
     '--untracked-files': false,
   };
 
@@ -488,6 +493,7 @@ test('It should take all checkers except those that are skipped', () => {
     '--sensitivedata': false,
     '--skip-foo-bar': true,
     '--test': false,
+    '--uncommited-files': false,
     '--untracked-files': false,
   };
 

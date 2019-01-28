@@ -9,5 +9,6 @@ Options:
     --help, -h                  Show help
     --sensitivedata, -s         Ensure there is no sensitive or useless data in the npm package
     --test, -t                  Ensure that command 'npm test' is successfull
+    --uncommited-files, -c      Ensure there are no uncommited files in the working tree
     --untracked-files, -u       Ensure there are no untracked files in the working tree
 `;
