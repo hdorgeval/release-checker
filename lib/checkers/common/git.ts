@@ -75,3 +75,8 @@ export function getUncommitedFiles(): string[] {
 
   return uncommitedFiles;
 }
+
+export function getLatestTag(): string {
+  const gitExecutionResult = exec('git describe --tags $(git rev-list --tags --max-count=1)');
+  return gitExecutionResult;
+}
