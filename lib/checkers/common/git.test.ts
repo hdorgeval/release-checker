@@ -271,6 +271,8 @@ test('It should detect the latest tagged commit', () => {
 
 test('It should get the latest tag', () => {
   // Given
+  exec('git config user.email "you@example.com"');
+  exec('git config user.name "Your Name"');
   exec('git tag -a v1.0.0  -m yo');
 
   // When
