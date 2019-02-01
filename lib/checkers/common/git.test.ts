@@ -243,5 +243,17 @@ test('It should detect there is no tagged commit', () => {
   const result = getLatestTaggedCommit();
 
   // Then
-  expect(result).toStrictEqual('');
+  expect(result).toBe('');
+});
+
+test('It should detect the latest tagged commit', () => {
+  // Given
+  exec('git tag -a v1.0.0  -m yo');
+
+  // When
+  const result = getLatestTaggedCommit();
+
+  // Then
+  const expectedLastCommit = exec('git rev-list --all  --max-count=1');
+  expect(result).toBe(expectedLastCommit);
 });
