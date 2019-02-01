@@ -77,11 +77,15 @@ export function getUncommitedFiles(): string[] {
 }
 
 export function getLatestTag(): string {
-  const gitExecutionResult = exec('git describe --tags $(git rev-list --tags --max-count=1)');
-  return gitExecutionResult;
+  const latestTaggedCommit = getLatestTaggedCommit();
+  if (latestTaggedCommit === '') {
+    throw new Error('no git tag found');
+  }
+  const gitExecutionResult = exec(`git describe --tags ${latestTaggedCommit}`);
+  return gitExecutionResult.replace(/[\t,\n,\r]/g, '');
 }
 
 export function getLatestTaggedCommit(): string {
   const gitExecutionResult = exec('git rev-list --tags --max-count=1');
-  return gitExecutionResult;
+  return gitExecutionResult.replace(/[\t,\n,\r]/g, '');
 }

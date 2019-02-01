@@ -7,6 +7,7 @@ import { removeFile } from '../../utils/fs';
 import { PackageDotJson } from '../../utils/read-package-json';
 import {
   getCurrentBranch,
+  getLatestTag,
   getLatestTaggedCommit,
   getUncommitedFiles,
   getUntrackedFiles,
@@ -246,6 +247,16 @@ test('It should detect there is no tagged commit', () => {
   expect(result).toBe('');
 });
 
+test('It should detect there is no tag', () => {
+  // Given
+
+  // When
+
+  // Then
+  const expectedError = new Error('no git tag found');
+  expect(() => getLatestTag()).toThrowError(expectedError);
+});
+
 test('It should detect the latest tagged commit', () => {
   // Given
   exec('git tag -a v1.0.0  -m yo');
@@ -255,5 +266,16 @@ test('It should detect the latest tagged commit', () => {
 
   // Then
   const expectedLastCommit = exec('git rev-list --all  --max-count=1');
-  expect(result).toBe(expectedLastCommit);
+  expect(expectedLastCommit).toContain(result);
+});
+
+test('It should get the latest tag', () => {
+  // Given
+  exec('git tag -a v1.0.0  -m yo');
+
+  // When
+  const result = getLatestTag();
+
+  // Then
+  expect(result).toBe('v1.0.0');
 });
