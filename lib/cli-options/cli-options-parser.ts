@@ -7,6 +7,7 @@ export interface ReleaseCheckerOptions {
   '--help': boolean;
   '--package.json': boolean;
   '--sensitivedata': boolean;
+  '--tag': boolean;
   '--test': boolean;
   '--uncommited-files': boolean;
   '--untracked-files': boolean;
@@ -20,6 +21,7 @@ export function getCliOptions(): ReleaseCheckerOptions {
     '--help': args.help || args.h || false,
     '--package.json': true,
     '--sensitivedata': args.sensitivedata || args.s || false,
+    '--tag': args.tag || args.T || false,
     '--test': args.test || args.t || false,
     '--uncommited-files': args['uncommited-files'] || args.c || false,
     '--untracked-files': args['untracked-files'] || args.u || false,
@@ -42,6 +44,7 @@ export function no(options: Partial<ReleaseCheckerOptions>) {
         options['--customize-sensitivedata'] === false &&
         options['--help'] === false &&
         options['--sensitivedata'] === false &&
+        options['--tag'] === false &&
         options['--test'] === false &&
         options['--uncommited-files'] === false &&
         options['--untracked-files'] === false

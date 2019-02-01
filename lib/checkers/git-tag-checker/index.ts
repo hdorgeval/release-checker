@@ -8,7 +8,7 @@ export const gitTagChecker: Partial<Checker> = {
   id: 'git-tag-checker',
   run: () => validate(),
   shortCliOption: '-T',
-  statusToDisplayWhileValidating: 'Checking that latest tag matches package.json version',
+  statusToDisplayWhileValidating: 'Checking that latest git tag matches package.json version',
   whyCannotRun: () => `git not found. Run 'npm doctor' for more details`,
 };
 
