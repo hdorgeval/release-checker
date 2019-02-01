@@ -7,7 +7,7 @@ import { removeFile } from '../../utils/fs';
 import { PackageDotJson } from '../../utils/read-package-json';
 import {
   getCurrentBranch,
-  getLatestTag,
+  getLatestTaggedCommit,
   getUncommitedFiles,
   getUntrackedFiles,
   gitIsInstalled,
@@ -236,12 +236,12 @@ test('It should detect uncommited added files', () => {
   expect(result).toEqual(['foo.txt']);
 });
 
-test('It should detect there is no tag', () => {
+test('It should detect there is no tagged commit', () => {
   // Given
 
   // When
-  const result = getLatestTag();
+  const result = getLatestTaggedCommit();
 
   // Then
-  expect(result).toContain('No names found');
+  expect(result).toStrictEqual('');
 });
