@@ -1,7 +1,7 @@
 import { mkdirSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../utils/exec-sync';
-import { getProductionDepenciesOf } from './npm-dependencies';
+import { findInstallPathOfDependency, getProductionDepenciesOf } from './npm-dependencies';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
@@ -57,4 +57,16 @@ test('It should get prod dependencies', () => {
 
   // Then
   expect(result).toEqual(['@types/micromatch', 'micromatch']);
+});
+
+test('It should get install path of direct dependency', () => {
+  // Given
+  exec('npm install --save micromatch');
+
+  // When
+  const result = findInstallPathOfDependency('micromatch').startingFrom(testingRepo);
+
+  // Then
+  const expectedPath = join(testingRepo, 'node_modules', 'micromatch');
+  expect(result).toBe(expectedPath);
 });

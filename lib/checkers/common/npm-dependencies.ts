@@ -1,3 +1,5 @@
+import { join } from 'path';
+import { file } from '../../utils/fs';
 import { read } from '../../utils/read-package-json';
 
 export function getProductionDepenciesOf(filename: string) {
@@ -14,6 +16,19 @@ export function getProductionDepenciesOf(filename: string) {
         }
       }
       return result;
+    },
+  };
+}
+
+export function findInstallPathOfDependency(dependency: string) {
+  return {
+    startingFrom(directory: string): string {
+      const defaultInstallPath = join(directory, 'node_modules', dependency);
+      if (file('package.json').existsInDirectory(defaultInstallPath)) {
+        return defaultInstallPath;
+      }
+
+      throw new Error(`cannot find install path of dependency '${dependency}' in directory '${directory}'`);
     },
   };
 }
