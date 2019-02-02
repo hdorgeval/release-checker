@@ -13,11 +13,11 @@ It checks the following:
 - tests pass
 - there is no sensitive data embedded in the package that will be sent to the registry
 - there is no useless files (like tests files) embedded in the package that will be sent to the registry
-- there is no vulnerable dependencies (unreleased)
+- there are no vulnerable dependencies (unreleased)
 - there are no uncommitted changes in the working tree
 - there are no untracked files in the working tree
 - current branch is `master` or `release`
-- git tag matches version specified in the `package.json` (unreleased)
+- git tag matches version specified in the `package.json`
 - all licences declared in dependencies are valid (unreleased)
 
 ## Warning
@@ -131,6 +131,14 @@ The above command could be also rewritten to:
 
 ```sh
 npx release-checker --skip-t --skip-b
+```
+
+### -T, --tag
+
+Ensure that latest git tag matches package.json version
+
+```sh
+npx release-checker --tag
 ```
 
 ### -t, --test
