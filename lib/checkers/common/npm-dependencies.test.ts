@@ -37,7 +37,7 @@ test('It should get empty prod dependencies', () => {
   expect(result).toEqual([]);
 });
 
-test('It should get prod dependencies', () => {
+test('It should get prod dependency', () => {
   // Given
   exec('npm install --save micromatch');
 
@@ -46,4 +46,15 @@ test('It should get prod dependencies', () => {
 
   // Then
   expect(result).toEqual(['micromatch']);
+});
+
+test('It should get prod dependencies', () => {
+  // Given
+  exec('npm install --save micromatch @types/micromatch');
+
+  // When
+  const result = getProductionDepenciesOf('package.json').inDirectory(testingRepo);
+
+  // Then
+  expect(result).toEqual(['@types/micromatch', 'micromatch']);
 });
