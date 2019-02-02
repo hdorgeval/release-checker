@@ -1,5 +1,6 @@
 import { Checker } from './common/checker-interface';
 import { gitBranchChecker } from './git-branch-checker/index';
+import { gitTagChecker } from './git-tag-checker/index';
 import { gitUncommitedFilesChecker } from './git-uncommited-files-checker/index';
 import { gitUntrackedFilesChecker } from './git-untracked-files-checker/index';
 import { npmTestChecker } from './npm-test-checker/index';
@@ -13,4 +14,5 @@ export const checkers: Array<Partial<Checker>> = [
   gitBranchChecker,
   gitUncommitedFilesChecker,
   gitUntrackedFilesChecker,
+  gitTagChecker,
 ];
