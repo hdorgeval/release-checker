@@ -4,9 +4,14 @@ export interface PackageDotJson {
   name: string;
   version: string;
   scripts: ScriptsSection;
+  dependencies: DependenciesSection;
 }
 
 export interface ScriptsSection {
+  [index: string]: string;
+}
+
+export interface DependenciesSection {
   [index: string]: string;
 }
 
