@@ -70,3 +70,25 @@ test('It should get install path of direct dependency', () => {
   const expectedPath = join(testingRepo, 'node_modules', 'micromatch');
   expect(result).toBe(expectedPath);
 });
+
+test('It should get install path of direct scoped-dependency', () => {
+  // Given
+  exec('npm install --save @types/micromatch');
+
+  // When
+  const result = findInstallPathOfDependency('@types/micromatch').startingFrom(testingRepo);
+
+  // Then
+  const expectedPath = join(testingRepo, 'node_modules', '@types', 'micromatch');
+  expect(result).toBe(expectedPath);
+});
+
+test('It should raise an error when dependency is not found', () => {
+  // Given
+
+  // When
+
+  // Then
+  const expectedError = new Error(`cannot find install path of dependency 'foobar' in directory '${testingRepo}'`);
+  expect(() => findInstallPathOfDependency('foobar').startingFrom(testingRepo)).toThrow(expectedError);
+});
