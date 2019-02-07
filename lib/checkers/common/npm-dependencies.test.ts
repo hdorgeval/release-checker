@@ -1,7 +1,13 @@
 import { mkdirSync } from 'fs';
 import { join } from 'path';
 import { exec } from '../../utils/exec-sync';
-import { findInstallPathOfDependency, getProductionDepenciesOf } from './npm-dependencies';
+import {
+  DependencyInfo,
+  findInstallPathOfDependency,
+  getProductionDepenciesOf,
+  getProductionDependenciesGraphOf,
+  getProductionDependenciesInfosOf,
+} from './npm-dependencies';
 
 let nativeProcessArgv: string[];
 let tempFolder: string;
@@ -91,4 +97,85 @@ test('It should raise an error when dependency is not found', () => {
   // Then
   const expectedError = new Error(`cannot find install path of dependency 'foobar' in directory '${testingRepo}'`);
   expect(() => findInstallPathOfDependency('foobar').startingFrom(testingRepo)).toThrow(expectedError);
+});
+
+test('It should get prod dependencies infos', () => {
+  // Given
+  exec('npm install --save micromatch @types/micromatch');
+
+  // When
+  const result = getProductionDependenciesInfosOf('package.json').inDirectory(testingRepo);
+
+  // Then
+  const expectedRootDependency1: DependencyInfo = {
+    graph: ['@types/micromatch'],
+    name: '@types/micromatch',
+    path: join(testingRepo, 'node_modules', '@types', 'micromatch'),
+    version: '3.1.0',
+  };
+
+  const expectedRootDependency2: DependencyInfo = {
+    graph: ['micromatch'],
+    name: 'micromatch',
+    path: join(testingRepo, 'node_modules', 'micromatch'),
+    version: '3.1.10',
+  };
+  const expectedResult = [expectedRootDependency1, expectedRootDependency2];
+  expect(result).toEqual(expectedResult);
+});
+
+test('It should get prod dependencies graph', () => {
+  // Given
+  exec('npm install --save micromatch');
+
+  // When
+  const results = getProductionDependenciesGraphOf('package.json')
+    .inDirectory(testingRepo)
+    .withMaxLevels(100);
+
+  // Then
+  const expectedRootDependency1: DependencyInfo = {
+    graph: ['micromatch'],
+    name: 'micromatch',
+    path: join(testingRepo, 'node_modules', 'micromatch'),
+    version: '3.1.10',
+  };
+
+  expect(results.length).toBe(900);
+  expect(results[0]).toEqual(expectedRootDependency1);
+});
+
+test('It should get prod dependencies graph', () => {
+  // Given
+  exec('npm install --save @types/micromatch');
+
+  // When
+  const results = getProductionDependenciesGraphOf('package.json')
+    .inDirectory(testingRepo)
+    .withMaxLevels(100);
+
+  // Then
+  const expectedRootDependency1: DependencyInfo = {
+    graph: ['@types/micromatch'],
+    name: '@types/micromatch',
+    path: join(testingRepo, 'node_modules', '@types', 'micromatch'),
+    version: '3.1.0',
+  };
+
+  expect(results.length).toBe(2);
+  expect(results[0]).toEqual(expectedRootDependency1);
+});
+
+test('It should throw an error when dependency graph is greater than expected', () => {
+  // Given
+  exec('npm install --save micromatch');
+
+  // When
+  // Then
+  const expectedError = new Error(`The dependency graph is too deep: it has more than 5 levels`);
+  expect(() =>
+    getProductionDependenciesGraphOf('package.json')
+      .inDirectory(testingRepo)
+      .withMaxLevels(5),
+  ).toThrow(expectedError);
 });
