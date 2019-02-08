@@ -1,9 +1,12 @@
 import { mkdirSync } from 'fs';
+import { ModuleInfo } from 'license-checker';
 import { join } from 'path';
 import { exec } from '../../utils/exec-sync';
 import {
+  addLicenceInfoIn,
   DependencyInfo,
   findInstallPathOfDependency,
+  getLicencesFrom,
   getProductionDepenciesOf,
   getProductionDependenciesGraphOf,
   getProductionDependenciesInfosOf,
@@ -109,6 +112,7 @@ test('It should get prod dependencies infos', () => {
   // Then
   const expectedRootDependency1: DependencyInfo = {
     graph: ['@types/micromatch'],
+    licences: [],
     name: '@types/micromatch',
     path: join(testingRepo, 'node_modules', '@types', 'micromatch'),
     version: '3.1.0',
@@ -116,6 +120,7 @@ test('It should get prod dependencies infos', () => {
 
   const expectedRootDependency2: DependencyInfo = {
     graph: ['micromatch'],
+    licences: [],
     name: 'micromatch',
     path: join(testingRepo, 'node_modules', 'micromatch'),
     version: '3.1.10',
@@ -136,6 +141,7 @@ test('It should get prod dependencies graph', () => {
   // Then
   const expectedRootDependency1: DependencyInfo = {
     graph: ['micromatch'],
+    licences: [],
     name: 'micromatch',
     path: join(testingRepo, 'node_modules', 'micromatch'),
     version: '3.1.10',
@@ -157,6 +163,7 @@ test('It should get prod dependencies graph', () => {
   // Then
   const expectedRootDependency1: DependencyInfo = {
     graph: ['@types/micromatch'],
+    licences: [],
     name: '@types/micromatch',
     path: join(testingRepo, 'node_modules', '@types', 'micromatch'),
     version: '3.1.0',
@@ -178,4 +185,64 @@ test('It should throw an error when dependency graph is greater than expected', 
       .inDirectory(testingRepo)
       .withMaxLevels(5),
   ).toThrow(expectedError);
+});
+
+test('It should get licenses of prod dependencies graph', () => {
+  // Given
+  exec('npm install --save micromatch');
+
+  // When
+  const results = getProductionDependenciesGraphOf('package.json')
+    .inDirectory(testingRepo)
+    .withMaxLevels(100);
+  addLicenceInfoIn(results);
+
+  // Then
+  const expectedRootDependency1: DependencyInfo = {
+    graph: ['micromatch'],
+    licences: ['MIT'],
+    name: 'micromatch',
+    path: join(testingRepo, 'node_modules', 'micromatch'),
+    version: '3.1.10',
+  };
+
+  expect(results.length).toBe(900);
+  expect(results[0]).toEqual(expectedRootDependency1);
+});
+
+test('It should get licences extracted by licenses-checker ', () => {
+  // Given
+  const moduleInfo1 = { licenses: 'MIT' } as ModuleInfo;
+  const moduleInfo2 = { licenses: ['MIT'] } as ModuleInfo;
+  const moduleInfo3 = { licenses: ['MIT', 'ISC'] } as ModuleInfo;
+  const moduleInfo4 = { licenses: undefined } as ModuleInfo;
+  const moduleInfo5 = { licenses: [] } as ModuleInfo;
+
+  // When
+  const result1 = getLicencesFrom(moduleInfo1);
+  const result2 = getLicencesFrom(moduleInfo2);
+  const result3 = getLicencesFrom(moduleInfo3);
+  const result4 = getLicencesFrom(moduleInfo4);
+  const result5 = getLicencesFrom(moduleInfo5);
+
+  // Then
+  expect(result1).toEqual(['MIT']);
+  expect(result2).toEqual(['MIT']);
+  expect(result3).toEqual(['MIT', 'ISC']);
+  expect(result4).toEqual(['unknown']);
+  expect(result5).toEqual(['unknown']);
+});
+
+test.only('It should get licenses of prod dependencies graph for release-checker', () => {
+  // Given
+  exec('npm install --save release-checker');
+
+  // When
+  const results = getProductionDependenciesGraphOf('package.json')
+    .inDirectory(testingRepo)
+    .withMaxLevels(100);
+  addLicenceInfoIn(results);
+
+  // Then
+  expect(results.length).toBe(900);
 });

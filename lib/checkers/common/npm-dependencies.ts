@@ -1,4 +1,6 @@
+import { ModuleInfo, ModuleInfos } from 'license-checker';
 import { join } from 'path';
+import { exec } from '../../utils/exec-sync';
 import { file } from '../../utils/fs';
 import { read } from '../../utils/read-package-json';
 
@@ -63,7 +65,7 @@ export function getProductionDependenciesInfosOf(filename: string) {
         const pkg = read('package.json')
           .inDirectory(path)
           .asJson();
-        result.push({ graph: [dependency], name: dependency, path, version: pkg.version });
+        result.push({ graph: [dependency], name: dependency, path, version: pkg.version, licences: [] });
       });
       return result;
     },
@@ -75,6 +77,7 @@ export interface DependencyInfo {
   name: string;
   path: string;
   version: string;
+  licences: string[];
 }
 
 export function getProductionDependenciesGraphOf(filename: string) {
@@ -92,6 +95,7 @@ export function getProductionDependenciesGraphOf(filename: string) {
               childDependencies.forEach((childDependency) => {
                 allChildDependencies.push({
                   graph: [...dependencyInfo.graph, ...childDependency.graph],
+                  licences: [],
                   name: childDependency.name,
                   path: childDependency.path,
                   version: childDependency.version,
@@ -113,4 +117,36 @@ export function getProductionDependenciesGraphOf(filename: string) {
       };
     },
   };
+}
+
+export function addLicenceInfoIn(dependencies: DependencyInfo[]) {
+  const licenseCheckerPath = join(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    'node_modules',
+    'license-checker',
+    'bin',
+    'license-checker',
+  );
+  const executionResult = exec(
+    `node ${licenseCheckerPath} --json --production --excludePrivatePackages --start ${process.cwd()}`,
+  );
+  const licensesInfos = JSON.parse(executionResult) as ModuleInfos;
+  dependencies.forEach((dependencyInfo) => {
+    const packageNameAndVersion = `${dependencyInfo.name}@${dependencyInfo.version}`;
+    dependencyInfo.licences = getLicencesFrom(licensesInfos[packageNameAndVersion]);
+  });
+}
+
+export function getLicencesFrom(moduleInfo: ModuleInfo): string[] {
+  if (moduleInfo && Array.isArray(moduleInfo.licenses) && moduleInfo.licenses.length > 0) {
+    return moduleInfo.licenses;
+  }
+  if (moduleInfo && typeof moduleInfo.licenses === 'string') {
+    return [moduleInfo.licenses];
+  }
+
+  return ['unknown'];
 }
