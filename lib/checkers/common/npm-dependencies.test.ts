@@ -233,7 +233,7 @@ test('It should get licences extracted by licenses-checker ', () => {
   expect(result5).toEqual(['unknown']);
 });
 
-test.only('It should get licenses of prod dependencies graph for release-checker', () => {
+test('It should get licenses of prod dependencies graph for release-checker', () => {
   // Given
   exec('npm install --save release-checker');
 
@@ -244,5 +244,18 @@ test.only('It should get licenses of prod dependencies graph for release-checker
   addLicenceInfoIn(results);
 
   // Then
-  expect(results.length).toBe(900);
+  const expectedRootDependency1: Partial<DependencyInfo> = {
+    graph: ['release-checker'],
+    licences: ['ISC'],
+    name: 'release-checker',
+    path: join(testingRepo, 'node_modules', 'release-checker'),
+  };
+
+  expect(results.length).toBe(907);
+  expect(results[0]).toMatchObject(expectedRootDependency1);
+
+  results.forEach((result) => {
+    expect(result.licences.length).toBe(1);
+    expect(['MIT', 'ISC', 'BSD-3-Clause', '(MIT OR Apache-2.0)']).toContain(result.licences[0]);
+  });
 });
