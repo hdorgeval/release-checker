@@ -5,6 +5,7 @@ export interface PackageDotJson {
   version: string;
   scripts: ScriptsSection;
   dependencies: DependenciesSection;
+  optionalDependencies: DependenciesSection;
 }
 
 export interface ScriptsSection {

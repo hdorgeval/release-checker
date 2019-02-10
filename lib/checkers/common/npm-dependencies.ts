@@ -13,9 +13,10 @@ export function getProductionDepenciesOf(filename: string) {
       const prodDependencies = pkg.dependencies || {};
       const result: string[] = [];
       for (const key in prodDependencies) {
-        if (prodDependencies.hasOwnProperty(key)) {
-          result.push(key);
+        if (pkg.optionalDependencies && pkg.optionalDependencies[key]) {
+          continue;
         }
+        result.push(key);
       }
       return result;
     },

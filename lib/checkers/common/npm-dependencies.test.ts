@@ -259,3 +259,118 @@ test('It should get licenses of prod dependencies graph for release-checker', ()
     expect(['MIT', 'ISC', 'BSD-3-Clause', '(MIT OR Apache-2.0)']).toContain(result.licences[0]);
   });
 });
+
+test('It should get licenses of prod dependencies graph for testcafe-hammerhead', () => {
+  // Given
+  exec('npm install --save testcafe-hammerhead');
+
+  // When
+  const results = getProductionDependenciesGraphOf('package.json')
+    .inDirectory(testingRepo)
+    .withMaxLevels(100);
+  addLicenceInfoIn(results);
+
+  // Then
+  const expectedRootDependency1: Partial<DependencyInfo> = {
+    graph: ['testcafe-hammerhead'],
+    licences: ['MIT'],
+    name: 'testcafe-hammerhead',
+    path: join(testingRepo, 'node_modules', 'testcafe-hammerhead'),
+  };
+
+  expect(results.length).toBe(49);
+  expect(results[0]).toMatchObject(expectedRootDependency1);
+
+  results.forEach((result) => {
+    expect(result.licences.length).toBe(1);
+    expect([
+      'MIT',
+      'MIT*',
+      'ISC',
+      'BSD',
+      'BSD*',
+      'BSD-3-Clause',
+      'BSD-3-Clause OR MIT',
+      'Apache-2.0',
+      '(MIT OR Apache-2.0)',
+    ]).toContain(result.licences[0]);
+  });
+});
+
+test('It should get licenses of prod dependencies graph for react', () => {
+  // Given
+  exec('npm install --save react');
+
+  // When
+  const results = getProductionDependenciesGraphOf('package.json')
+    .inDirectory(testingRepo)
+    .withMaxLevels(100);
+  addLicenceInfoIn(results);
+
+  // Then
+  const expectedRootDependency1: Partial<DependencyInfo> = {
+    graph: ['react'],
+    licences: ['MIT'],
+    name: 'react',
+    path: join(testingRepo, 'node_modules', 'react'),
+  };
+
+  expect(results.length).toBe(12);
+  expect(results[0]).toMatchObject(expectedRootDependency1);
+
+  results.forEach((result) => {
+    expect(result.licences.length).toBe(1);
+    expect([
+      'MIT',
+      'MIT*',
+      'ISC',
+      'BSD',
+      'BSD*',
+      'BSD-3-Clause',
+      'BSD-3-Clause OR MIT',
+      'Apache-2.0',
+      '(MIT OR Apache-2.0)',
+    ]).toContain(result.licences[0]);
+  });
+});
+
+test('It should skip optional prod dependencies', () => {
+  // Given
+  exec('npm install --save trianglify');
+
+  // When
+  const results = getProductionDependenciesGraphOf('package.json')
+    .inDirectory(testingRepo)
+    .withMaxLevels(100);
+  addLicenceInfoIn(results);
+
+  // Then
+  const expectedRootDependency1: Partial<DependencyInfo> = {
+    graph: ['trianglify'],
+    licences: ['GPL-3.0'],
+    name: 'trianglify',
+    path: join(testingRepo, 'node_modules', 'trianglify'),
+  };
+
+  expect(results.length).toBe(102);
+  expect(results[0]).toMatchObject(expectedRootDependency1);
+
+  results.forEach((result) => {
+    expect([
+      'MIT',
+      'MIT*',
+      'ISC',
+      'BSD',
+      'BSD*',
+      'BSD-2-Clause',
+      'BSD-3-Clause',
+      'BSD-3-Clause OR MIT',
+      'Apache-2.0',
+      'GPL-3.0',
+      '(MIT OR Apache-2.0)',
+      'WTFPL',
+      'AFLv2.1',
+      'Unlicense',
+    ]).toContain(result.licences[0]);
+  });
+});
