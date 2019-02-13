@@ -146,8 +146,19 @@ export function getLicencesFrom(moduleInfo: ModuleInfo): string[] {
     return moduleInfo.licenses;
   }
   if (moduleInfo && typeof moduleInfo.licenses === 'string') {
-    return [moduleInfo.licenses];
+    const licencesList = moduleInfo.licenses;
+    const extractedLicences = splitLicensesIfNeeded(licencesList);
+    return extractedLicences;
   }
 
   return ['unknown'];
+}
+
+export function splitLicensesIfNeeded(licence: string): string[] {
+  const result = licence
+    .split(' OR ')
+    .map((l) => l.replace('(', ''))
+    .map((l) => l.replace(')', ''))
+    .map((l) => l.trim());
+  return result;
 }

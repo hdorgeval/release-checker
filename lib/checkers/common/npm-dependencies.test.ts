@@ -255,8 +255,7 @@ test('It should get licenses of prod dependencies graph for release-checker', ()
   expect(results[0]).toMatchObject(expectedRootDependency1);
 
   results.forEach((result) => {
-    expect(result.licences.length).toBe(1);
-    expect(['MIT', 'ISC', 'BSD-3-Clause', '(MIT OR Apache-2.0)']).toContain(result.licences[0]);
+    expect(['MIT', 'ISC', 'BSD-3-Clause']).toContain(result.licences[0]);
   });
 });
 
@@ -282,18 +281,7 @@ test('It should get licenses of prod dependencies graph for testcafe-hammerhead'
   expect(results[0]).toMatchObject(expectedRootDependency1);
 
   results.forEach((result) => {
-    expect(result.licences.length).toBe(1);
-    expect([
-      'MIT',
-      'MIT*',
-      'ISC',
-      'BSD',
-      'BSD*',
-      'BSD-3-Clause',
-      'BSD-3-Clause OR MIT',
-      'Apache-2.0',
-      '(MIT OR Apache-2.0)',
-    ]).toContain(result.licences[0]);
+    expect(['MIT', 'MIT*', 'ISC', 'BSD', 'BSD*', 'BSD-3-Clause', 'Apache-2.0']).toContain(result.licences[0]);
   });
 });
 
@@ -315,22 +303,12 @@ test('It should get licenses of prod dependencies graph for react', () => {
     path: join(testingRepo, 'node_modules', 'react'),
   };
 
-  expect(results.length).toBe(12);
+  expect(results.length).toBe(11);
   expect(results[0]).toMatchObject(expectedRootDependency1);
 
   results.forEach((result) => {
     expect(result.licences.length).toBe(1);
-    expect([
-      'MIT',
-      'MIT*',
-      'ISC',
-      'BSD',
-      'BSD*',
-      'BSD-3-Clause',
-      'BSD-3-Clause OR MIT',
-      'Apache-2.0',
-      '(MIT OR Apache-2.0)',
-    ]).toContain(result.licences[0]);
+    expect(['MIT', 'MIT*', 'ISC', 'BSD', 'BSD*', 'BSD-3-Clause', 'Apache-2.0']).toContain(result.licences[0]);
   });
 });
 
@@ -367,7 +345,6 @@ test('It should skip optional prod dependencies', () => {
       'BSD-3-Clause OR MIT',
       'Apache-2.0',
       'GPL-3.0',
-      '(MIT OR Apache-2.0)',
       'WTFPL',
       'AFLv2.1',
       'Unlicense',
