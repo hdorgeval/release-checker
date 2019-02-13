@@ -303,7 +303,7 @@ test('It should get licenses of prod dependencies graph for react', () => {
     path: join(testingRepo, 'node_modules', 'react'),
   };
 
-  expect(results.length).toBe(11);
+  expect(results.length).toBe(13);
   expect(results[0]).toMatchObject(expectedRootDependency1);
 
   results.forEach((result) => {
